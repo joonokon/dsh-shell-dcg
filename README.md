@@ -146,6 +146,7 @@ printf 'git reset --hard HEAD~1' | dcg --robot test --stdin --format json
 | `onNotReady` | `"deny"` | dcg 没准备好时，命令类工具是拒还是放过 |
 | `failClosed` | `true` | 判不了（超时/崩溃/未知判定）时是否拒绝 |
 | `onAsk` | `"ask"` | dcg 判"需要人看"时：`ask` 走审批 / `deny` / `allow` |
+| `policy.defaultMode` | `"ask"` | 命中规则时的默认动作：`ask`（交给审批）/ `deny` / `warn` / `log` |
 | `tools` | `["ops_bash","bash","pwsh","ssh_exec"]` | 参与判定的工具名 |
 | `policy.packModes` | `{}` | 单包降级，例如 `{ "core.git": "warn" }` |
 
@@ -206,21 +207,25 @@ plugin_manager { action: "remove_bundle", target: "dsh-shell-dcg" }
 ## 开发
 
 ```sh
-npm test        # == node test/smoke.mjs && node test/gate.mjs，26 项
+npm test        # 27 项，不需要 DSH 运行时，也不需要真 dcg
+npm run test:live   # 对着真 dcg 跑完整门禁链路（需要本机有 dcg）
+npm run probe       # 只看 dcg 对一批命令的判定，排查用
 ```
+
+`test:live` 用假 ctx 驱动真实 `arm()`：查二进制、比版本、跑自检探针、生成策略、写审计、映射判定全都走一遍，`DSH_HOME` 指到临时目录，不碰你的正式数据。
 
 | 目录 | 内容 |
 |---|---|
 | `index.js` | `apply` / `inject` / `name` |
 | `lib/` | config、dcg 进程边界、policy 生成、doctor、audit、门禁 |
-| `test/` | 纯函数测试 + 门禁接线测试（不需要 DSH 运行时，也不需要真 dcg） |
+| `test/` | 纯函数测试、门禁接线测试，以及两个需要真 dcg 的手工脚本 |
 | `tools/asar.mjs` | 读 Electron `app.asar` 里文件的小工具：`node tools/asar.mjs <app.asar> list <regex>` / `cat <path>` |
 
 ### 几个刻意的决定
 
 **走 `dcg test --stdin` 而不是 `dcg hook`。** dcg 的 hook 入口按 `tool_name` 白名单过滤，`ops_bash` 不在名单里，它"没有意见"就放行——静默失效。`test --stdin` 不经过工具名判定，命令走 stdin 也避开了 Windows 的引号和命令行长度问题。
 
-**自己拥有策略文件。** `--config` 指向插件生成的 `policy.toml`，只写用户真正配置过的键；留空时 dcg 用自己的默认值。这样会话策略和终端策略隔离，且可复现。
+**自己拥有策略文件。** `--config` 指向插件生成的 `policy.toml`：`default_mode` 总是显式写出，其余键只写用户配置过的。这样会话策略和终端策略隔离，且可复现。
 
 **零外部依赖。** 本机目录是 link 安装，Node 按真实路径解析裸模块名，`@deepseek-ai/*` 不一定解析得到。只用 `node:*` 就没有这个风险；代价是配置不走 schemastery 表单，校验自己写（类型不对就回退并 warning，绝不抛）。
 

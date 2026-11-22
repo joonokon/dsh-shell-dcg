@@ -66,6 +66,7 @@ dcg 的判定 → DSH 的决定：
 | `indeterminate` | 拒绝（分析没做完，不能当放行） | `failClosed` |
 | 未知的新判定词 | 拒绝 | `failClosed` |
 | dcg 超时 / 崩溃 / 输出不是 JSON | 拒绝 | `failClosed` |
+| dcg 拒绝加载策略（`configuration_error`） | 拒绝，且不受 `failClosed` 影响 | — |
 
 **未知判定词默认拒绝**是刻意的：dcg 以后新增判定词时，插件必须先"不懂就拦"，而不是把它当成放行。
 
@@ -74,7 +75,7 @@ dcg 的判定 → DSH 的决定：
 - `onNotReady: "deny"`（默认）：dcg 装坏/找不到时，命令类工具会被拒绝，理由直接写明哪里不对。宁可卡一次，也不要你以为有保护其实没有。
 - `onNotReady: "pass"`：不拦，只记审计和日志。适合先把插件装上但不影响工作。
 
-`failClosed: false` 会把上面所有"判不了"的情况都改成放行——只建议在灰度期这么用。
+`failClosed: false` 会把上面所有"判不了"的情况都改成放行——只建议在灰度期这么用。唯一例外是策略文件加载失败：那说明门禁自己坏了，这种情况下 `failClosed: false` 也不放行。
 
 ## 配置项
 
@@ -96,13 +97,21 @@ dcg 的判定 → DSH 的决定：
 | `dryRun` | `false` | 只记录不拦（灰度用） |
 | `timeoutMs` | `3000` | 单次判定预算 |
 | `maxConcurrent` | `4` | 并发判定上限，防止批量调用 fork 风暴 |
-| `policy.packs` | `[]` | 写进策略的 `[packs] enabled`；留空则沿用 dcg 自己的默认 |
-| `policy.defaultMode` | `""` | 写进 `[policy] default_mode` |
+| `policy.packs` | `[]` | 额外启用的包，写进 `[packs] enabled`。这是**增量**的：dcg 自带的包集合与 `core.*` 包始终生效，关不掉 |
+| `policy.defaultMode` | `"ask"` | 写进 `[policy] default_mode`，取值 `deny`/`ask`/`warn`/`log`。**总是显式写出**，见下方说明 |
 | `policy.observeUntil` | `""` | 写进 `policy.observe_until`，即 dcg 内建的灰度到期日 |
 | `policy.packModes` | `{}` | 单包降级，例如 `{ "core.git": "warn" }` |
 | `audit.enabled` | `true` | 是否写审计 |
 | `audit.keepCommandText` | `false` | 审计里存命令原文（默认只存哈希） |
 | `audit.retentionDays` | `30` | 审计保留天数 |
+
+## 两个和 dcg 有关的事实
+
+这两条是实测出来的，写在这里免得以后再踩：
+
+**`--config` 会把策略变成"完整声明"。** 只要把文件传给 dcg，文件里没写 `default_mode` 就一律按 `deny` 处理；完全不传文件时才是 dcg 自己的默认（`ask`）。所以本插件**总是显式写出** `default_mode`：行为由配置决定，而不是由"那个文件恰好存不存在"决定。
+
+**包只能加，不能关。** `[packs] enabled` 是增量的，dcg 自带的包集合照旧生效，`core.*` 始终在保护范围内；`[policy.packs]` 只能在 `deny`/`ask`/`warn`/`log` 之间调整，没有 `off`。想让某类命令放行，只能把它降到 `log`，而不是关掉整个包。
 
 ## 磁盘上有什么
 
