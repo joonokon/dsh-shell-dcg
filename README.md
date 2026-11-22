@@ -31,7 +31,7 @@
 
 ## 第一步：安装 dcg
 
-插件不自带二进制，也不联网下载。任选一种：
+插件不自带二进制。任选一种：
 
 **A. 官方脚本（推荐，带签名校验）**
 
@@ -49,6 +49,18 @@ git clone https://github.com/Dicklesworthstone/destructive_command_guard
 cd destructive_command_guard
 cargo install --path . --locked
 ```
+
+**C. 用插件自带的安装脚本（钉版本 + 校验和）**
+
+```sh
+npm run install-dcg
+```
+
+下载 0.17.0 对应平台的资产，与 `lib/install.js` 里写死的 SHA-256 比对，通过后才解包到 `%DSH_HOME%\dsh-shell-dcg\bin\0.17.0\`。
+
+- 5 分钟内没下完就报错退出，不会一直挂着；网速慢就自己下载，再用 `dcgPath` 指过去
+- Windows 用内置 ZIP 读取器解包，不需要额外工具；Linux / macOS 是 `.tar.xz`，需要系统有 `tar`
+- 报证书错误（公司网络做 TLS 拦截时常见）就用 `node --use-system-ca tools/install-dcg.mjs`
 
 **确认：**
 

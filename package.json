@@ -26,7 +26,8 @@
   "scripts": {
     "test": "node test/smoke.mjs && node test/gate.mjs",
     "test:live": "node test/live.mjs",
-    "probe": "node test/probe-dcg.mjs"
+    "probe": "node test/probe-dcg.mjs",
+    "install-dcg": "node tools/install-dcg.mjs"
   },
   "dsh": {
     "bundle": {

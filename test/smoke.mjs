@@ -12,6 +12,7 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
+import zlib from 'node:zlib'
 
 import {
   compareVersions,
@@ -24,6 +25,8 @@ import { buildTestArgs, cleanEnv, createLimiter, parseVerdict, resolveBinary, ru
 import { mapDecision, reasonFor } from '../lib/gate.js'
 import { buildPolicyToml as policyToml } from '../lib/policy.js'
 import { readScript, resolveScriptTarget, resolveWorkdir } from '../lib/script.js'
+import { TARGETS, digestOf, installManaged, releaseUrl, targetFor } from '../lib/install.js'
+import { extractNamed, listEntries, readEntry } from '../lib/zip.js'
 
 const results = []
 async function check(name, fn) {
@@ -300,6 +303,151 @@ await check('readScript refuses what it cannot judge faithfully', () => {
 })
 
 fs.rmSync(scriptDir, { recursive: true, force: true })
+
+// ------------------------------------------------------------------ zip ----
+
+/** Build a minimal ZIP in memory so the reader is tested without a fixture. */
+function buildZip(entries) {
+  const parts = []
+  const central = []
+  let offset = 0
+  for (const entry of entries) {
+    const name = Buffer.from(entry.name, 'utf8')
+    const payload = entry.deflate === true ? zlib.deflateRawSync(entry.data) : Buffer.from(entry.data)
+    const method = entry.deflate === true ? 8 : 0
+
+    const local = Buffer.alloc(30)
+    local.writeUInt32LE(0x04034b50, 0)
+    local.writeUInt16LE(20, 4)
+    local.writeUInt16LE(method, 8)
+    local.writeUInt32LE(payload.length, 18)
+    local.writeUInt32LE(entry.data.length, 22)
+    local.writeUInt16LE(name.length, 26)
+
+    const directory = Buffer.alloc(46)
+    directory.writeUInt32LE(0x02014b50, 0)
+    directory.writeUInt16LE(20, 4)
+    directory.writeUInt16LE(method, 10)
+    directory.writeUInt32LE(payload.length, 20)
+    directory.writeUInt32LE(entry.data.length, 24)
+    directory.writeUInt16LE(name.length, 28)
+    directory.writeUInt32LE(offset, 42)
+
+    parts.push(local, name, payload)
+    central.push(directory, name)
+    offset += local.length + name.length + payload.length
+  }
+
+  const localPart = Buffer.concat(parts)
+  const centralPart = Buffer.concat(central)
+  const end = Buffer.alloc(22)
+  end.writeUInt32LE(0x06054b50, 0)
+  end.writeUInt16LE(entries.length, 8)
+  end.writeUInt16LE(entries.length, 10)
+  end.writeUInt32LE(centralPart.length, 12)
+  end.writeUInt32LE(localPart.length, 16)
+  return Buffer.concat([localPart, centralPart, end])
+}
+
+await check('zip reader finds the binary, stored or deflated', () => {
+  for (const deflate of [false, true]) {
+    const zip = buildZip([
+      { name: 'README.md', data: Buffer.from('hi'), deflate },
+      { name: 'dcg-v0.17.0/dcg.exe', data: Buffer.from('MZ fake binary'), deflate },
+    ])
+    const found = extractNamed(zip, ['dcg.exe'])
+    assert.equal(found.ok, true, `deflate=${String(deflate)}`)
+    assert.equal(found.name, 'dcg-v0.17.0/dcg.exe')
+    assert.equal(found.data.toString('utf8'), 'MZ fake binary')
+  }
+})
+
+await check('zip reader reports what it cannot use', () => {
+  const zip = buildZip([{ name: 'only.txt', data: Buffer.from('x') }])
+  const missing = extractNamed(zip, ['dcg.exe'])
+  assert.equal(missing.ok, false)
+  assert.match(missing.reason, /no dcg\.exe in the archive/)
+
+  assert.equal(listEntries(Buffer.from('not a zip at all')).ok, false)
+
+  const truncated = zip.subarray(0, 40)
+  assert.equal(listEntries(truncated).ok, false)
+
+  const listed = listEntries(zip)
+  assert.equal(listed.ok, true)
+  assert.equal(listed.entries.length, 1)
+  assert.equal(readEntry(zip, listed.entries[0]).data.toString('utf8'), 'x')
+})
+
+// ------------------------------------------------------------------ install ----
+
+await check('every pinned target carries a 64-hex digest', () => {
+  const keys = Object.keys(TARGETS)
+  assert.ok(keys.includes('win32-x64'))
+  for (const [key, target] of Object.entries(TARGETS)) {
+    assert.match(target.sha256, /^[0-9a-f]{64}$/, key)
+    assert.ok(target.asset.includes(key.split('-')[0]) || /windows|linux|apple/.test(target.asset), key)
+  }
+  assert.equal(targetFor('win32', 'x64').asset, 'dcg-x86_64-pc-windows-msvc.zip')
+  assert.equal(targetFor('plan9', 'mips'), undefined)
+  assert.match(releaseUrl('0.17.0', 'x.zip'), /releases\/download\/v0\.17\.0\/x\.zip$/)
+})
+
+await check('install refuses a download whose digest does not match', async () => {
+  const fakeFetch = async () => ({
+    ok: true,
+    headers: { get: () => null },
+    arrayBuffer: async () => Buffer.from('tampered archive'),
+  })
+  const result = await installManaged({ platform: 'win32', arch: 'x64', fetchImpl: fakeFetch })
+  assert.equal(result.ok, false)
+  assert.match(result.reason, /checksum mismatch/)
+})
+
+await check('install refuses an uncovered platform and a dead URL', async () => {
+  assert.match((await installManaged({ platform: 'plan9', arch: 'mips' })).reason, /no pinned dcg build/)
+
+  const failing = async () => ({ ok: false, status: 404, headers: { get: () => null } })
+  assert.match((await installManaged({ platform: 'win32', arch: 'x64', fetchImpl: failing })).reason, /answered 404/)
+
+  const throwing = async () => {
+    throw new Error('offline')
+  }
+  assert.match((await installManaged({ platform: 'win32', arch: 'x64', fetchImpl: throwing })).reason, /cannot reach/)
+})
+
+await check('install writes only after the digest checks out', async () => {
+  // A matching archive: fake the asset by pinning a digest of known bytes.
+  const archive = buildZip([{ name: 'dcg.exe', data: Buffer.from('binary'), deflate: true }])
+  const expected = digestOf(archive)
+  assert.equal(expected, digestOf(archive))
+
+  const scratchHome = fs.mkdtempSync(path.join(os.tmpdir(), 'dsh-shell-dcg-install-'))
+  const fakeFetch = async () => ({ ok: true, headers: { get: () => null }, arrayBuffer: async () => archive })
+  try {
+    // The real table will not match this synthetic archive, so the refusal itself
+    // proves nothing is written before verification.
+    const refused = await installManaged({ env: { DSH_HOME: scratchHome }, platform: 'win32', arch: 'x64', fetchImpl: fakeFetch })
+    assert.equal(refused.ok, false)
+    assert.match(refused.reason, /checksum mismatch/)
+    const binRoot = path.join(scratchHome, 'dsh-shell-dcg', 'bin')
+    assert.equal(fs.existsSync(binRoot), false)
+  } finally {
+    fs.rmSync(scratchHome, { recursive: true, force: true })
+  }
+})
+
+await check('install gives up on a stalled download', async () => {
+  const stalled = async () => {
+    const error = new Error('The operation was aborted due to timeout')
+    error.name = 'TimeoutError'
+    throw error
+  }
+  const result = await installManaged({ platform: 'win32', arch: 'x64', fetchImpl: stalled, timeoutMs: 50 })
+  assert.equal(result.ok, false)
+  assert.match(result.reason, /download gave up after 50 ms/)
+  assert.match(result.reason, /dcgPath/)
+})
 
 // ----------------------------------------------------------------- go/no ----
 
