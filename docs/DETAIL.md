@@ -84,8 +84,7 @@ dcg 的判定 → DSH 的决定：
 - 总开关（`role="switch"`）：直接改 `enabled`，走 DSH 的 config editor
 - dcg：版本、路径、来源（managed / config / path）
 - 策略：「判定为危险时」的动作（dcg 默认 / 一律拒绝 / 询问 / 只警告 / 只记录），每项都有一句说明；下面是按分类勾选的「额外启用的规则包」，默认收起
-- 判定记录：累计条数，以及可展开的「记录保留」（保留天数 / 最多条数，改完即写入配置）
-- 最近的判定：默认收起；展开后每条是本地时间、彩色判定（allow 绿 / warn 黄 / deny 红）、命令原文与规则 id
+- 日志：累计条数，点开「最近记录」后统一在一块里放——记录日志开关、保留天数与最多条数（改完即写入配置）、清空日志按钮，以及最近 20 条（本地时间、彩色判定：allow 绿 / warn 黄 / deny 红、命令原文、规则 id）
 - 三个动作：保存策略、检查是否可用、安装 dcg
 
 数据来自插件自己的四条 loopback 路由（`/api/dsh-shell-dcg/status|packs|action|config`）。之所以不用 Remote 命名空间，是因为 bundle 无法在运行期新增一个（那组能力在构建时就定死了）；非本机请求一律 403。
@@ -119,7 +118,7 @@ dcg 的判定 → DSH 的决定：
 | `audit.keepCommandText` | `true` | 记录命令原文；关掉则只存哈希 |
 | `audit.commandMaxChars` | `300` | 命令原文的截断长度 |
 | `audit.retentionDays` | `30` | 保留天数 |
-| `audit.retentionEntries` | `2000` | 最多保留条数；超过任一上限就从最旧的记录删起 |
+| `audit.retentionEntries` | `500` | 最多保留条数；超过任一上限就从最旧的记录删起 |
 
 ## 安装 dcg
 

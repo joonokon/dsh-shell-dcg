@@ -28,7 +28,7 @@ window.__ModuleLoader__.load({
           off: '已关闭',
           binary: 'dcg',
           policy: '策略',
-          audit: '判定记录',
+          audit: '日志',
           recent: '最近的判定',
           empty: '还没有判定记录',
           doctor: '检查是否可用',
@@ -59,12 +59,15 @@ window.__ModuleLoader__.load({
           packsHint: '基础规则（core）始终开启；这里只是增加更多类别，例如 database 覆盖数据库相关命令。',
           packsLoading: '正在读取可用的规则包…',
           packsFailed: '暂时读不到规则包列表，可以直接填写包名；重启 DSH 后这里会变成勾选列表。',
-          logs: '最近的判定',
+          logs: '最近记录',
           logHint: 'allow 放行 · warn 警告 · deny 拒绝 · ask 等审批',
           savePolicy: '保存策略',
           savedPolicy: '已保存。插件重启后按新策略判定。',
           packsUnit: (n) => `${n} 组`,
-          retention: '记录保留',
+          logEnabled: '记录日志',
+          clearLog: '清空日志',
+          cleared: (n) => `已清空 ${n} 条记录`,
+          savedLog: '已保存。',
           retentionDays: '保留天数',
           retentionEntries: '最多条数',
           retentionHint: '超过任一上限就从最旧的记录开始删；清理发生在下次写入时。',
@@ -82,7 +85,7 @@ window.__ModuleLoader__.load({
           off: 'Off',
           binary: 'dcg',
           policy: 'Policy',
-          audit: 'Verdicts',
+          audit: 'Log',
           recent: 'Recent verdicts',
           empty: 'No verdicts yet',
           doctor: 'Check install',
@@ -113,12 +116,15 @@ window.__ModuleLoader__.load({
           packsHint: 'The core rules are always on; ticking here only adds categories, e.g. database covers database commands.',
           packsLoading: 'Reading the available packs…',
           packsFailed: 'The pack list is unavailable; type pack names instead. A DSH restart turns this into checkboxes.',
-          logs: 'Recent verdicts',
+          logs: 'Recent records',
           logHint: 'allow passed · warn warned · deny refused · ask waited for approval',
           savePolicy: 'Save policy',
           savedPolicy: 'Saved. The plugin restarts and judges by the new policy.',
           packsUnit: (n) => `${n} packs`,
-          retention: 'Log retention',
+          logEnabled: 'Record log',
+          clearLog: 'Clear log',
+          cleared: (n) => `Cleared ${n} records`,
+          savedLog: 'Saved.',
           retentionDays: 'Keep days',
           retentionEntries: 'Max entries',
           retentionHint: 'Past either limit the oldest records go first; trimming happens on the next write.',
@@ -164,7 +170,6 @@ window.__ModuleLoader__.load({
 .dsh-dcg__pill--warn { color: var(--dsw-alias-state-warn-primary); border-color: currentColor; }
 .dsh-dcg__cmd { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
 .dsh-dcg__rule { color: var(--dsw-alias-label-tertiary); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
-.dsh-dcg__field { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--dsw-alias-label-secondary); }
 .dsh-dcg__number { width: 84px; box-sizing: border-box; border: 1px solid var(--dsw-alias-border-l2); background: transparent; color: var(--dsw-alias-label-primary); border-radius: 8px; padding: 5px 8px; font-size: 12px; }
 .dsh-dcg__alert { border: 1px solid var(--dsw-alias-state-error-primary); color: var(--dsw-alias-state-error-primary); border-radius: 10px; padding: 10px 14px; margin: 12px 0 0; white-space: pre-wrap; word-break: break-word; }
 .dsh-dcg__info { border: 1px solid var(--dsw-alias-border-l2); border-radius: 10px; padding: 10px 14px; margin: 12px 0 0; white-space: pre-wrap; word-break: break-word; }
@@ -221,7 +226,6 @@ window.__ModuleLoader__.load({
       const [mode, setMode] = React.useState(undefined)
       const [packs, setPacks] = React.useState(undefined)
       const [retention, setRetention] = React.useState(undefined)
-      const [showRetention, setShowRetention] = React.useState(false)
       const [catalog, setCatalog] = React.useState(undefined)
       const [catalogError, setCatalogError] = React.useState(undefined)
       const [showPacks, setShowPacks] = React.useState(false)
@@ -317,6 +321,14 @@ window.__ModuleLoader__.load({
         const entries = retention?.entries ?? status?.audit.retentionEntries ?? 2000
         const result = await run('retention', '/config', { audit: { retentionDays: days, retentionEntries: entries } }, () => copy.savedRetention)
         if (result?.ok === true) setRetention(undefined)
+      }
+
+      const toggleLog = async () => {
+        await run('log', '/config', { audit: { enabled: !(status?.audit.enabled ?? false) } }, () => copy.savedLog)
+      }
+
+      const clearLog = async () => {
+        await run('clear', '/action', { action: 'clear-audit' }, (result) => copy.cleared(result.removed))
       }
 
       const currentPacks = packs ?? status?.policy.packs ?? []
@@ -521,12 +533,12 @@ window.__ModuleLoader__.load({
 
         h(
           'button',
-          { type: 'button', className: 'dsh-dcg__disclose', 'aria-expanded': showRetention, onClick: () => setShowRetention(!showRetention) },
-          h('span', { style: { width: 10, display: 'inline-block' } }, showRetention ? '▾' : '▸'),
-          copy.retention,
-          h('span', { className: 'dsh-dcg__count' }, `${status.audit.retentionDays} 天 / ${status.audit.retentionEntries} 条`),
+          { type: 'button', className: 'dsh-dcg__disclose dsh-dcg__title', 'aria-expanded': showLog, onClick: () => setShowLog(!showLog) },
+          h('span', { style: { width: 10, display: 'inline-block' } }, showLog ? '▾' : '▸'),
+          copy.logs,
+          h('span', { className: 'dsh-dcg__count' }, copy.lines(status.audit.lines)),
         ),
-        showRetention
+        showLog
           ? h(
               'div',
               null,
@@ -535,75 +547,104 @@ window.__ModuleLoader__.load({
                 { className: 'dsh-dcg__card' },
                 h(
                   'div',
-                  { className: 'dsh-dcg__row', style: { borderBottom: 'none' } },
+                  { className: 'dsh-dcg__row' },
+                  h('span', { className: 'dsh-dcg__key' }, copy.logEnabled),
                   h(
-                    'span',
-                    { className: 'dsh-dcg__field' },
-                    copy.retentionDays,
-                    h('input', {
-                      type: 'number',
-                      min: 1,
-                      max: 3650,
-                      className: 'dsh-dcg__number',
-                      value: retention?.days ?? status.audit.retentionDays,
-                      onChange: (event) => setRetention({ ...(retention ?? {}), days: Number(event.target.value) }),
-                    }),
-                  ),
-                  h(
-                    'span',
-                    { className: 'dsh-dcg__field' },
-                    copy.retentionEntries,
-                    h('input', {
-                      type: 'number',
-                      min: 10,
-                      max: 100000,
-                      className: 'dsh-dcg__number',
-                      value: retention?.entries ?? status.audit.retentionEntries,
-                      onChange: (event) => setRetention({ ...(retention ?? {}), entries: Number(event.target.value) }),
+                    'button',
+                    {
+                      type: 'button',
+                      role: 'switch',
+                      'aria-checked': status.audit.enabled,
+                      'aria-label': copy.logEnabled,
+                      disabled: busy === 'log',
+                      onClick: toggleLog,
+                      className: 'dsh-dcg__btn',
+                      style: {
+                        width: 40,
+                        height: 22,
+                        padding: 2,
+                        borderRadius: 999,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: status.audit.enabled ? 'flex-end' : 'flex-start',
+                        background: status.audit.enabled ? 'var(--dsw-alias-brand-primary)' : 'transparent',
+                        borderColor: status.audit.enabled ? 'transparent' : 'var(--dsw-alias-border-l2)',
+                      },
+                    },
+                    h('span', {
+                      style: {
+                        width: 16,
+                        height: 16,
+                        borderRadius: '50%',
+                        background: status.audit.enabled ? 'var(--dsw-alias-label-primary-foreground, #fff)' : 'var(--dsw-alias-label-tertiary)',
+                      },
                     }),
                   ),
                 ),
-              ),
-              h('p', { className: 'dsh-dcg__hint', style: { margin: '8px 0 0' } }, copy.retentionHint),
-              h(
-                'div',
-                { className: 'dsh-dcg__actions' },
-                h('button', { type: 'button', className: 'dsh-dcg__btn', disabled: busy !== undefined, onClick: saveRetention },
-                  busy === 'retention' ? copy.working : copy.saveRetention),
-              ),
-            )
-          : null,
-        h(
-          'button',
-          { type: 'button', className: 'dsh-dcg__disclose dsh-dcg__title', 'aria-expanded': showLog, onClick: () => setShowLog(!showLog) },
-          h('span', { style: { width: 10, display: 'inline-block' } }, showLog ? '▾' : '▸'),
-          copy.logs,
-          h('span', { className: 'dsh-dcg__count' }, `（${recent.length}）`),
-        ),
-        h('p', { className: 'dsh-dcg__hint', style: { margin: showLog ? '0 0 8px' : '0' } }, copy.logHint),
-        showLog
-          ? recent.length === 0
-            ? h('p', { className: 'dsh-dcg__hint' }, copy.empty)
-            : h(
-                'div',
-                { className: 'dsh-dcg__card' },
-                ...recent.map((record, index) =>
+                h(
+                  'div',
+                  { className: 'dsh-dcg__row' },
+                  h('span', { className: 'dsh-dcg__key' }, copy.retentionDays),
+                  h('input', {
+                    type: 'number',
+                    min: 1,
+                    max: 3650,
+                    className: 'dsh-dcg__number',
+                    value: retention?.days ?? status.audit.retentionDays,
+                    onChange: (event) => setRetention({ ...(retention ?? {}), days: Number(event.target.value) }),
+                  }),
+                ),
+                h(
+                  'div',
+                  { className: 'dsh-dcg__row' },
+                  h('span', { className: 'dsh-dcg__key' }, copy.retentionEntries),
+                  h('input', {
+                    type: 'number',
+                    min: 10,
+                    max: 100000,
+                    className: 'dsh-dcg__number',
+                    value: retention?.entries ?? status.audit.retentionEntries,
+                    onChange: (event) => setRetention({ ...(retention ?? {}), entries: Number(event.target.value) }),
+                  }),
+                ),
+                h(
+                  'div',
+                  { className: 'dsh-dcg__row', style: { borderBottom: 'none' } },
+                  h('span', { className: 'dsh-dcg__hint', style: { margin: 0 } }, copy.retentionHint),
                   h(
                     'div',
-                    { key: `${record.ts ?? index}-${index}`, className: 'dsh-dcg__log' },
-                    h('span', { className: 'dsh-dcg__mono' }, clockOf(record.ts)),
-                    h('span', { className: pillClass(record.decision) }, record.decision ?? '?'),
-                    h(
-                      'span',
-                      { className: 'dsh-dcg__cmd', title: record.command ?? record.tool ?? '' },
-                      record.command ?? copy.commandMissing,
-                    ),
-                    record.ruleId === null || record.ruleId === undefined
-                      ? null
-                      : h('span', { className: 'dsh-dcg__rule' }, record.ruleId),
+                    { style: { display: 'flex', gap: 8, flex: '0 0 auto' } },
+                    h('button', { type: 'button', className: 'dsh-dcg__btn', disabled: busy !== undefined, onClick: saveRetention },
+                      busy === 'retention' ? copy.working : copy.saveRetention),
+                    h('button', { type: 'button', className: 'dsh-dcg__btn', disabled: busy !== undefined, onClick: clearLog },
+                      busy === 'clear' ? copy.working : copy.clearLog),
                   ),
                 ),
-              )
+              ),
+              h('p', { className: 'dsh-dcg__hint', style: { margin: '8px 0' } }, copy.logHint),
+              recent.length === 0
+                ? h('p', { className: 'dsh-dcg__hint' }, copy.empty)
+                : h(
+                    'div',
+                    { className: 'dsh-dcg__card' },
+                    ...recent.map((record, index) =>
+                      h(
+                        'div',
+                        { key: `${record.ts ?? index}-${index}`, className: 'dsh-dcg__log' },
+                        h('span', { className: 'dsh-dcg__mono' }, clockOf(record.ts)),
+                        h('span', { className: pillClass(record.decision) }, record.decision ?? '?'),
+                        h(
+                          'span',
+                          { className: 'dsh-dcg__cmd', title: record.command ?? record.tool ?? '' },
+                          record.command ?? copy.commandMissing,
+                        ),
+                        record.ruleId === null || record.ruleId === undefined
+                          ? null
+                          : h('span', { className: 'dsh-dcg__rule' }, record.ruleId),
+                      ),
+                    ),
+                  ),
+            )
           : null,
       )
     }

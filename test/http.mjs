@@ -202,6 +202,20 @@ await check('config surfaces a rejected edit instead of claiming success', async
   assert.match(json.error, /overridden/)
 })
 
+await check('clear-audit removes the day files and reports the count', async () => {
+  const auditRoot = path.join(scratch, 'dsh-shell-dcg', 'audit')
+  fs.mkdirSync(auditRoot, { recursive: true })
+  fs.writeFileSync(path.join(auditRoot, '2026-11-22.jsonl'), '{"n":1}\n{"n":2}\n', 'utf8')
+  fs.writeFileSync(path.join(auditRoot, '2026-11-21.jsonl'), '{"n":3}\n', 'utf8')
+
+  const { routes } = mount()
+  const { status, json } = await call(routes, '/action', { body: { action: 'clear-audit' } })
+  assert.equal(status, 200)
+  assert.equal(json.ok, true)
+  assert.equal(json.removed, 3)
+  assert.deepEqual(fs.readdirSync(auditRoot).filter((name) => name.endsWith('.jsonl')), [])
+})
+
 await check('action rejects an unknown verb and reports install failures', async () => {
   const { routes } = mount()
   const unknown = await call(routes, '/action', { body: { action: 'pizza' } })
