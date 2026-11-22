@@ -15,6 +15,7 @@
 
 import { normalizeConfig } from './lib/config.js'
 import { arm } from './lib/gate.js'
+import { registerRoutes } from './lib/http.js'
 import { log } from './lib/log.js'
 
 /** Cordis plugin name used by loader diagnostics. */
@@ -32,5 +33,14 @@ export const inject = ['tools']
 export function apply(ctx, config) {
   const { settings, warnings } = normalizeConfig(config)
   for (const warning of warnings) log(ctx, 'warn', `dsh-shell-dcg: ${warning}`)
-  return arm(ctx, settings)
+
+  const disposer = arm(ctx, settings)
+
+  // The settings page is optional: a headless or ACP run has no web server, and
+  // the gate itself must still work there.
+  if (typeof ctx.inject === 'function') {
+    ctx.inject(['webServer'], (scope) => registerRoutes(scope, settings))
+  }
+
+  return disposer
 }

@@ -8,12 +8,14 @@
   "main": "index.js",
   "exports": {
     ".": "./index.js",
+    "./client": "./client.js",
     "./package.json": "./package.json",
     "./locale/*.json": "./locale/*.json",
     "./icon": "./icon.svg"
   },
   "files": [
     "index.js",
+    "client.js",
     "lib/**/*.js",
     "cordis.patch.yml",
     "locale/*.json",
@@ -24,7 +26,7 @@
     "dsh": ">=0.2.2-rc.1"
   },
   "scripts": {
-    "test": "node test/smoke.mjs && node test/gate.mjs",
+    "test": "node test/smoke.mjs && node test/gate.mjs && node test/http.mjs",
     "test:live": "node test/live.mjs",
     "probe": "node test/probe-dcg.mjs",
     "install-dcg": "node tools/install-dcg.mjs"
@@ -32,6 +34,13 @@
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-settings"
+      ]
     }
   }
 }

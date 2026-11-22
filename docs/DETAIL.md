@@ -77,6 +77,19 @@ dcg 的判定 → DSH 的决定：
 
 `failClosed: false` 会把上面所有"判不了"的情况都改成放行——只建议在灰度期这么用。唯一例外是策略文件加载失败：那说明门禁自己坏了，这种情况下 `failClosed: false` 也不放行。
 
+## 设置页面
+
+装好并重启 DSH 后，**设置 → 命令门禁** 里有一页：
+
+- 总开关（`role="switch"`）：直接改 `enabled`，走 DSH 的 config editor
+- dcg：版本、路径、来源（managed / config / path）
+- 策略：「判定为危险时」的动作（dcg 默认 / 一律拒绝 / 询问 / 只警告 / 只记录），每项都有一句说明；下面是按分类勾选的「额外启用的规则包」，默认收起
+- 判定记录：累计条数
+- 最近的判定：默认收起，展开后是时间、判定、工具与规则 id
+- 三个动作：保存策略、检查是否可用、安装 dcg
+
+数据来自插件自己的四条 loopback 路由（`/api/dsh-shell-dcg/status|packs|action|config`）。之所以不用 Remote 命名空间，是因为 bundle 无法在运行期新增一个（那组能力在构建时就定死了）；非本机请求一律 403。
+
 ## 配置项
 
 | 键 | 默认 | 说明 |
@@ -98,8 +111,8 @@ dcg 的判定 → DSH 的决定：
 | `dryRun` | `false` | 只记录不拦（灰度用） |
 | `timeoutMs` | `3000` | 单次判定预算 |
 | `maxConcurrent` | `4` | 并发判定上限，防止批量调用 fork 风暴 |
-| `policy.packs` | `[]` | 额外启用的包，写进 `[packs] enabled`。这是**增量**的：dcg 自带的包集合与 `core.*` 包始终生效，关不掉 |
-| `policy.defaultMode` | `"ask"` | 写进 `[policy] default_mode`，取值 `deny`/`ask`/`warn`/`log`。**总是显式写出**，见下方说明 |
+| `policy.packs` | `[]` | 额外启用的包，写进 `[packs] enabled`。这是**增量**的：dcg 自带的包集合照旧生效，`core.*` 始终在保护范围内 |
+| `policy.defaultMode` | `""` | 写进 `[policy] default_mode`，取值 `deny`/`ask`/`warn`/`log`。**留空表示不写**，交给 dcg 的严重度分级 |
 | `policy.observeUntil` | `""` | 写进 `policy.observe_until`，即 dcg 内建的灰度到期日 |
 | `policy.packModes` | `{}` | 单包降级，例如 `{ "core.git": "warn" }` |
 | `audit.enabled` | `true` | 是否写审计 |
@@ -120,13 +133,13 @@ npm run install-dcg
 - Windows 解包走内置 ZIP 读取器；Linux / macOS 是 `.tar.xz`，用系统 `tar` 解
 - 装好的二进制在 `bin/<版本>/`，查找顺序里排在 `dcgPath` 与 PATH 之前
 
-## 两个和 dcg 有关的事实
+## 关于 dcg 的几点实测结论
 
-这两条是实测出来的，写在这里免得以后再踩：
+**不设 `default_mode` 时，dcg 按严重度分级。** 规则命中后：`critical`/`high` 拒绝、`medium` 警告后放行、`low` 只记日志。插件只在 `policy.defaultMode` 明确配置时才写这一行——把模式定死会把三级压成同一个答案，那才是"模棱两可"的来源。
 
-**`--config` 会把策略变成"完整声明"。** 只要把文件传给 dcg，文件里没写 `default_mode` 就一律按 `deny` 处理；完全不传文件时才是 dcg 自己的默认（`ask`）。所以本插件**总是显式写出** `default_mode`：行为由配置决定，而不是由"那个文件恰好存不存在"决定。
+**终端和会话用的不是同一份配置。** 插件用 `--config` 指定自己生成的策略文件；你在终端直接跑 `dcg` 时读的是 `~/.config/dcg/config.toml`。两边的包集合与 `default_mode` 互不影响，想让会话和终端一致，就把包列表写进 `policy.packs`。
 
-**包只能加，不能关。** `[packs] enabled` 是增量的，dcg 自带的包集合照旧生效，`core.*` 始终在保护范围内；`[policy.packs]` 只能在 `deny`/`ask`/`warn`/`log` 之间调整，没有 `off`。想让某类命令放行，只能把它降到 `log`，而不是关掉整个包。
+**包是增量的。** `[packs] enabled` 只追加，`core.*` 始终生效；dcg 另有 `[packs] disabled` 可关掉非 core 的包，本插件暂未暴露这个开关。
 
 ## 磁盘上有什么
 

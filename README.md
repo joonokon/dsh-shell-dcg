@@ -135,6 +135,8 @@ printf 'git reset --hard HEAD~1' | dcg --robot test --stdin --format json
 
 每行是一次判定。`decision` 是 dcg 的说法，`tool` 是哪个工具，`dryRun: true` 表示这次只记录没拦。
 
+**看状态**：打开 **设置 → 命令门禁**——总开关、dcg 的版本与路径、当前策略、判定条数、最近的判定，以及「检查是否可用」「安装 dcg」两个动作。
+
 **其他落地文件：**
 
 ```
@@ -158,7 +160,7 @@ printf 'git reset --hard HEAD~1' | dcg --robot test --stdin --format json
 | `onNotReady` | `"deny"` | dcg 没准备好时，命令类工具是拒还是放过 |
 | `failClosed` | `true` | 判不了（超时/崩溃/未知判定）时是否拒绝 |
 | `onAsk` | `"ask"` | dcg 判"需要人看"时：`ask` 走审批 / `deny` / `allow` |
-| `policy.defaultMode` | `"ask"` | 命中规则时的默认动作：`ask`（交给审批）/ `deny` / `warn` / `log` |
+| `policy.defaultMode` | 留空 | 留空则按 dcg 的严重度分级（high/critical 拒、medium 警告、low 只记日志）；填 `deny`/`ask`/`warn`/`log` 则统一按该动作 |
 | `tools` | `["ops_bash","bash","pwsh","ssh_exec"]` | 参与判定的工具名 |
 | `scriptPath` | `"read"` | 只给 `script_path` 的调用：`read` 读出文件内容再判 / `deny` / `pass` |
 | `policy.packModes` | `{}` | 单包降级，例如 `{ "core.git": "warn" }` |
@@ -220,7 +222,7 @@ plugin_manager { action: "remove_bundle", target: "dsh-shell-dcg" }
 ## 开发
 
 ```sh
-npm test        # 27 项，不需要 DSH 运行时，也不需要真 dcg
+npm test        # 57 项，不需要 DSH 运行时，也不需要真 dcg
 npm run test:live   # 对着真 dcg 跑完整门禁链路（需要本机有 dcg）
 npm run probe       # 只看 dcg 对一批命令的判定，排查用
 ```
@@ -238,7 +240,7 @@ npm run probe       # 只看 dcg 对一批命令的判定，排查用
 
 **走 `dcg test --stdin` 而不是 `dcg hook`。** dcg 的 hook 入口按 `tool_name` 白名单过滤，`ops_bash` 不在名单里，它"没有意见"就放行——静默失效。`test --stdin` 不经过工具名判定，命令走 stdin 也避开了 Windows 的引号和命令行长度问题。
 
-**自己拥有策略文件。** `--config` 指向插件生成的 `policy.toml`：`default_mode` 总是显式写出，其余键只写用户配置过的。这样会话策略和终端策略隔离，且可复现。
+**自己拥有策略文件。** `--config` 指向插件生成的 `policy.toml`，只写配置过的键；`default_mode` 留空时交给 dcg 的严重度分级。这样会话策略和终端策略隔离，各自可复现。
 
 **零外部依赖。** 本机目录是 link 安装，Node 按真实路径解析裸模块名，`@deepseek-ai/*` 不一定解析得到。只用 `node:*` 就没有这个风险；代价是配置不走 schemastery 表单，校验自己写（类型不对就回退并 warning，绝不抛）。
 

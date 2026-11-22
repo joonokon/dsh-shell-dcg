@@ -34,6 +34,9 @@ if (NO_DCG) {
 
 const { normalizeConfig } = await import('../lib/config.js')
 const { arm } = await import('../lib/gate.js')
+const { resolveBinary } = await import('../lib/dcg.js')
+const { runDoctor } = await import('../lib/doctor.js')
+const { writePolicy } = await import('../lib/policy.js')
 
 const WORKSPACE = process.cwd()
 const NEXT = Symbol('next')
@@ -197,6 +200,21 @@ async function main() {
   const passScripts = boot({ scriptPath: 'pass' })
   check('scriptPath=pass     → proceed', await passScripts.run(script(risky)), 'next')
   await passScripts.dispose()
+
+  // --- readiness probe against the real binary -------------------------------
+  const doctorSettings = normalizeConfig({ enabled: true }).settings
+  const doctorResult = await runDoctor({
+    settings: doctorSettings,
+    binary: resolveBinary(doctorSettings),
+    policyFile: writePolicy(doctorSettings).path,
+    cwd: WORKSPACE,
+  })
+  console.log('')
+  console.log('-- readiness probe against the real binary --')
+  check('doctor              → ok', doctorResult.ok, true)
+  if (doctorResult.ok !== true) {
+    for (const entry of doctorResult.checks) if (!entry.ok) console.log(`      ${entry.id}: ${entry.detail}`)
+  }
 
   // --- onNotReady: needs a machine with no dcg at all, so a child run does it -
   console.log('')
