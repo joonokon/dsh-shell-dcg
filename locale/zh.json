@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "DCG 命令门禁",
+    "description": "每次执行 shell 命令前，先用 Destructive Command Guard（dcg）判一次。默认关闭；需要本机已安装 dcg。",
+    "detail": "docs/DETAIL.md"
+  }
+}

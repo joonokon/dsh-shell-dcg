@@ -1,0 +1,34 @@
+{
+  "name": "dsh-shell-dcg",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Insert Destructive Command Guard (dcg) into the DeepSeek Harness tool-review chain for shell tools.",
+  "license": "MIT",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "lib/**/*.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "docs/DETAIL.md",
+    "icon.svg"
+  ],
+  "engines": {
+    "dsh": ">=0.2.2-rc.1"
+  },
+  "scripts": {
+    "test": "node test/smoke.mjs && node test/gate.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

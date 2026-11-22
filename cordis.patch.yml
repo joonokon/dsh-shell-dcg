@@ -1,0 +1,7 @@
+# One row: the plugin's only runtime entry. `enabled: false` ships by default so a
+# fresh install changes nothing until dcg is installed and the switch is turned on.
+- insert:
+    - id: dsh-shell-dcg
+      name: dsh-shell-dcg
+      config:
+        enabled: false
