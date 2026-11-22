@@ -184,6 +184,16 @@ await check('config writes the switch and the policy through one editor call', a
   })
 })
 
+await check('config also writes the log retention limits', async () => {
+  const seen = []
+  const editor = { async edit(entry, change) { seen.push(change({ enabled: true, audit: { retentionDays: 30 } })) } }
+  const { routes } = mount({ editor })
+  const { status, json } = await call(routes, '/config', { body: { audit: { retentionDays: 7, retentionEntries: 500 } } })
+  assert.equal(status, 200)
+  assert.equal(json.ok, true)
+  assert.deepEqual(seen[0].audit, { retentionDays: 7, retentionEntries: 500 })
+})
+
 await check('config surfaces a rejected edit instead of claiming success', async () => {
   const editor = { async edit() { throw new Error('overridden by a higher layer') } }
   const { routes } = mount({ editor })

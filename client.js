@@ -64,6 +64,13 @@ window.__ModuleLoader__.load({
           savePolicy: '保存策略',
           savedPolicy: '已保存。插件重启后按新策略判定。',
           packsUnit: (n) => `${n} 组`,
+          retention: '记录保留',
+          retentionDays: '保留天数',
+          retentionEntries: '最多条数',
+          retentionHint: '超过任一上限就从最旧的记录开始删；清理发生在下次写入时。',
+          saveRetention: '保存',
+          savedRetention: '已保存。下次写入判定记录时按新上限清理。',
+          commandMissing: '（未记录命令）',
         }
       : {
           label: 'Command gate',
@@ -111,6 +118,13 @@ window.__ModuleLoader__.load({
           savePolicy: 'Save policy',
           savedPolicy: 'Saved. The plugin restarts and judges by the new policy.',
           packsUnit: (n) => `${n} packs`,
+          retention: 'Log retention',
+          retentionDays: 'Keep days',
+          retentionEntries: 'Max entries',
+          retentionHint: 'Past either limit the oldest records go first; trimming happens on the next write.',
+          saveRetention: 'Save',
+          savedRetention: 'Saved. The next write trims to the new limits.',
+          commandMissing: '(command not recorded)',
         }
 
     // Scoped CSS: the native select could not be themed, so the controls are
@@ -146,6 +160,12 @@ window.__ModuleLoader__.load({
 .dsh-dcg__log { display: flex; align-items: baseline; gap: 10px; padding: 6px 0; font-size: 12px; }
 .dsh-dcg__pill { min-width: 52px; text-align: center; border-radius: 999px; padding: 0 8px; font-size: 11px; line-height: 18px; border: 1px solid var(--dsw-alias-border-l2); color: var(--dsw-alias-label-secondary); }
 .dsh-dcg__pill--deny { color: var(--dsw-alias-state-error-primary); border-color: currentColor; }
+.dsh-dcg__pill--allow { color: var(--dsw-alias-state-success-primary); border-color: currentColor; }
+.dsh-dcg__pill--warn { color: var(--dsw-alias-state-warn-primary); border-color: currentColor; }
+.dsh-dcg__cmd { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.dsh-dcg__rule { color: var(--dsw-alias-label-tertiary); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
+.dsh-dcg__field { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--dsw-alias-label-secondary); }
+.dsh-dcg__number { width: 84px; box-sizing: border-box; border: 1px solid var(--dsw-alias-border-l2); background: transparent; color: var(--dsw-alias-label-primary); border-radius: 8px; padding: 5px 8px; font-size: 12px; }
 .dsh-dcg__alert { border: 1px solid var(--dsw-alias-state-error-primary); color: var(--dsw-alias-state-error-primary); border-radius: 10px; padding: 10px 14px; margin: 12px 0 0; white-space: pre-wrap; word-break: break-word; }
 .dsh-dcg__info { border: 1px solid var(--dsw-alias-border-l2); border-radius: 10px; padding: 10px 14px; margin: 12px 0 0; white-space: pre-wrap; word-break: break-word; }
 .dsh-dcg__detail { color: var(--dsw-alias-label-secondary); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; margin-top: 4px; }
@@ -177,6 +197,18 @@ window.__ModuleLoader__.load({
     const selectsCategory = (entries, category) =>
       entries.some((entry) => entry === category || entry.startsWith(`${category}.`))
 
+    /** Audit stamps are ISO UTC; the page shows the reader's own clock. */
+    const clockOf = (ts) => {
+      if (typeof ts !== 'string') return '--:--:--'
+      const date = new Date(ts)
+      return Number.isNaN(date.getTime()) ? '--:--:--' : date.toLocaleTimeString(undefined, { hour12: false })
+    }
+
+    const pillClass = (decision) =>
+      decision === 'deny' || decision === 'allow' || decision === 'warn'
+        ? `dsh-dcg__pill dsh-dcg__pill--${decision}`
+        : 'dsh-dcg__pill'
+
     // -------------------------------------------------------------- component
 
     function Section() {
@@ -188,6 +220,8 @@ window.__ModuleLoader__.load({
       // Policy editing: `undefined` follows the Host, a value is unsaved input.
       const [mode, setMode] = React.useState(undefined)
       const [packs, setPacks] = React.useState(undefined)
+      const [retention, setRetention] = React.useState(undefined)
+      const [showRetention, setShowRetention] = React.useState(false)
       const [catalog, setCatalog] = React.useState(undefined)
       const [catalogError, setCatalogError] = React.useState(undefined)
       const [showPacks, setShowPacks] = React.useState(false)
@@ -276,6 +310,13 @@ window.__ModuleLoader__.load({
           setMode(undefined)
           setPacks(undefined)
         }
+      }
+
+      const saveRetention = async () => {
+        const days = retention?.days ?? status?.audit.retentionDays ?? 30
+        const entries = retention?.entries ?? status?.audit.retentionEntries ?? 2000
+        const result = await run('retention', '/config', { audit: { retentionDays: days, retentionEntries: entries } }, () => copy.savedRetention)
+        if (result?.ok === true) setRetention(undefined)
       }
 
       const currentPacks = packs ?? status?.policy.packs ?? []
@@ -480,6 +521,60 @@ window.__ModuleLoader__.load({
 
         h(
           'button',
+          { type: 'button', className: 'dsh-dcg__disclose', 'aria-expanded': showRetention, onClick: () => setShowRetention(!showRetention) },
+          h('span', { style: { width: 10, display: 'inline-block' } }, showRetention ? '▾' : '▸'),
+          copy.retention,
+          h('span', { className: 'dsh-dcg__count' }, `${status.audit.retentionDays} 天 / ${status.audit.retentionEntries} 条`),
+        ),
+        showRetention
+          ? h(
+              'div',
+              null,
+              h(
+                'div',
+                { className: 'dsh-dcg__card' },
+                h(
+                  'div',
+                  { className: 'dsh-dcg__row', style: { borderBottom: 'none' } },
+                  h(
+                    'span',
+                    { className: 'dsh-dcg__field' },
+                    copy.retentionDays,
+                    h('input', {
+                      type: 'number',
+                      min: 1,
+                      max: 3650,
+                      className: 'dsh-dcg__number',
+                      value: retention?.days ?? status.audit.retentionDays,
+                      onChange: (event) => setRetention({ ...(retention ?? {}), days: Number(event.target.value) }),
+                    }),
+                  ),
+                  h(
+                    'span',
+                    { className: 'dsh-dcg__field' },
+                    copy.retentionEntries,
+                    h('input', {
+                      type: 'number',
+                      min: 10,
+                      max: 100000,
+                      className: 'dsh-dcg__number',
+                      value: retention?.entries ?? status.audit.retentionEntries,
+                      onChange: (event) => setRetention({ ...(retention ?? {}), entries: Number(event.target.value) }),
+                    }),
+                  ),
+                ),
+              ),
+              h('p', { className: 'dsh-dcg__hint', style: { margin: '8px 0 0' } }, copy.retentionHint),
+              h(
+                'div',
+                { className: 'dsh-dcg__actions' },
+                h('button', { type: 'button', className: 'dsh-dcg__btn', disabled: busy !== undefined, onClick: saveRetention },
+                  busy === 'retention' ? copy.working : copy.saveRetention),
+              ),
+            )
+          : null,
+        h(
+          'button',
           { type: 'button', className: 'dsh-dcg__disclose dsh-dcg__title', 'aria-expanded': showLog, onClick: () => setShowLog(!showLog) },
           h('span', { style: { width: 10, display: 'inline-block' } }, showLog ? '▾' : '▸'),
           copy.logs,
@@ -496,12 +591,16 @@ window.__ModuleLoader__.load({
                   h(
                     'div',
                     { key: `${record.ts ?? index}-${index}`, className: 'dsh-dcg__log' },
-                    h('span', { className: 'dsh-dcg__mono' }, (record.ts ?? '').slice(11, 19) || '--:--:--'),
-                    h('span', { className: record.decision === 'deny' ? 'dsh-dcg__pill dsh-dcg__pill--deny' : 'dsh-dcg__pill' }, record.decision ?? '?'),
-                    h('span', null, record.tool ?? '?'),
+                    h('span', { className: 'dsh-dcg__mono' }, clockOf(record.ts)),
+                    h('span', { className: pillClass(record.decision) }, record.decision ?? '?'),
+                    h(
+                      'span',
+                      { className: 'dsh-dcg__cmd', title: record.command ?? record.tool ?? '' },
+                      record.command ?? copy.commandMissing,
+                    ),
                     record.ruleId === null || record.ruleId === undefined
                       ? null
-                      : h('span', { className: 'dsh-dcg__mono' }, record.ruleId),
+                      : h('span', { className: 'dsh-dcg__rule' }, record.ruleId),
                   ),
                 ),
               )

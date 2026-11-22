@@ -21,6 +21,8 @@ import {
   policyPath,
   auditDir,
 } from '../lib/config.js'
+import { createAudit } from '../lib/audit.js'
+import { summarizeAudit } from '../lib/status.js'
 import { buildTestArgs, cleanEnv, createLimiter, parseVerdict, resolveBinary, runDcg } from '../lib/dcg.js'
 import { mapDecision, reasonFor } from '../lib/gate.js'
 import { buildPolicyToml as policyToml } from '../lib/policy.js'
@@ -447,6 +449,50 @@ await check('install gives up on a stalled download', async () => {
   assert.equal(result.ok, false)
   assert.match(result.reason, /download gave up after 50 ms/)
   assert.match(result.reason, /dcgPath/)
+})
+
+// ----------------------------------------------------------------- audit ----
+
+await check('audit trims the oldest entries when past the cap', () => {
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), 'dsh-shell-dcg-audit-'))
+  const settings = normalizeConfig({ audit: { retentionEntries: 10 } }).settings
+  const dir = path.join(home, 'dsh-shell-dcg', 'audit')
+  fs.mkdirSync(dir, { recursive: true })
+
+  const day = path.join(dir, '2099-01-01.jsonl')
+  const seeded = Array.from({ length: 15 }, (_, index) =>
+    JSON.stringify({ ts: `2099-01-01T00:00:${String(index).padStart(2, '0')}Z`, event: 'decision', n: index }),
+  )
+  fs.writeFileSync(day, `${seeded.join('\n')}\n`, 'utf8')
+
+  // A fresh sink prunes once, before its first append.
+  createAudit(settings, { DSH_HOME: home }).record({ event: 'decision', n: 15 })
+
+  const kept = fs
+    .readFileSync(day, 'utf8')
+    .split('\n')
+    .filter((line) => line.length > 0)
+  assert.equal(kept.length, 10)
+  assert.equal(JSON.parse(kept[0]).n, 5)
+  assert.equal(JSON.parse(kept[9]).n, 14)
+
+  fs.rmSync(home, { recursive: true, force: true })
+})
+
+await check('audit surfaces the recorded command in the summary', () => {
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), 'dsh-shell-dcg-audit-'))
+  const settings = normalizeConfig({}).settings
+  assert.equal(settings.audit.keepCommandText, true, 'commands are recorded by default')
+
+  const dir = path.join(home, 'dsh-shell-dcg', 'audit')
+  fs.mkdirSync(dir, { recursive: true })
+  const day = path.join(dir, '2099-01-02.jsonl')
+  fs.writeFileSync(day, `${JSON.stringify({ ts: '2099-01-02T03:04:05.000Z', event: 'decision', tool: 'ops_bash', decision: 'deny', command: 'rm -rf ./build' })}\n`, 'utf8')
+
+  const summary = summarizeAudit(settings, { DSH_HOME: home })
+  assert.equal(summary.recent.length, 1)
+  assert.equal(summary.recent[0].command, 'rm -rf ./build')
+  fs.rmSync(home, { recursive: true, force: true })
 })
 
 // ----------------------------------------------------------------- go/no ----

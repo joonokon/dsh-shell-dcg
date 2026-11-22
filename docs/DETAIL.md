@@ -84,8 +84,8 @@ dcg 的判定 → DSH 的决定：
 - 总开关（`role="switch"`）：直接改 `enabled`，走 DSH 的 config editor
 - dcg：版本、路径、来源（managed / config / path）
 - 策略：「判定为危险时」的动作（dcg 默认 / 一律拒绝 / 询问 / 只警告 / 只记录），每项都有一句说明；下面是按分类勾选的「额外启用的规则包」，默认收起
-- 判定记录：累计条数
-- 最近的判定：默认收起，展开后是时间、判定、工具与规则 id
+- 判定记录：累计条数，以及可展开的「记录保留」（保留天数 / 最多条数，改完即写入配置）
+- 最近的判定：默认收起；展开后每条是本地时间、彩色判定（allow 绿 / warn 黄 / deny 红）、命令原文与规则 id
 - 三个动作：保存策略、检查是否可用、安装 dcg
 
 数据来自插件自己的四条 loopback 路由（`/api/dsh-shell-dcg/status|packs|action|config`）。之所以不用 Remote 命名空间，是因为 bundle 无法在运行期新增一个（那组能力在构建时就定死了）；非本机请求一律 403。
@@ -115,9 +115,11 @@ dcg 的判定 → DSH 的决定：
 | `policy.defaultMode` | `""` | 写进 `[policy] default_mode`，取值 `deny`/`ask`/`warn`/`log`。**留空表示不写**，交给 dcg 的严重度分级 |
 | `policy.observeUntil` | `""` | 写进 `policy.observe_until`，即 dcg 内建的灰度到期日 |
 | `policy.packModes` | `{}` | 单包降级，例如 `{ "core.git": "warn" }` |
-| `audit.enabled` | `true` | 是否写审计 |
-| `audit.keepCommandText` | `false` | 审计里存命令原文（默认只存哈希） |
-| `audit.retentionDays` | `30` | 审计保留天数 |
+| `audit.enabled` | `true` | 是否写判定记录 |
+| `audit.keepCommandText` | `true` | 记录命令原文；关掉则只存哈希 |
+| `audit.commandMaxChars` | `300` | 命令原文的截断长度 |
+| `audit.retentionDays` | `30` | 保留天数 |
+| `audit.retentionEntries` | `2000` | 最多保留条数；超过任一上限就从最旧的记录删起 |
 
 ## 安装 dcg
 
@@ -158,4 +160,4 @@ $DSH_HOME/dsh-shell-dcg/
 - 读文件与 bash 真正执行之间有一个极短的时间窗，脚本在这期间被改写的话判定结果会过期。
 - 不判文件工具，不做路径约束。
 - dcg 是 deny-list：没被收录的新型破坏写法可能漏过，它也会被刻意构造的混淆绕过。它是减速带，不是保险柜。
-- 审计默认只存命令哈希；要复盘具体命令，把 `audit.keepCommandText` 打开。
+- 判定记录默认保存命令原文（超过 `audit.commandMaxChars` 截断）；只想留指纹就关掉 `audit.keepCommandText`。
