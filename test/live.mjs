@@ -79,6 +79,12 @@ function call(command, extra = {}) {
 }
 
 let failures = 0
+
+/** One `script_path`-only call. */
+function script(filePath) {
+  return call(undefined, { arguments: { script_path: filePath } })
+}
+
 function check(label, actual, expected) {
   const ok = actual === expected
   if (!ok) failures += 1
@@ -140,7 +146,7 @@ async function main() {
   check('git reset --hard    → ask', await fresh.run(call('git reset --hard HEAD~1')), 'ask')
   check('unjudged tool       → proceed', await fresh.run(call(undefined, { tool: 'read', arguments: { file_path: 'x' } })), 'next')
   check('no command at all   → proceed', await fresh.run(call(undefined, { arguments: {} })), 'next')
-  check('script_path         → deny', await fresh.run(call(undefined, { arguments: { script_path: 'a.sh' } })), 'deny')
+  check('missing script      → deny', await fresh.run(call(undefined, { arguments: { script_path: 'a.sh' } })), 'deny')
   await fresh.dispose()
 
   // --- a bogus dcgPath is not fatal: PATH is still consulted ------------------
@@ -166,6 +172,31 @@ async function main() {
   console.log('-- defaultMode = "ask" with onAsk = "deny" --')
   check('cd /tmp && rm -rf *  → deny', await askAsDeny.run(call('cd /tmp && rm -rf *')), 'deny')
   await askAsDeny.dispose()
+
+  // --- script_path: the file's contents are what gets judged ------------------
+  const scripts = path.join(scratch, 'scripts')
+  fs.mkdirSync(scripts, { recursive: true })
+  const risky = path.join(scripts, 'risky.sh')
+  fs.writeFileSync(risky, '#!/usr/bin/env bash\nset -euo pipefail\nrm -rf ./build\n', 'utf8')
+  const benign = path.join(scripts, 'benign.sh')
+  fs.writeFileSync(benign, '#!/usr/bin/env bash\necho hello\nls -la\n', 'utf8')
+
+  const reading = boot({})
+  console.log('')
+  console.log('-- script_path: contents judged (scriptPath=read, default) --')
+  check('risky script        → ask', await reading.run(script(risky)), 'ask')
+  check('benign script       → proceed', await reading.run(script(benign)), 'next')
+  check('relative + workdir  → ask', await reading.run(call(undefined, { arguments: { script_path: 'risky.sh', workdir: scripts } })), 'ask')
+  check('missing script      → deny', await reading.run(script(path.join(scripts, 'nope.sh'))), 'deny')
+  await reading.dispose()
+
+  const denyScripts = boot({ scriptPath: 'deny' })
+  check('scriptPath=deny     → deny', await denyScripts.run(script(risky)), 'deny')
+  await denyScripts.dispose()
+
+  const passScripts = boot({ scriptPath: 'pass' })
+  check('scriptPath=pass     → proceed', await passScripts.run(script(risky)), 'next')
+  await passScripts.dispose()
 
   // --- onNotReady: needs a machine with no dcg at all, so a child run does it -
   console.log('')

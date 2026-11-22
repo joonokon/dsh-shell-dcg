@@ -143,7 +143,7 @@ await check('onNotReady=pass lets the call through', async () => {
   assert.deepEqual(outcome, { kind: 'allow' })
 })
 
-await check('a script_path call is denied without consulting dcg', async () => {
+await check('an unreadable script_path is denied without consulting dcg', async () => {
   const { ctx, listeners } = createContext()
   const settings = normalizeConfig({ enabled: true, dcgPath: broken.file, preferManaged: false }).settings
   arm(ctx, settings)
@@ -154,7 +154,32 @@ await check('a script_path call is denied without consulting dcg', async () => {
   )
   assert.equal(outcome.kind, 'deny')
   assert.equal(outcome.info.code, 'SHELL_DCG_DENIED')
-  assert.match(outcome.reason, /scriptPath/)
+  assert.match(outcome.reason, /无法把脚本/)
+})
+
+await check('scriptPath=deny refuses every script_path call', async () => {
+  const { ctx, listeners } = createContext()
+  const settings = normalizeConfig({ enabled: true, scriptPath: 'deny', dcgPath: broken.file, preferManaged: false }).settings
+  arm(ctx, settings)
+  await new Promise((resolve) => setTimeout(resolve, 10))
+  const outcome = await listeners[0].handler(
+    { name: 'ops_bash', arguments: { script_path: 'E:/definitely-missing.sh' }, callId: 'c' },
+    next,
+  )
+  assert.equal(outcome.kind, 'deny')
+  assert.match(outcome.reason, /不读脚本/)
+})
+
+await check('scriptPath=pass lets the call through untouched', async () => {
+  const { ctx, listeners } = createContext()
+  const settings = normalizeConfig({ enabled: true, scriptPath: 'pass', dcgPath: broken.file, preferManaged: false }).settings
+  arm(ctx, settings)
+  await new Promise((resolve) => setTimeout(resolve, 10))
+  const outcome = await listeners[0].handler(
+    { name: 'ops_bash', arguments: { script_path: 'E:/definitely-missing.sh' }, callId: 'c' },
+    next,
+  )
+  assert.deepEqual(outcome, { kind: 'allow' })
 })
 
 await check('a call with no command at all passes through', async () => {

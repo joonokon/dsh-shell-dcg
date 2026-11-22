@@ -88,7 +88,8 @@ dcg 的判定 → DSH 的决定：
 | `agentName` | `"dsh"` | 传给 `dcg --agent`，对应策略里的 `[agents.dsh]` |
 | `tools` | `["ops_bash","bash","pwsh","ssh_exec"]` | 参与判定的工具名 |
 | `commandField` | `"command"` | 从工具参数里取命令的字段名 |
-| `scriptPath` | `"deny"` | 调用只给 `script_path` 时的处理：`deny` 或 `pass` |
+| `scriptPath` | `"read"` | 只给 `script_path` 时：`read` 读出文件内容交给 dcg 判 / `deny` 直接拒 / `pass` 放行不审 |
+| `workdirField` | `"workdir"` | 解析相对脚本路径时用哪个参数当 cwd |
 | `dialects` | 按工具名映射 | `ops_bash`/`bash`/`ssh_exec` → `posix`，`pwsh` → `ps` |
 | `onAsk` | `"ask"` | `ask` / `deny` / `allow` |
 | `onWarn` | `"allow"` | `allow` / `ask` / `deny` |
@@ -126,7 +127,8 @@ $DSH_HOME/dsh-shell-dcg/
 
 ## 已知限制
 
-- 只判命令字符串。`script_path` 形式默认拒绝，因为 dcg 看不到文件内容。
+- 只判命令字符串。`script_path` 形式会把文件内容读出来再判，上限 256 KB，且必须是可读的 shell 文本：含 NUL 字节、超限、空文件一律拒绝。
+- 读文件与 bash 真正执行之间有一个极短的时间窗，脚本在这期间被改写的话判定结果会过期。
 - 不判文件工具，不做路径约束。
 - dcg 是 deny-list：没被收录的新型破坏写法可能漏过，它也会被刻意构造的混淆绕过。它是减速带，不是保险柜。
 - 审计默认只存命令哈希；要复盘具体命令，把 `audit.keepCommandText` 打开。

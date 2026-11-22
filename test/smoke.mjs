@@ -23,6 +23,7 @@ import {
 import { buildTestArgs, cleanEnv, createLimiter, parseVerdict, resolveBinary, runDcg } from '../lib/dcg.js'
 import { mapDecision, reasonFor } from '../lib/gate.js'
 import { buildPolicyToml as policyToml } from '../lib/policy.js'
+import { readScript, resolveScriptTarget, resolveWorkdir } from '../lib/script.js'
 
 const results = []
 async function check(name, fn) {
@@ -255,6 +256,50 @@ await check('createLimiter never exceeds the cap', async () => {
   )
   assert.equal(peak, 2)
 })
+
+// ------------------------------------------------------------ script_path ----
+
+const scriptDir = fs.mkdtempSync(path.join(os.tmpdir(), 'dsh-shell-dcg-script-'))
+
+await check('resolveScriptTarget follows bash: relative to workdir, then session cwd', () => {
+  const session = path.join(scriptDir, 'workspace')
+  assert.equal(resolveScriptTarget('scripts/x.sh', undefined, session), path.join(session, 'scripts', 'x.sh'))
+  assert.equal(resolveScriptTarget('x.sh', 'sub', session), path.join(session, 'sub', 'x.sh'))
+  const absolute = path.join(scriptDir, 'abs.sh')
+  assert.equal(resolveScriptTarget(absolute, 'ignored', session), absolute)
+  assert.equal(resolveWorkdir(undefined, session), session)
+})
+
+await check('readScript returns the text bash would run', () => {
+  const file = path.join(scriptDir, 'ok.sh')
+  fs.writeFileSync(file, 'echo hi\nrm -rf ./build\n', 'utf8')
+  const read = readScript(file)
+  assert.equal(read.ok, true)
+  assert.match(read.text, /rm -rf \.\/build/)
+  assert.equal(read.bytes, fs.statSync(file).size)
+})
+
+await check('readScript refuses what it cannot judge faithfully', () => {
+  const missing = readScript(path.join(scriptDir, 'nope.sh'))
+  assert.equal(missing.ok, false)
+  assert.match(missing.reason, /cannot stat/)
+
+  assert.match(readScript(scriptDir).reason, /directory/)
+
+  const binary = path.join(scriptDir, 'binary.bin')
+  fs.writeFileSync(binary, Buffer.from([0x7f, 0x45, 0x4c, 0x00, 0x01]))
+  assert.match(readScript(binary).reason, /NUL/)
+
+  const empty = path.join(scriptDir, 'empty.sh')
+  fs.writeFileSync(empty, '')
+  assert.match(readScript(empty).reason, /empty/)
+
+  const big = path.join(scriptDir, 'big.sh')
+  fs.writeFileSync(big, 'x'.repeat(64))
+  assert.match(readScript(big, 16).reason, /over the 16-byte limit/)
+})
+
+fs.rmSync(scriptDir, { recursive: true, force: true })
 
 // ----------------------------------------------------------------- go/no ----
 

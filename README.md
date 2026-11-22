@@ -148,6 +148,7 @@ printf 'git reset --hard HEAD~1' | dcg --robot test --stdin --format json
 | `onAsk` | `"ask"` | dcg 判"需要人看"时：`ask` 走审批 / `deny` / `allow` |
 | `policy.defaultMode` | `"ask"` | 命中规则时的默认动作：`ask`（交给审批）/ `deny` / `warn` / `log` |
 | `tools` | `["ops_bash","bash","pwsh","ssh_exec"]` | 参与判定的工具名 |
+| `scriptPath` | `"read"` | 只给 `script_path` 的调用：`read` 读出文件内容再判 / `deny` / `pass` |
 | `policy.packModes` | `{}` | 单包降级，例如 `{ "core.git": "warn" }` |
 
 一个稍微完整的例子：
