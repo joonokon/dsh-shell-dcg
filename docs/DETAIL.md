@@ -9,7 +9,7 @@
 - 按 `dcg` 返回的 `decision` 决定放行、转交审批或拒绝；
 - 每次判定写入一行审计记录。
 
-覆盖工具默认 `bash`、`pwsh`、`ops_bash`、`ssh_exec`，由 `tools` 调整。前两个由 DSH 自带，`ops_bash` 来自 `dsh-ops`，`ssh_exec` 来自 `@linxin666/dsh-ssh`。命令取自工具参数中的 `command` 字段；仅提供 `script_path` 时读取该文件内容（上限 256 KiB，含 NUL 字节、超限或空文件一律拒绝）后再判定。
+覆盖工具默认 `bash`、`pwsh`、`ops_bash`、`ssh_exec`，由 `tools` 调整。`bash`、`pwsh` 是 DSH 的工具名（Windows 上 `bash` 通常由 `dsh-gitbash-shell` 这类插件提供 Git Bash，Linux 与 macOS 上由 DSH 自带的 `tool-bash` 提供），`ops_bash` 来自 `dsh-ops`，`ssh_exec` 来自 `@linxin666/dsh-ssh`。命令取自工具参数中的 `command` 字段；仅提供 `script_path` 时读取该文件内容（上限 256 KiB，含 NUL 字节、超限或空文件一律拒绝）后再判定。
 
 `--dialect` 按工具选择：POSIX 系工具为 `posix`，`pwsh` 为 `ps`。单次判定超时 3000 ms，并发上限 4。
 

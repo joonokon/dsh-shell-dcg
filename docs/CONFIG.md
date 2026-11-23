@@ -11,7 +11,7 @@
 | `preferManaged` | `true` | 为 `true` 时托管安装优先；为 `false` 时忽略托管安装，仅使用 `dcgPath` 与 `PATH` |
 | `minVersion` | `"0.16.0"` | 低于此版本视为未就绪 |
 | `agentName` | `"dsh"` | 传给 `dcg --agent`，对应策略中的 `[agents.dsh]` |
-| `tools` | `["bash","pwsh","ops_bash","ssh_exec"]` | 参与判定的工具名。`bash`、`pwsh` 由 DSH 自带，`ops_bash` 来自 `dsh-ops`、`ssh_exec` 来自 `@linxin666/dsh-ssh`；未安装的工具只是匹配不到，不影响运行 |
+| `tools` | `["bash","pwsh","ops_bash","ssh_exec"]` | 参与判定的工具名。`bash`、`pwsh` 是 DSH 的工具名：Windows 上 `bash` 通常由 `dsh-gitbash-shell` 这类插件提供 Git Bash，Linux 与 macOS 上由 DSH 自带的 `tool-bash` 提供；`ops_bash` 来自 `dsh-ops`，`ssh_exec` 来自 `@linxin666/dsh-ssh`。未安装的工具只是匹配不到，不影响运行 |
 | `commandField` | `"command"` | 提取命令字符串的参数名 |
 | `scriptPathField` | `"script_path"` | 提取脚本路径的参数名 |
 | `scriptPath` | `"read"` | 仅提供脚本路径时：`read` 读取内容后判定 / `deny` 直接拒绝 / `pass` 不判定 |
