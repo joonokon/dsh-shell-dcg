@@ -191,6 +191,46 @@ await check('a call with no command at all passes through', async () => {
   assert.deepEqual(outcome, { kind: 'allow' })
 })
 
+await check('an unlisted tool carrying a command is judged', async () => {
+  const { ctx, listeners } = createContext()
+  const settings = normalizeConfig({ enabled: true, dcgPath: broken.file, preferManaged: false }).settings
+  arm(ctx, settings)
+  await new Promise((resolve) => setTimeout(resolve, 10))
+  let called = 0
+  const outcome = await listeners[0].handler(
+    { name: 'run_cmd', arguments: { command: 'ls -la' }, callId: 'c' },
+    async () => {
+      called += 1
+      return { kind: 'allow' }
+    },
+  )
+  assert.equal(called, 0)
+  assert.equal(outcome.kind, 'deny')
+  assert.equal(outcome.info.code, 'SHELL_DCG_NOT_READY')
+})
+
+await check('argument matching can be turned off', async () => {
+  const { ctx, listeners } = createContext()
+  const settings = normalizeConfig({
+    enabled: true,
+    dcgPath: broken.file,
+    preferManaged: false,
+    matchUnlistedTools: false,
+  }).settings
+  arm(ctx, settings)
+  await new Promise((resolve) => setTimeout(resolve, 10))
+  let called = 0
+  const outcome = await listeners[0].handler(
+    { name: 'run_cmd', arguments: { command: 'ls -la' }, callId: 'c' },
+    async () => {
+      called += 1
+      return { kind: 'allow' }
+    },
+  )
+  assert.equal(called, 1)
+  assert.deepEqual(outcome, { kind: 'allow' })
+})
+
 broken.cleanup()
 
 const failed = results.filter((result) => !result.ok)

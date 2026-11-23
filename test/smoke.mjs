@@ -20,11 +20,13 @@ import {
   normalizeConfig,
   policyPath,
   auditDir,
+  otherDialect,
+  planJudgment,
 } from '../lib/config.js'
 import { createAudit } from '../lib/audit.js'
 import { summarizeAudit } from '../lib/status.js'
 import { buildTestArgs, cleanEnv, createLimiter, parseVerdict, resolveBinary, runDcg } from '../lib/dcg.js'
-import { mapDecision, reasonFor } from '../lib/gate.js'
+import { mapDecision, reasonFor, stricterVerdict } from '../lib/gate.js'
 import { buildPolicyToml as policyToml } from '../lib/policy.js'
 import { readScript, resolveScriptTarget, resolveWorkdir } from '../lib/script.js'
 import { TARGETS, digestOf, installManaged, releaseUrl, targetFor } from '../lib/install.js'
@@ -52,6 +54,8 @@ await check('defaults are complete and frozen', () => {
   assert.equal(settings.onNotReady, 'deny')
   assert.deepEqual(settings.tools, ['bash', 'pwsh', 'ops_bash', 'ssh_exec'])
   assert.equal(settings.dialects.pwsh, 'ps')
+  assert.equal(settings.matchUnlistedTools, true)
+  assert.equal(settings.crossCheckDialects, 'on-allow')
   assert.ok(Object.isFrozen(settings))
 })
 
@@ -61,6 +65,8 @@ await check('bad values fall back with warnings, never throw', () => {
     timeoutMs: -5,
     maxConcurrent: 1.5,
     tools: 'ops_bash',
+    matchUnlistedTools: 'yes',
+    crossCheckDialects: 'sometimes',
     onAsk: 'maybe',
     dialects: { pwsh: 'cmd', bash: 'posix' },
     policy: { packModes: { 'core.git': 'nope', 'core.fs': 'warn' } },
@@ -73,9 +79,38 @@ await check('bad values fall back with warnings, never throw', () => {
   assert.equal(settings.onAsk, 'ask')
   assert.equal(settings.dialects.pwsh, 'ps')
   assert.equal(settings.dialects.bash, 'posix')
+  assert.equal(settings.matchUnlistedTools, true)
+  assert.equal(settings.crossCheckDialects, 'on-allow')
   assert.deepEqual(settings.policy.packModes, { 'core.fs': 'warn' })
   assert.equal(settings.audit.retentionDays, 30)
   assert.ok(warnings.length >= 6, `expected several warnings, got ${warnings.length}`)
+})
+
+await check('unlisted tools are judged by their arguments', () => {
+  const { settings } = normalizeConfig(undefined)
+  assert.deepEqual(planJudgment(settings, 'bash', {}), { dialect: 'posix', source: 'tool' })
+  assert.deepEqual(planJudgment(settings, 'pwsh', {}), { dialect: 'ps', source: 'tool' })
+  assert.deepEqual(planJudgment(settings, 'run_cmd', { command: 'ls' }), { dialect: 'posix', source: 'args' })
+  assert.deepEqual(planJudgment(settings, 'run_cmd', { script_path: 'x.sh' }), { dialect: 'posix', source: 'args' })
+  assert.equal(planJudgment(settings, 'run_cmd', { foo: 1 }), undefined)
+  assert.equal(planJudgment(settings, 'write', { file_path: 'x' }), undefined)
+})
+
+await check('argument matching can be turned off', () => {
+  const { settings } = normalizeConfig({ matchUnlistedTools: false })
+  assert.equal(planJudgment(settings, 'run_cmd', { command: 'ls' }), undefined)
+  assert.deepEqual(planJudgment(settings, 'bash', {}), { dialect: 'posix', source: 'tool' })
+})
+
+await check('cross-check compares verdicts and knows the other dialect', () => {
+  assert.equal(otherDialect('posix'), 'ps')
+  assert.equal(otherDialect('ps'), 'posix')
+  const allow = { decision: 'allow' }
+  assert.equal(stricterVerdict(allow, { decision: 'warn' }).decision, 'warn')
+  assert.equal(stricterVerdict(allow, { decision: 'ask' }).decision, 'ask')
+  assert.equal(stricterVerdict({ decision: 'deny' }, allow).decision, 'deny')
+  assert.equal(stricterVerdict(allow, allow), allow)
+  assert.equal(stricterVerdict(allow, { decision: 'indeterminate' }).decision, 'indeterminate')
 })
 
 await check('policy settings are parsed', () => {
