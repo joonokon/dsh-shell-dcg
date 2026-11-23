@@ -155,6 +155,7 @@ plugin_manager { action: "remove_bundle", target: "dsh-shell-dcg" }
 - **不判文件工具，不做路径约束。**
 - **`dcg` 采用 deny-list。** 未收录的破坏方式、刻意构造的混淆可能绕过。
 - **命令拼接由 `dcg` 解析。** 其无法解析的形式返回 `indeterminate`，本插件按拒绝处理，复杂单行命令可能被误拦。
+- **`/tmp` 下的 `rm -rf` 放行。** `dcg` 对 `rm -rf` 在 `/tmp`、`/var/tmp` 的子目录下明确允许；`ssh_exec` 按本地路径语义判定，因此远端主机上的 `rm -rf /tmp/x` 不会被拦。
 - **未在 macOS 与 Linux 上实测。**
 - **摘要未逐平台核对。** `lib/install.js` 中的 SHA-256 取自 release 的 `SHA256SUMS`，除当前使用平台外未逐一校验。
 - **无版本更新提醒。** `minVersion` 只拦截过低版本。
