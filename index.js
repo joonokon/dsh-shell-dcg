@@ -1,5 +1,5 @@
 /**
- * dsh-shell-dcg — a DCG-backed command gate for the DeepSeek Harness.
+ * dsh-shell-dcg — a DCG-backed shell guard for the DeepSeek Harness.
  *
  * The plugin listens on the `tools/pre-execute` waterfall and asks
  * Destructive Command Guard (https://github.com/Dicklesworthstone/destructive_command_guard)

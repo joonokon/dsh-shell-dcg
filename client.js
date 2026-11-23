@@ -19,7 +19,7 @@ window.__ModuleLoader__.load({
     const zh = navigator.language.toLowerCase().startsWith('zh')
     const copy = zh
       ? {
-          label: '命令门禁',
+          label: 'Shell 守卫',
           subtitle: '每条 shell 命令执行前，先交给 DCG 判断它会不会造成破坏；读写文件这类工具不在它的范围内。',
           loading: '读取中…',
           gate: '总开关',
@@ -76,7 +76,7 @@ window.__ModuleLoader__.load({
           commandMissing: '（未记录命令）',
         }
       : {
-          label: 'Command gate',
+          label: 'Shell guard',
           subtitle: 'Before each shell command runs, DCG decides whether it could do damage. File-editing tools are out of scope.',
           loading: 'Loading…',
           gate: 'Gate',
@@ -215,6 +215,31 @@ window.__ModuleLoader__.load({
         : 'dsh-dcg__pill'
 
     // -------------------------------------------------------------- component
+
+    /** Nav glyph for the settings section: the same shield-and-prompt as the app icon. */
+    function SectionIcon({ size = 16, active = false } = {}) {
+      const ink = active ? 'var(--dsw-alias-brand-primary)' : 'currentColor'
+      return h(
+        'svg',
+        { viewBox: '0 0 24 24', width: size, height: size, 'aria-hidden': true, style: { display: 'block' } },
+        h('path', {
+          d: 'M12 3l7 3v6c0 4.6-3 7.6-7 9-4-1.4-7-4.4-7-9V6z',
+          fill: 'none',
+          stroke: ink,
+          strokeWidth: 1.7,
+          strokeLinejoin: 'round',
+        }),
+        h('path', {
+          d: 'M9.2 9.8l2.1 2.1-2.1 2.1',
+          fill: 'none',
+          stroke: ink,
+          strokeWidth: 1.7,
+          strokeLinecap: 'round',
+          strokeLinejoin: 'round',
+        }),
+        h('path', { d: 'M13.2 14h3.2', stroke: ink, strokeWidth: 1.7, strokeLinecap: 'round' }),
+      )
+    }
 
     function Section() {
       const [status, setStatus] = React.useState(undefined)
@@ -658,6 +683,16 @@ window.__ModuleLoader__.load({
               ctx.slots.register({ name: 'settings.section', id: 'dsh-shell-dcg', order: 70, label: copy.label }, Section),
             ),
           'dsh-shell-dcg: settings page',
+        )
+
+        // The nav row shows a default glyph without this; its id must equal the
+        // section id above.
+        ctx.effect(
+          () =>
+            ctx.slots.inject('settings.section.icon', () =>
+              ctx.slots.register({ name: 'settings.section.icon', id: 'dsh-shell-dcg' }, SectionIcon),
+            ),
+          'dsh-shell-dcg: settings section icon',
         )
       },
     }

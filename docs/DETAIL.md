@@ -1,4 +1,4 @@
-# DCG 命令门禁
+# Shell 守卫
 
 把 [Destructive Command Guard](https://github.com/Dicklesworthstone/destructive_command_guard)（`dcg`）插进 DSH 的工具审核链路：**每条 shell 命令在执行前先用 dcg 判一次**，被拒绝的命令根本不会跑到 body。
 
@@ -79,7 +79,7 @@ dcg 的判定 → DSH 的决定：
 
 ## 设置页面
 
-装好并重启 DSH 后，**设置 → 命令门禁** 里有一页：
+装好并重启 DSH 后，**设置 → Shell 守卫** 里有一页：
 
 - 总开关（`role="switch"`）：直接改 `enabled`，走 DSH 的 config editor
 - dcg：版本、路径、来源（managed / config / path）

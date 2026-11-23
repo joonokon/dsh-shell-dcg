@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "DCG command gate",
+    "title": "Shell guard",
     "description": "Runs Destructive Command Guard (dcg) on every shell command before it executes. Off by default; needs the dcg binary.",
     "detail": "docs/DETAIL.md"
   }
