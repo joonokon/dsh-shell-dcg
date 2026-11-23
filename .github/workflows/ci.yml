@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Show environment
+        run: |
+          node --version
+          npm --version
+
+      - name: Unit and integration tests
+        run: npm test
+
+  manifest:
+    name: publish manifest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Show what would be published
+        run: npm pack --dry-run
+
+      # The published tarball is what users install. Fail when a file that the
+      # plugin loads at run time (client.js, lib/, locale/, icon.svg) is missing
+      # from `files` in package.json.
+      - name: Every runtime file is in the tarball
+        run: |
+          npm pack --json --dry-run > pack.json
+          node -e '
+            const parsed = JSON.parse(require("fs").readFileSync("pack.json", "utf8"))
+            const entry = Array.isArray(parsed) ? parsed[0] : Object.values(parsed)[0]
+            const files = entry.files.map((file) => file.path)
+            const required = [
+              "index.js",
+              "client.js",
+              "cordis.patch.yml",
+              "icon.svg",
+              "locale/zh.json",
+              "locale/en.json",
+              "lib/gate.js",
+              "lib/policy.js",
+              "lib/install.js",
+            ]
+            const missing = required.filter((path) => !files.includes(path))
+            if (missing.length > 0) {
+              console.error("missing from tarball: " + missing.join(", "))
+              process.exit(1)
+            }
+            console.log(files.length + " files, all runtime entries present")
+          '
