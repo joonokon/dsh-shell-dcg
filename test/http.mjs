@@ -116,6 +116,7 @@ await check('status answers with the shape the page renders', async () => {
   assert.equal(json.enabled, true)
   assert.equal(typeof json.binary, 'object')
   assert.equal(json.policy.defaultMode, '')
+  assert.equal(json.crossCheckDialects, 'on-allow')
   assert.equal(typeof json.audit.lines, 'number')
   assert.ok(Array.isArray(json.audit.recent))
   assert.equal(json.headers === undefined, true)
@@ -192,6 +193,25 @@ await check('config also writes the log retention limits', async () => {
   assert.equal(status, 200)
   assert.equal(json.ok, true)
   assert.deepEqual(seen[0].audit, { retentionDays: 7, retentionEntries: 500 })
+})
+
+await check('config writes the dialect cross-check choice', async () => {
+  const seen = []
+  const editor = { async edit(entry, change) { seen.push(change({ enabled: true, crossCheckDialects: 'on-allow' })) } }
+  const { routes } = mount({ editor })
+  const { status, json } = await call(routes, '/config', { body: { crossCheckDialects: 'never' } })
+  assert.equal(status, 200)
+  assert.equal(json.ok, true)
+  assert.deepEqual(seen[0], { enabled: true, crossCheckDialects: 'never' })
+  assert.equal(json.crossCheckDialects, 'never')
+})
+
+await check('config refuses an unknown cross-check value', async () => {
+  const editor = { async edit() { throw new Error('the editor must not be reached') } }
+  const { routes } = mount({ editor })
+  const { status, json } = await call(routes, '/config', { body: { crossCheckDialects: 'always' } })
+  assert.equal(status, 400)
+  assert.match(json.error, /on-allow/)
 })
 
 await check('config surfaces a rejected edit instead of claiming success', async () => {
