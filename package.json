@@ -1,10 +1,28 @@
 {
   "name": "dsh-shell-dcg",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
-  "description": "Insert Destructive Command Guard (dcg) into the DeepSeek Harness tool-review chain for shell tools.",
+  "description": "Runs Destructive Command Guard (dcg) on every shell command a DeepSeek Harness tool is about to run.",
   "license": "MIT",
+  "icon": "icon.svg",
+  "author": "joonokon",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joonokon/dsh-shell-dcg.git"
+  },
+  "bugs": {
+    "url": "https://github.com/joonokon/dsh-shell-dcg/issues"
+  },
+  "homepage": "https://github.com/joonokon/dsh-shell-dcg#readme",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "dcg",
+    "destructive-command-guard",
+    "shell",
+    "safety"
+  ],
   "main": "index.js",
   "exports": {
     ".": "./index.js",
@@ -19,7 +37,7 @@
     "lib/**/*.js",
     "cordis.patch.yml",
     "locale/*.json",
-    "docs/DETAIL.md",
+    "docs/*.md",
     "icon.svg"
   ],
   "engines": {
@@ -29,6 +47,8 @@
     "test": "node test/smoke.mjs && node test/gate.mjs && node test/http.mjs",
     "test:live": "node test/live.mjs",
     "probe": "node test/probe-dcg.mjs",
+    "bench": "node test/bench.mjs",
+    "compare": "node test/compare-versions.mjs",
     "install-dcg": "node tools/install-dcg.mjs"
   },
   "dsh": {
