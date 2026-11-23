@@ -4,10 +4,13 @@
 
 ## 工作方式
 
-- 在 `tools/pre-execute` 最早阶段注册，取出待执行工具的命令字符串；
+- 在 `tools/pre-execute` 最早阶段注册，取出待执行工具的命令字符串。工具名在 `tools` 中，或参数里带命令且 `matchUnlistedTools` 开启，都会进入判定；
 - 调用 `dcg --robot test --stdin --format json --dialect <posix|ps> --config <policy.toml>`，命令经 stdin 传入；
-- 按 `dcg` 返回的 `decision` 决定放行、转交审批或拒绝；
-- 每次判定写入一行审计记录。
+- 判定为 `allow` 时，用另一种方言再判一次，取更严的结果（`crossCheckDialects`）；
+- 按最终 `decision` 决定放行、转交审批或拒绝；
+- 每次判定写入一行审计记录，含 `matchedBy`（按工具名还是按参数命中）与 `dialect`，复核过的另有 `crossCheck`。
+
+工具名与实际执行器可能不一致（例如名为 `pwsh` 的工具底层跑 bash），这时按名字选的方言就是错的语法。`eval "$(…)"` 这类构造在 PowerShell 语法下不构成可疑结构，在 POSIX 语法下会命中 `heredoc.posix:eval-dynamic`——只按一次方言判会漏。复核只对 `allow` 生效：拒绝已经拦住了命令，没必要再花一次子进程。
 
 覆盖工具默认 `bash`、`pwsh`、`ops_bash`、`ssh_exec`，由 `tools` 调整。`bash`、`pwsh` 是 DSH 的工具名（Windows 上 `bash` 通常由 `dsh-gitbash-shell` 这类插件提供 Git Bash，Linux 与 macOS 上由 DSH 自带的 `tool-bash` 提供），`ops_bash` 来自 `dsh-ops`，`ssh_exec` 来自 `@linxin666/dsh-ssh`。命令取自工具参数中的 `command` 字段；仅提供 `script_path` 时读取该文件内容（上限 256 KiB，含 NUL 字节、超限或空文件一律拒绝）后再判定。
 
@@ -81,22 +84,33 @@
 
 - 总开关；
 - `dcg` 的版本、路径与来源（托管 / 配置 / PATH），以及「检查是否可用」；
-- 策略：「判定为危险时」五个选项（`dcg` 默认 / 一律拒绝 / 询问 / 只警告 / 只记录），每项附说明；下方按分类勾选额外规则包；
+- 策略：「判定为危险时」五个选项（`dcg` 默认 / 一律拒绝 / 询问 / 只警告 / 只记录），每项附说明；
+- 方言复核：双重判断（默认，两种语法各判一次）与单次判定（只按工具名的方言判一次），每项附说明；
+- 额外规则包：按分类勾选；
 - 日志：累计条数；展开「最近记录」后为记录开关、保留天数、最多条数、清空日志，以及最近 20 条记录（本地时间、判定着色、命令原文、规则 id）。
 
-页面修改通过 DSH 的 config editor 写回 profile 配置，与手写 `cordis.patch.yml` 等价，需重启生效。`policy.packModes`、`policy.observeUntil`、`dryRun`、`maxConcurrent` 未提供界面入口。
+页面修改通过 DSH 的 config editor 写回 profile 配置，与手写 `cordis.patch.yml` 等价，需重启生效。`policy.packModes`、`policy.observeUntil`、`dryRun`、`maxConcurrent`、`matchUnlistedTools` 未提供界面入口。
 
 页面数据来自插件挂载的四条 loopback 路由（`/api/dsh-shell-dcg/status|packs|action|config`），非本机请求返回 403。使用自有路由而非 Remote 命名空间，原因是 bundle 无法在运行期新增 Remote 命名空间。
 
 ## 性能
 
-单次判定的完整开销（进程启动 + `dcg` 评估），每条命令 100 次：
+单次 `dcg` 调用的开销（进程启动 + 评估），每条命令 100 次：
 
 | 命令 | 最小 | 中位数 | p90 | 最大 |
 |---|---|---|---|---|
-| `ls -la`（allow） | 24.4 ms | 26.3 ms | 33.3 ms | 38.9 ms |
-| `rm -rf ./build`（deny） | 25.7 ms | 27.0 ms | 33.8 ms | 36.6 ms |
-| `git reset --hard`（deny） | 32.1 ms | 33.5 ms | 36.4 ms | 50.5 ms |
+| `ls -la`（allow） | 24.6 ms | 26.0 ms | 27.3 ms | 33.7 ms |
+| `rm -rf ./build`（deny） | 25.4 ms | 26.5 ms | 29.9 ms | 32.3 ms |
+| `git reset --hard`（deny） | 31.6 ms | 32.8 ms | 33.7 ms | 41.9 ms |
+
+整条工具调用（含门禁自身开销）在两种复核模式下的差别只出现在放行路径：
+
+| 复核模式 | 放行（中位 / p90） | 拒绝（中位） |
+|---|---|---|
+| 单次判定 `crossCheckDialects: never` | 39.1 / 41.8 ms | 39.8 ms |
+| 双重判断 `crossCheckDialects: on-allow`（默认） | 78.6 / 85.4 ms | 40.2 ms |
+
+结论：复核只发生在判定为 `allow` 之后，因此放行路径约翻倍，拒绝路径基本不变。按每天 300 条命令、九成放行估算，一天多出的时间约 10 秒。设置页可在两种模式之间切换；需要速度、且确认工具名与实际执行器一致时选单次。
 
 该成本主要来自 `dcg` 自身启动。批量调用受 `maxConcurrent`（默认 4）约束，不会形成并发进程风暴。
 

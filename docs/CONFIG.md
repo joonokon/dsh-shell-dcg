@@ -12,6 +12,7 @@
 | `minVersion` | `"0.16.0"` | 低于此版本视为未就绪 |
 | `agentName` | `"dsh"` | 传给 `dcg --agent`，对应策略中的 `[agents.dsh]` |
 | `tools` | `["bash","pwsh","ops_bash","ssh_exec"]` | 参与判定的工具名。`bash`、`pwsh` 是 DSH 的工具名：Windows 上 `bash` 通常由 `dsh-gitbash-shell` 这类插件提供 Git Bash，Linux 与 macOS 上由 DSH 自带的 `tool-bash` 提供；`ops_bash` 来自 `dsh-ops`，`ssh_exec` 来自 `@linxin666/dsh-ssh`。未安装的工具只是匹配不到，不影响运行 |
+| `matchUnlistedTools` | `true` | 工具名不在 `tools` 里、但参数带有 `command` 或 `script_path` 时是否也判定。第三方 shell 插件的工具名无法预先枚举 |
 | `commandField` | `"command"` | 提取命令字符串的参数名 |
 | `scriptPathField` | `"script_path"` | 提取脚本路径的参数名 |
 | `scriptPath` | `"read"` | 仅提供脚本路径时：`read` 读取内容后判定 / `deny` 直接拒绝 / `pass` 不判定 |
@@ -30,6 +31,7 @@
 | `onWarn` | `"allow"` | `dcg` 判定 `warn` 或 `log` 时：`allow` / `ask` / `deny` |
 | `failClosed` | `true` | 无法判定时是否拒绝 |
 | `onNotReady` | `"deny"` | `dcg` 未就绪时，命令类工具是否拒绝 |
+| `crossCheckDialects` | `"on-allow"` | 判定为 `allow` 时，用另一种方言再判一次并取更严的结果；`never` 关闭复核。设置页的「方言复核」即此项 |
 | `dryRun` | `false` | 只记录不拦截。与 `policy.defaultMode: log` 效果重叠，区别是不改动策略文件 |
 
 ## 规则包与日志
@@ -69,4 +71,7 @@
 - `policy.packs` 是增量设置：写入的包是额外启用，不是替换 `dcg` 自带的包集合。
 - `onNotReady` 处理启动阶段的静态检查失败，`failClosed` 处理单次判定中途失败，两者独立。
 - `scriptPath` 仅在调用未提供 `command` 时生效；提供 `command` 时始终优先判定命令字符串。
+- `matchUnlistedTools` 覆盖「工具名不在 `tools` 里」的调用。这类调用的方言未知，按 `defaultDialect` 判定，再靠 `crossCheckDialects` 复核另一种方言。
+- `crossCheckDialects` 只在判定为 `allow` 时触发。拒绝路径只跑一次 `dcg`，放行路径跑两次，单次判定开销约翻倍。
+- 复核那次如果超时或出错，以第一次结果为准，只在日志里留一条 warn——复核是额外一层，不应变成随机拒绝的来源。
 - 设置页未提供 `policy.packModes`、`policy.observeUntil`、`dryRun`、`maxConcurrent` 的界面入口，需手写配置。
