@@ -55,6 +55,15 @@ window.__ModuleLoader__.load({
             warn: '全部放行，只在日志里记一条警告，适合先观察。',
             log: '全部放行，只记录不警告，等于只看不拦。',
           },
+          crossCheck: '方言复核',
+          crossCheckOptions: [
+            ['on-allow', '双重判断'],
+            ['never', '单次判定'],
+          ],
+          crossCheckHints: {
+            'on-allow': '两种语法各判一次，取更严的结论。比单次慢一倍，放行约 80 ms 一次；工具名与实际执行的 shell 不一致时不会漏判。推荐。',
+            never: '只按工具名对应的语法判一次，约 40 ms 一次，最快。确认工具名与实际执行器一致（例如只用官方 shell 工具）时才选它。',
+          },
           packs: '额外启用的规则包',
           packsHint: '基础规则（core）始终开启；这里只是增加更多类别，例如 database 覆盖数据库相关命令。',
           packsLoading: '正在读取可用的规则包…',
@@ -111,6 +120,15 @@ window.__ModuleLoader__.load({
             ask: 'A prompt asks you to allow or refuse. Needs approvals; with approvals off the command fails closed.',
             warn: 'Everything runs, with a warning in the log. Good for watching first.',
             log: 'Everything runs and is only recorded, never blocked.',
+          },
+          crossCheck: 'Dialect check',
+          crossCheckOptions: [
+            ['on-allow', 'Double-check'],
+            ['never', 'Single pass'],
+          ],
+          crossCheckHints: {
+            'on-allow': 'Judge once per dialect and keep the stricter answer. Twice as slow as a single pass, about 80 ms per allowed command; a tool whose name disagrees with its executor cannot slip through. Recommended.',
+            never: 'Judge once with the dialect the tool name maps to, about 40 ms per command, the fastest option. Pick it only when tool names and executors are known to match, e.g. official shells only.',
           },
           packs: 'Extra rule packs',
           packsHint: 'The core rules are always on; ticking here only adds categories, e.g. database covers database commands.',
@@ -249,6 +267,7 @@ window.__ModuleLoader__.load({
 
       // Policy editing: `undefined` follows the Host, a value is unsaved input.
       const [mode, setMode] = React.useState(undefined)
+      const [crossCheck, setCrossCheck] = React.useState(undefined)
       const [packs, setPacks] = React.useState(undefined)
       const [retention, setRetention] = React.useState(undefined)
       const [catalog, setCatalog] = React.useState(undefined)
@@ -334,10 +353,17 @@ window.__ModuleLoader__.load({
       const savePolicy = async () => {
         const chosen = mode ?? status?.policy.defaultMode ?? ''
         const entries = packs ?? status?.policy.packs ?? []
-        const result = await run('save', '/config', { policy: { defaultMode: chosen, packs: entries } }, () => copy.savedPolicy)
+        const check = crossCheck ?? status?.crossCheckDialects ?? 'on-allow'
+        const result = await run(
+          'save',
+          '/config',
+          { policy: { defaultMode: chosen, packs: entries }, crossCheckDialects: check },
+          () => copy.savedPolicy,
+        )
         if (result?.ok === true) {
           setMode(undefined)
           setPacks(undefined)
+          setCrossCheck(undefined)
         }
       }
 
@@ -466,6 +492,33 @@ window.__ModuleLoader__.load({
             { className: 'dsh-dcg__row', style: { borderBottom: 'none', paddingBottom: 0 } },
             h('span', { className: 'dsh-dcg__hint', style: { margin: 0 } },
               copy.modeHints[mode ?? status.policy.defaultMode ?? ''] ?? ''),
+          ),
+          h(
+            'div',
+            { className: 'dsh-dcg__row', style: { flexWrap: 'wrap', borderBottom: 'none' } },
+            h('span', { className: 'dsh-dcg__key' }, copy.crossCheck),
+            h(
+              'div',
+              { className: 'dsh-dcg__seg', role: 'group', 'aria-label': copy.crossCheck },
+              ...copy.crossCheckOptions.map(([value, label]) =>
+                h(
+                  'button',
+                  {
+                    key: value,
+                    type: 'button',
+                    'aria-pressed': (crossCheck ?? status.crossCheckDialects ?? 'on-allow') === value,
+                    onClick: () => setCrossCheck(value),
+                  },
+                  label,
+                ),
+              ),
+            ),
+          ),
+          h(
+            'div',
+            { className: 'dsh-dcg__row', style: { borderBottom: 'none', paddingBottom: 0 } },
+            h('span', { className: 'dsh-dcg__hint', style: { margin: 0 } },
+              copy.crossCheckHints[crossCheck ?? status.crossCheckDialects ?? 'on-allow'] ?? ''),
           ),
           h(
             'div',
