@@ -46,6 +46,7 @@
   "scripts": {
     "test": "node test/all.mjs",
     "test:live": "node test/live.mjs",
+    "check:pack": "node tools/check-pack.mjs",
     "probe": "node test/probe-dcg.mjs",
     "bench": "node test/bench.mjs",
     "compare": "node test/compare-versions.mjs",
