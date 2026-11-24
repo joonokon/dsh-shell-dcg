@@ -44,7 +44,7 @@
     "dsh": ">=0.2.2-rc.1"
   },
   "scripts": {
-    "test": "node test/smoke.mjs && node test/gate.mjs && node test/http.mjs",
+    "test": "node test/all.mjs",
     "test:live": "node test/live.mjs",
     "probe": "node test/probe-dcg.mjs",
     "bench": "node test/bench.mjs",
