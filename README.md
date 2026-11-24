@@ -34,7 +34,7 @@
 
 ## 安装
 
-> [!hint] Hint
+> [!tip]
 > 交给 AI 执行请使用 [docs/AI-INSTALL.md](docs/AI-INSTALL.md)，包含逐步操作、验证判据与异常处理。
 
 1. **安装 dcg**（≥ 0.16.0）。可在插件装好后于 **设置 → Shell 守卫** 点「安装 dcg」：默认下载 0.17.0、校验 SHA-256 后解包；也可前往 DCG 官方 [下载](https://github.com/Dicklesworthstone/destructive_command_guard/releases/) 页面自行下载，将可执行文件加入环境变量或放入 `%DSH_HOME%\dsh-shell-dcg\bin\<版本号>\`。
