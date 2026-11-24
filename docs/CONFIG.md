@@ -42,6 +42,9 @@
 | `policy.packModes` | `{}` | 单个规则包降级，例如 `{ "core.git": "warn" }` |
 | `policy.observeUntil` | `""` | 写入 `policy.observe_until`，`dcg` 内建的灰度到期日 |
 | `audit.enabled` | `true` | 是否写入判定记录 |
+| `audit.record` | `"warn"` | 最低写入等级，取值 `allow` / `warn` / `ask` / `deny`。低于它的判定不写文件。默认 `warn`：放行的命令远多于被拦的，全记会把拒绝挤出 `retentionEntries` |
+| `audit.decisions` | `["warn","ask","deny"]` | 设置页「显示的等级」勾选项。空数组是合法值，表示什么都不显示 |
+| `audit.limit` | `20` | 设置页「显示条数」，只能是 `20` / `50` / `100` |
 | `audit.keepCommandText` | `true` | 是否记录命令原文；关闭后仅记录哈希 |
 | `audit.commandMaxChars` | `300` | 命令原文截断长度 |
 | `audit.retentionDays` | `30` | 保留天数 |
@@ -61,6 +64,8 @@
       packModes:
         core.git: warn
     audit:
+      record: warn
+      decisions: [warn, deny]
       keepCommandText: false
       retentionDays: 7
 ```
@@ -75,3 +80,5 @@
 - `crossCheckDialects` 只在判定为 `allow` 时触发。拒绝路径只跑一次 `dcg`，放行路径跑两次，单次判定开销约翻倍。
 - 复核那次如果超时或出错，以第一次结果为准，只在日志里留一条 warn——复核是额外一层，不应变成随机拒绝的来源。
 - 设置页未提供 `policy.packModes`、`policy.observeUntil`、`dryRun`、`maxConcurrent` 的界面入口，需手写配置。
+- 记录等级与显示过滤共用一套四级顺序：`allow < warn < ask < deny`，衡量的是「需要人介入的程度」，不是 `dcg` 的 severity。`dcg` 的 `log` 归入 `allow`（存储时仍是 `log`），`indeterminate` 归入 `deny`（`failClosed` 时它确实被拒绝）。`audit.record` 只影响写入，`audit.decisions` 只影响显示，两者独立。
+- `GET /api/dsh-shell-dcg/status` 额外接受 `?limit=20|50|100` 与 `?decisions=warn,deny`，用于不写配置地预览一段切片；非法值回退到配置值，`?decisions=`（空）表示什么都不显示。

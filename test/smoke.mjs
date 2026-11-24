@@ -23,7 +23,7 @@ import {
   otherDialect,
   planJudgment,
 } from '../lib/config.js'
-import { createAudit } from '../lib/audit.js'
+import { createAudit, levelOf, localDay } from '../lib/audit.js'
 import { summarizeAudit } from '../lib/status.js'
 import { buildTestArgs, cleanEnv, createLimiter, parseVerdict, resolveBinary, runDcg } from '../lib/dcg.js'
 import { mapDecision, reasonFor, stricterVerdict } from '../lib/gate.js'
@@ -487,6 +487,95 @@ await check('install gives up on a stalled download', async () => {
 })
 
 // ----------------------------------------------------------------- audit ----
+
+await check('the log writes and shows warnings and up by default', () => {
+  const { settings, warnings } = normalizeConfig({})
+  assert.equal(settings.audit.record, 'warn')
+  assert.deepEqual(settings.audit.decisions, ['warn', 'ask', 'deny'])
+  assert.equal(settings.audit.limit, 20)
+  assert.deepEqual(warnings, [])
+})
+
+await check('an unknown level, level list or count falls back to its default', () => {
+  const { settings, warnings } = normalizeConfig({
+    audit: { record: 'block', limit: 500, decisions: ['deny', 'nope'] },
+  })
+  assert.equal(settings.audit.record, 'warn')
+  assert.equal(settings.audit.limit, 20)
+  // The level it does know survives; the one it does not is reported and dropped.
+  assert.deepEqual(settings.audit.decisions, ['deny'])
+  assert.equal(warnings.length, 3)
+})
+
+await check('an empty level list stays empty: it means show nothing', () => {
+  const { settings, warnings } = normalizeConfig({ audit: { decisions: [] } })
+  assert.deepEqual(settings.audit.decisions, [])
+  assert.deepEqual(warnings, [])
+})
+
+await check('a record sits at the level a reader would sort it into', () => {
+  assert.equal(levelOf({ decision: 'allow' }), 'allow')
+  assert.equal(levelOf({ decision: 'log' }), 'allow', 'log is the softest allow')
+  assert.equal(levelOf({ decision: 'warn' }), 'warn')
+  assert.equal(levelOf({ decision: 'ask' }), 'ask')
+  assert.equal(levelOf({ decision: 'deny' }), 'deny')
+  assert.equal(levelOf({ decision: 'indeterminate' }), 'deny', 'indeterminate is refused fail-closed')
+  assert.equal(levelOf({ event: 'not-ready' }), 'deny')
+  assert.equal(levelOf({ event: 'decision', error: 'dcg crashed' }), 'deny')
+  assert.equal(levelOf({ event: 'script-path', bytes: 120 }), 'warn')
+})
+
+await check('the record threshold drops everything below it', () => {
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), 'dsh-shell-dcg-audit-'))
+  const settings = normalizeConfig({ audit: { record: 'deny' } }).settings
+  const sink = createAudit(settings, { DSH_HOME: home })
+  sink.record({ event: 'decision', decision: 'allow' })
+  sink.record({ event: 'decision', decision: 'log' })
+  sink.record({ event: 'decision', decision: 'warn' })
+  sink.record({ event: 'decision', decision: 'deny', ruleId: 'core.git:reset-hard' })
+
+  const file = path.join(home, 'dsh-shell-dcg', 'audit', `${localDay(new Date())}.jsonl`)
+  const kept = fs
+    .readFileSync(file, 'utf8')
+    .split('\n')
+    .filter((line) => line.length > 0)
+  assert.equal(kept.length, 1)
+  assert.equal(JSON.parse(kept[0]).ruleId, 'core.git:reset-hard')
+  fs.rmSync(home, { recursive: true, force: true })
+})
+
+await check('the summary takes the levels and the count it is asked for', () => {
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), 'dsh-shell-dcg-audit-'))
+  const settings = normalizeConfig({}).settings
+  const dir = path.join(home, 'dsh-shell-dcg', 'audit')
+  fs.mkdirSync(dir, { recursive: true })
+  const rows = []
+  for (let index = 0; index < 30; index += 1) {
+    rows.push(
+      JSON.stringify({
+        ts: `2099-01-03T00:00:${String(index).padStart(2, '0')}.000Z`,
+        event: 'decision',
+        decision: index % 2 === 0 ? 'deny' : 'allow',
+        n: index,
+      }),
+    )
+  }
+  fs.writeFileSync(path.join(dir, '2099-01-03.jsonl'), `${rows.join('\n')}\n`, 'utf8')
+
+  const capped = summarizeAudit(settings, { DSH_HOME: home }, { decisions: ['allow', 'deny'], limit: 20 })
+  assert.equal(capped.recent.length, 20, 'the count caps the merged list')
+  assert.equal(capped.recent[19].n, 29, 'newest last')
+  assert.equal(capped.lines, 30, 'the total covers the levels that were filtered out')
+
+  const denials = summarizeAudit(settings, { DSH_HOME: home }, { decisions: ['deny'] })
+  assert.equal(denials.recent.length, 15)
+
+  const none = summarizeAudit(settings, { DSH_HOME: home }, { decisions: [] })
+  assert.deepEqual(none.recent, [], 'an empty selection shows nothing')
+  assert.equal(none.lines, 30, 'and still reports how much is in the log')
+
+  fs.rmSync(home, { recursive: true, force: true })
+})
 
 await check('audit trims the oldest entries when past the cap', () => {
   const home = fs.mkdtempSync(path.join(os.tmpdir(), 'dsh-shell-dcg-audit-'))

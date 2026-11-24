@@ -17,7 +17,7 @@
 - 参数里带命令的调用都会判定，工具名不在预设列表内也覆盖
 - 判定为放行时用另一种语法复核，取更严的结论，避免工具名与实际执行器不一致而漏判
 - 默认判定 `bash`、`pwsh`与 `ops_bash`、`ssh_exec`（第三方插件），按工具选择 POSIX 或 PowerShell 语法
-- 设置页提供总开关、策略选择、规则包、日志与 `dcg` 一键安装
+- 设置页提供总开关、策略选择、规则包、判定记录（记录等级、显示条数与等级筛选）与 `dcg` 一键安装
 - 默认关闭，关闭时不进行任何监听
 
 | 命令 | `dcg` 判定 | 插件结果 |
@@ -61,7 +61,7 @@
    printf 'git reset --hard HEAD~1' | dcg --robot test --stdin --format json   # 应返回 deny
    ```
 
-   随后在设置页「最近记录」或 `%DSH_HOME%\dsh-shell-dcg\audit\` 下应出现新增记录。
+   随后在设置页「判定记录」或 `%DSH_HOME%\dsh-shell-dcg\audit\` 下应出现新增记录。
 
 ## 文档
 

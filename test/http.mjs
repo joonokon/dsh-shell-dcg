@@ -49,10 +49,12 @@ function mount({ editor } = {}) {
 
 /** One request/response pair against a mounted route. */
 async function call(routes, pathName, { ip = '127.0.0.1', body } = {}) {
-  const route = routes.get(`${ROUTE_PREFIX}${pathName}`)
-  if (route === undefined) throw new Error(`no route ${pathName}`)
+  const [routePath, query] = pathName.split('?')
+  const route = routes.get(`${ROUTE_PREFIX}${routePath}`)
+  if (route === undefined) throw new Error(`no route ${routePath}`)
 
   const req = new EventEmitter()
+  req.url = query === undefined ? routePath : `${routePath}?${query}`
   req.socket = { remoteAddress: ip }
   setImmediate(() => {
     if (body !== undefined) req.emit('data', typeof body === 'string' ? body : JSON.stringify(body))
@@ -80,6 +82,14 @@ async function call(routes, pathName, { ip = '127.0.0.1', body } = {}) {
   route.handler(req, res)
   await settled
   return { status: res.statusCode, headers: res.headers, json: JSON.parse(res.payload) }
+}
+
+/** Replace the audit directory with exactly these records in one day file. */
+function seedAudit(lines) {
+  const root = path.join(scratch, 'dsh-shell-dcg', 'audit')
+  fs.rmSync(root, { recursive: true, force: true })
+  fs.mkdirSync(root, { recursive: true })
+  fs.writeFileSync(path.join(root, '2026-11-23.jsonl'), `${lines.join('\n')}\n`, 'utf8')
 }
 
 await check('mounts the routes the page calls', () => {
@@ -122,22 +132,63 @@ await check('status answers with the shape the page renders', async () => {
   assert.equal(json.headers === undefined, true)
 })
 
-await check('status reports recent verdicts newest last', async () => {
+await check('status lists the selected levels only, newest last', async () => {
   const auditRoot = path.join(scratch, 'dsh-shell-dcg', 'audit')
   fs.mkdirSync(auditRoot, { recursive: true })
   fs.writeFileSync(
     path.join(auditRoot, '2026-11-22.jsonl'),
     [
       JSON.stringify({ ts: '2026-11-22T02:00:00.000Z', tool: 'ops_bash', decision: 'allow' }),
-      JSON.stringify({ ts: '2026-11-22T02:00:01.000Z', tool: 'ops_bash', decision: 'deny', ruleId: 'core.git:reset-hard' }),
+      JSON.stringify({ ts: '2026-11-22T02:00:01.000Z', tool: 'ops_bash', decision: 'warn', ruleId: 'core.git:stash-drop' }),
+      JSON.stringify({ ts: '2026-11-22T02:00:02.000Z', tool: 'ops_bash', decision: 'deny', ruleId: 'core.git:reset-hard' }),
     ].join('\n'),
     'utf8',
   )
   const { routes } = mount()
   const { json } = await call(routes, '/status')
-  assert.equal(json.audit.lines, 2)
-  assert.equal(json.audit.recent.length, 2)
-  assert.equal(json.audit.recent[1].ruleId, 'core.git:reset-hard')
+  // The count covers every level; only the listed ones reach the page.
+  assert.equal(json.audit.lines, 3)
+  assert.deepEqual(json.audit.recent.map((record) => record.decision), ['warn', 'deny'])
+  assert.deepEqual(json.audit.decisions, ['warn', 'ask', 'deny'])
+  assert.equal(json.audit.record, 'warn')
+  assert.equal(json.audit.limit, 20)
+})
+
+await check('a limit and a filter answer from the newest record backwards', async () => {
+  const rows = []
+  for (let index = 0; index < 30; index += 1) {
+    rows.push(
+      JSON.stringify({
+        ts: `2026-11-23T00:00:${String(index).padStart(2, '0')}.000Z`,
+        tool: 'ops_bash',
+        event: 'decision',
+        decision: index % 2 === 0 ? 'deny' : 'allow',
+        ruleId: `rule.${index}`,
+      }),
+    )
+  }
+  seedAudit(rows)
+  const { routes } = mount()
+
+  // The limit caps the merged list, so the newest 20 records come back whole.
+  const capped = await call(routes, '/status?decisions=allow,deny&limit=20')
+  assert.equal(capped.json.audit.recent.length, 20)
+  assert.equal(capped.json.audit.recent[19].ruleId, 'rule.29')
+
+  // Filter first, then cut: the file holds 15 denials and none are elided.
+  const denials = await call(routes, '/status?decisions=deny')
+  assert.equal(denials.json.audit.recent.length, 15)
+  assert.ok(denials.json.audit.recent.every((record) => record.decision === 'deny'))
+  assert.equal(denials.json.audit.recent[14].ruleId, 'rule.28')
+
+  // Present but empty means "show nothing", not "show the default".
+  const none = await call(routes, '/status?decisions=')
+  assert.deepEqual(none.json.audit.decisions, [])
+  assert.deepEqual(none.json.audit.recent, [])
+
+  const fallback = await call(routes, '/status?limit=7&decisions=nonsense')
+  assert.equal(fallback.json.audit.limit, 20, 'an off-menu limit keeps the stored one')
+  assert.deepEqual(fallback.json.audit.decisions, ['warn', 'ask', 'deny'])
 })
 
 await check('a non-loopback caller is refused on every route', async () => {
@@ -195,6 +246,30 @@ await check('config also writes the log retention limits', async () => {
   assert.deepEqual(seen[0].audit, { retentionDays: 7, retentionEntries: 500 })
 })
 
+await check('config writes the record threshold, the filter and the count', async () => {
+  const seen = []
+  const editor = { async edit(entry, change) { seen.push(change({ enabled: true, audit: { enabled: true } })) } }
+  const { routes } = mount({ editor })
+  const { status, json } = await call(routes, '/config', {
+    body: { audit: { record: 'deny', decisions: ['deny', 'warn'], limit: 50 } },
+  })
+  assert.equal(status, 200)
+  // The editor merges over what is stored, so the fake's own keys come along.
+  assert.deepEqual(seen[0].audit, { enabled: true, record: 'deny', decisions: ['warn', 'deny'], limit: 50 })
+  assert.equal(json.audit.record, 'deny')
+  assert.deepEqual(json.audit.decisions, ['warn', 'deny'])
+  assert.equal(json.audit.limit, 50)
+})
+
+await check('config refuses a level or a count the page cannot render', async () => {
+  const editor = { async edit() { throw new Error('the editor must not be reached') } }
+  const { routes } = mount({ editor })
+  for (const body of [{ audit: { record: 'block' } }, { audit: { limit: 500 } }, { audit: { decisions: [1, 2] } }]) {
+    const { status } = await call(routes, '/config', { body })
+    assert.equal(status, 400, JSON.stringify(body))
+  }
+})
+
 await check('config writes the dialect cross-check choice', async () => {
   const seen = []
   const editor = { async edit(entry, change) { seen.push(change({ enabled: true, crossCheckDialects: 'on-allow' })) } }
@@ -224,6 +299,8 @@ await check('config surfaces a rejected edit instead of claiming success', async
 
 await check('clear-audit removes the day files and reports the count', async () => {
   const auditRoot = path.join(scratch, 'dsh-shell-dcg', 'audit')
+  // Start from a known slate: earlier checks left their own day files behind.
+  fs.rmSync(auditRoot, { recursive: true, force: true })
   fs.mkdirSync(auditRoot, { recursive: true })
   fs.writeFileSync(path.join(auditRoot, '2026-11-22.jsonl'), '{"n":1}\n{"n":2}\n', 'utf8')
   fs.writeFileSync(path.join(auditRoot, '2026-11-21.jsonl'), '{"n":3}\n', 'utf8')
