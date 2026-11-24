@@ -1,0 +1,61 @@
+name: Release
+
+# Publishing is what a tag means here: the tag carries the version, so a tag is
+# only allowed to ship when it agrees with package.json and the same suite CI
+# runs comes back green.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  # The credential for this job is minted per run from this OIDC identity; there
+  # is no long-lived token stored in the repository.
+  id-token: write
+
+jobs:
+  publish:
+    name: publish ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Reference point for protection rules: add required reviewers here and a
+    # tag alone can no longer publish.
+    environment:
+      name: npm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      # Node 24 bundles npm 11, the first line that speaks trusted publishing.
+      # No NPM_TOKEN, no registry-url: npm asks this workflow's OIDC identity for
+      # the credential, and the package's trusted-publisher setting on npmjs.com
+      # decides whether that identity may publish.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Tag matches package.json
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if [ "v${version}" != "${GITHUB_REF_NAME}" ]; then
+            echo "tag ${GITHUB_REF_NAME} does not match package.json v${version}" >&2
+            exit 1
+          fi
+          echo "tag and version agree: v${version}"
+
+      - name: Unit and integration tests
+        run: npm test
+
+      - name: Every runtime file is shipped, and nothing else
+        run: npm run check:pack
+
+      - name: Publish to npm with provenance
+        run: |
+          # A prerelease version never lands on `latest`: v0.2.0-next.1 goes to
+          # the `next` dist-tag, the same place `npm publish --tag next` would.
+          case "${GITHUB_REF_NAME}" in
+            *-*) dist_tag="--tag next" ;;
+            *) dist_tag="" ;;
+          esac
+          npm publish --access public --provenance $dist_tag
