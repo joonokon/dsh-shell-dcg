@@ -28,7 +28,7 @@ window.__ModuleLoader__.load({
           off: '已关闭',
           binary: 'dcg',
           policy: '策略',
-          audit: '日志',
+          audit: '判定记录',
           recent: '最近的判定',
           empty: '还没有判定记录',
           doctor: '检查是否可用',
@@ -68,12 +68,31 @@ window.__ModuleLoader__.load({
           packsHint: '基础规则（core）始终开启；这里只是增加更多类别，例如 database 覆盖数据库相关命令。',
           packsLoading: '正在读取可用的规则包…',
           packsFailed: '暂时读不到规则包列表，可以直接填写包名；重启 DSH 后这里会变成勾选列表。',
-          logs: '最近记录',
-          logHint: 'allow 放行 · warn 警告 · deny 拒绝 · ask 等审批',
+          logs: '判定记录',
+          logHint: 'allow 放行 · warn 警告 · ask 等审批 · deny 拒绝',
           savePolicy: '保存策略',
           savedPolicy: '已保存。插件重启后按新策略判定。',
           packsUnit: (n) => `${n} 组`,
           logEnabled: '记录日志',
+          auditSettings: '日志设置',
+          recordLevel: '记录等级',
+          recordLevelOptions: [
+            ['allow', '全部'],
+            ['warn', '警告及以上'],
+            ['ask', '需审批及以上'],
+            ['deny', '仅拒绝'],
+          ],
+          recordLevelHint: '低于这一级的判定不写入文件。默认只留警告及以上：放行的命令太多，会把拒绝挤出保留额度。',
+          showLimit: '显示条数',
+          decisionsLabel: '显示的等级',
+          decisionOptions: [
+            ['allow', '允许'],
+            ['warn', '警告'],
+            ['ask', '需审批'],
+            ['deny', '拒绝'],
+          ],
+          noSelection: '无选中等级',
+          savedAudit: '已保存。',
           clearLog: '清空日志',
           cleared: (n) => `已清空 ${n} 条记录`,
           savedLog: '已保存。',
@@ -134,12 +153,31 @@ window.__ModuleLoader__.load({
           packsHint: 'The core rules are always on; ticking here only adds categories, e.g. database covers database commands.',
           packsLoading: 'Reading the available packs…',
           packsFailed: 'The pack list is unavailable; type pack names instead. A DSH restart turns this into checkboxes.',
-          logs: 'Recent records',
-          logHint: 'allow passed · warn warned · deny refused · ask waited for approval',
+          logs: 'Verdict records',
+          logHint: 'allow passed · warn warned · ask waited for approval · deny refused',
           savePolicy: 'Save policy',
           savedPolicy: 'Saved. The plugin restarts and judges by the new policy.',
           packsUnit: (n) => `${n} packs`,
           logEnabled: 'Record log',
+          auditSettings: 'Log settings',
+          recordLevel: 'Record from',
+          recordLevelOptions: [
+            ['allow', 'Everything'],
+            ['warn', 'Warnings up'],
+            ['ask', 'Asks up'],
+            ['deny', 'Denials only'],
+          ],
+          recordLevelHint: 'Verdicts below this level are never written. The default keeps warnings and up: allowed commands would otherwise crowd the denials out of the retention budget.',
+          showLimit: 'Show',
+          decisionsLabel: 'Show levels',
+          decisionOptions: [
+            ['allow', 'allow'],
+            ['warn', 'warn'],
+            ['ask', 'ask'],
+            ['deny', 'deny'],
+          ],
+          noSelection: 'No level selected',
+          savedAudit: 'Saved.',
           clearLog: 'Clear log',
           cleared: (n) => `Cleared ${n} records`,
           savedLog: 'Saved.',
@@ -170,7 +208,8 @@ window.__ModuleLoader__.load({
 .dsh-dcg__seg { display: inline-flex; border: 1px solid var(--dsw-alias-border-l2); border-radius: 8px; overflow: hidden; }
 .dsh-dcg__seg button { appearance: none; border: 0; background: transparent; color: var(--dsw-alias-label-primary); padding: 5px 10px; font-size: 12px; cursor: pointer; transition: background 120ms ease; }
 .dsh-dcg__seg button + button { border-left: 1px solid var(--dsw-alias-border-l1); }
-.dsh-dcg__seg button:hover:not([aria-pressed="true"]) { background: var(--dsw-alias-interactive-bg-hover); }
+.dsh-dcg__seg button:hover:not([aria-pressed="true"]):not(:disabled) { background: var(--dsw-alias-interactive-bg-hover); }
+.dsh-dcg__seg button:disabled { opacity: 0.5; cursor: default; }
 .dsh-dcg__seg button[aria-pressed="true"] { background: var(--dsw-alias-brand-primary); color: var(--dsw-alias-label-primary-foreground, #fff); }
 .dsh-dcg__disclose { display: flex; align-items: center; gap: 8px; width: 100%; background: none; border: 0; padding: 12px 0; color: var(--dsw-alias-label-primary); font-size: 13px; font-weight: 600; cursor: pointer; text-align: left; }
 .dsh-dcg__disclose:hover { color: var(--dsw-alias-brand-primary); }
@@ -186,6 +225,7 @@ window.__ModuleLoader__.load({
 .dsh-dcg__pill--deny { color: var(--dsw-alias-state-error-primary); border-color: currentColor; }
 .dsh-dcg__pill--allow { color: var(--dsw-alias-state-success-primary); border-color: currentColor; }
 .dsh-dcg__pill--warn { color: var(--dsw-alias-state-warn-primary); border-color: currentColor; }
+.dsh-dcg__pill--ask { color: var(--dsw-alias-brand-primary); border-color: currentColor; }
 .dsh-dcg__cmd { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
 .dsh-dcg__rule { color: var(--dsw-alias-label-tertiary); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
 .dsh-dcg__number { width: 84px; box-sizing: border-box; border: 1px solid var(--dsw-alias-border-l2); background: transparent; color: var(--dsw-alias-label-primary); border-radius: 8px; padding: 5px 8px; font-size: 12px; }
@@ -227,10 +267,30 @@ window.__ModuleLoader__.load({
       return Number.isNaN(date.getTime()) ? '--:--:--' : date.toLocaleTimeString(undefined, { hour12: false })
     }
 
-    const pillClass = (decision) =>
-      decision === 'deny' || decision === 'allow' || decision === 'warn'
-        ? `dsh-dcg__pill dsh-dcg__pill--${decision}`
-        : 'dsh-dcg__pill'
+    /**
+     * Mirrors `levelOf` in lib/audit.js — a browser bundle cannot import it.
+     * `log` is the softest allow and `indeterminate` is refused fail-closed, so
+     * they share the allow and deny colours instead of getting their own.
+     */
+    const LEVELS = ['allow', 'warn', 'ask', 'deny']
+    const levelOf = (decision) => {
+      if (decision === 'allow' || decision === 'log') return 'allow'
+      if (decision === 'warn') return 'warn'
+      if (decision === 'ask') return 'ask'
+      if (decision === 'deny' || decision === 'indeterminate') return 'deny'
+      return undefined
+    }
+
+    const pillClass = (decision) => {
+      const level = levelOf(decision)
+      return level === undefined ? 'dsh-dcg__pill' : `dsh-dcg__pill dsh-dcg__pill--${level}`
+    }
+
+    /** The pill reads in the four words the filter speaks; `log` reads as allow. */
+    const pillText = (record) => {
+      const decision = record.decision ?? record.event ?? '?'
+      return decision === 'log' ? 'allow' : decision
+    }
 
     // -------------------------------------------------------------- component
 
@@ -382,6 +442,16 @@ window.__ModuleLoader__.load({
         await run('clear', '/action', { action: 'clear-audit' }, (result) => copy.cleared(result.removed))
       }
 
+      // The three panel controls persist on change: they are view settings the
+      // reader expects to find again, not a form to submit.
+      const saveAudit = (patch) => run('audit', '/config', { audit: patch }, () => copy.savedAudit)
+
+      const toggleDecision = (level) => {
+        const current = status?.audit.decisions ?? []
+        const next = current.includes(level) ? current.filter((entry) => entry !== level) : [...current, level]
+        return saveAudit({ decisions: LEVELS.filter((entry) => next.includes(entry)) })
+      }
+
       const currentPacks = packs ?? status?.policy.packs ?? []
       const togglePack = (category) => {
         const next = selectsCategory(currentPacks, category)
@@ -395,6 +465,11 @@ window.__ModuleLoader__.load({
       }
 
       const recent = status.audit.recent ?? []
+      // A browser with an older Host bundle gets no such fields; fall back to
+      // what the defaults would have been rather than render undefined.
+      const shownDecisions = status.audit.decisions ?? LEVELS
+      const recordLevel = status.audit.record ?? 'warn'
+      const shownLimit = status.audit.limit ?? 20
       const binaryLine =
         status.binary.path === null ? copy.notFound : `dcg ${status.binary.version ?? '?'} · ${status.binary.path}`
       const categories = catalog === undefined ? [] : categoriesOf(catalog)
@@ -609,6 +684,130 @@ window.__ModuleLoader__.load({
               ...(outcome.details ?? []).map((line, index) => h('div', { key: `d${index}`, className: 'dsh-dcg__detail' }, line)),
             ),
 
+        h('h3', { className: 'dsh-dcg__title' }, copy.auditSettings),
+        h(
+          'div',
+          { className: 'dsh-dcg__card' },
+          h(
+            'div',
+            { className: 'dsh-dcg__row' },
+            h('span', { className: 'dsh-dcg__key' }, copy.logEnabled),
+            h(
+              'button',
+              {
+                type: 'button',
+                role: 'switch',
+                'aria-checked': status.audit.enabled,
+                'aria-label': copy.logEnabled,
+                disabled: busy === 'log',
+                onClick: toggleLog,
+                className: 'dsh-dcg__btn',
+                style: {
+                  width: 40,
+                  height: 22,
+                  padding: 2,
+                  borderRadius: 999,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: status.audit.enabled ? 'flex-end' : 'flex-start',
+                  background: status.audit.enabled ? 'var(--dsw-alias-brand-primary)' : 'transparent',
+                  borderColor: status.audit.enabled ? 'transparent' : 'var(--dsw-alias-border-l2)',
+                },
+              },
+              h('span', {
+                style: {
+                  width: 16,
+                  height: 16,
+                  borderRadius: '50%',
+                  background: status.audit.enabled ? 'var(--dsw-alias-label-primary-foreground, #fff)' : 'var(--dsw-alias-label-tertiary)',
+                },
+              }),
+            ),
+          ),
+          h(
+            'div',
+            { className: 'dsh-dcg__row', style: { flexDirection: 'column', alignItems: 'stretch', gap: 8 } },
+            h(
+              'div',
+              { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' } },
+              h('span', { className: 'dsh-dcg__key' }, copy.recordLevel),
+              h(
+                'div',
+                { className: 'dsh-dcg__seg', role: 'group', 'aria-label': copy.recordLevel },
+                ...copy.recordLevelOptions.map(([value, label]) =>
+                  h(
+                    'button',
+                    {
+                      key: value,
+                      type: 'button',
+                      'aria-pressed': recordLevel === value,
+                      disabled: busy !== undefined,
+                      onClick: () => saveAudit({ record: value }),
+                    },
+                    label,
+                  ),
+                ),
+              ),
+            ),
+            h('span', { className: 'dsh-dcg__hint', style: { margin: 0 } }, copy.recordLevelHint),
+          ),
+          h(
+            'div',
+            { className: 'dsh-dcg__row', style: { flexDirection: 'column', alignItems: 'stretch', gap: 8 } },
+            h('span', { className: 'dsh-dcg__key' }, copy.decisionsLabel),
+            h(
+              'div',
+              { className: 'dsh-dcg__grid', style: { padding: 0, gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' } },
+              ...copy.decisionOptions.map(([value, label]) =>
+                h(
+                  'label',
+                  { key: value, className: 'dsh-dcg__check' },
+                  h('input', {
+                    type: 'checkbox',
+                    checked: shownDecisions.includes(value),
+                    disabled: busy !== undefined,
+                    onChange: () => toggleDecision(value),
+                  }),
+                  label,
+                ),
+              ),
+            ),
+          ),
+          h(
+            'div',
+            { className: 'dsh-dcg__row', style: { flexWrap: 'wrap', borderBottom: 'none' } },
+            h(
+              'div',
+              { style: { display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' } },
+              h('span', { className: 'dsh-dcg__key' }, copy.retentionDays),
+              h('input', {
+                type: 'number',
+                min: 1,
+                max: 3650,
+                className: 'dsh-dcg__number',
+                value: retention?.days ?? status.audit.retentionDays,
+                onChange: (event) => setRetention({ ...(retention ?? {}), days: Number(event.target.value) }),
+              }),
+              h('span', { className: 'dsh-dcg__key', style: { marginLeft: 8 } }, copy.retentionEntries),
+              h('input', {
+                type: 'number',
+                min: 10,
+                max: 100000,
+                className: 'dsh-dcg__number',
+                value: retention?.entries ?? status.audit.retentionEntries,
+                onChange: (event) => setRetention({ ...(retention ?? {}), entries: Number(event.target.value) }),
+              }),
+            ),
+            h('button', { type: 'button', className: 'dsh-dcg__btn', disabled: busy !== undefined, onClick: saveRetention },
+              busy === 'retention' ? copy.working : copy.saveRetention),
+          ),
+          h(
+            'div',
+            { className: 'dsh-dcg__row', style: { borderBottom: 'none', paddingTop: 0 } },
+            h('span', { className: 'dsh-dcg__hint', style: { margin: 0 } }, copy.retentionHint),
+          ),
+        ),
+
         h(
           'button',
           { type: 'button', className: 'dsh-dcg__disclose dsh-dcg__title', 'aria-expanded': showLog, onClick: () => setShowLog(!showLog) },
@@ -622,85 +821,14 @@ window.__ModuleLoader__.load({
               null,
               h(
                 'div',
-                { className: 'dsh-dcg__card' },
-                h(
-                  'div',
-                  { className: 'dsh-dcg__row' },
-                  h('span', { className: 'dsh-dcg__key' }, copy.logEnabled),
-                  h(
-                    'button',
-                    {
-                      type: 'button',
-                      role: 'switch',
-                      'aria-checked': status.audit.enabled,
-                      'aria-label': copy.logEnabled,
-                      disabled: busy === 'log',
-                      onClick: toggleLog,
-                      className: 'dsh-dcg__btn',
-                      style: {
-                        width: 40,
-                        height: 22,
-                        padding: 2,
-                        borderRadius: 999,
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: status.audit.enabled ? 'flex-end' : 'flex-start',
-                        background: status.audit.enabled ? 'var(--dsw-alias-brand-primary)' : 'transparent',
-                        borderColor: status.audit.enabled ? 'transparent' : 'var(--dsw-alias-border-l2)',
-                      },
-                    },
-                    h('span', {
-                      style: {
-                        width: 16,
-                        height: 16,
-                        borderRadius: '50%',
-                        background: status.audit.enabled ? 'var(--dsw-alias-label-primary-foreground, #fff)' : 'var(--dsw-alias-label-tertiary)',
-                      },
-                    }),
-                  ),
-                ),
-                h(
-                  'div',
-                  { className: 'dsh-dcg__row' },
-                  h('span', { className: 'dsh-dcg__key' }, copy.retentionDays),
-                  h('input', {
-                    type: 'number',
-                    min: 1,
-                    max: 3650,
-                    className: 'dsh-dcg__number',
-                    value: retention?.days ?? status.audit.retentionDays,
-                    onChange: (event) => setRetention({ ...(retention ?? {}), days: Number(event.target.value) }),
-                  }),
-                ),
-                h(
-                  'div',
-                  { className: 'dsh-dcg__row' },
-                  h('span', { className: 'dsh-dcg__key' }, copy.retentionEntries),
-                  h('input', {
-                    type: 'number',
-                    min: 10,
-                    max: 100000,
-                    className: 'dsh-dcg__number',
-                    value: retention?.entries ?? status.audit.retentionEntries,
-                    onChange: (event) => setRetention({ ...(retention ?? {}), entries: Number(event.target.value) }),
-                  }),
-                ),
-                h(
-                  'div',
-                  { className: 'dsh-dcg__row', style: { borderBottom: 'none' } },
-                  h('span', { className: 'dsh-dcg__hint', style: { margin: 0 } }, copy.retentionHint),
-                  h(
-                    'div',
-                    { style: { display: 'flex', gap: 8, flex: '0 0 auto' } },
-                    h('button', { type: 'button', className: 'dsh-dcg__btn', disabled: busy !== undefined, onClick: saveRetention },
-                      busy === 'retention' ? copy.working : copy.saveRetention),
-                    h('button', { type: 'button', className: 'dsh-dcg__btn', disabled: busy !== undefined, onClick: clearLog },
-                      busy === 'clear' ? copy.working : copy.clearLog),
-                  ),
-                ),
+                { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, margin: '8px 0' } },
+                h('span', { className: 'dsh-dcg__hint', style: { margin: 0 } }, copy.logHint),
+                h('button', { type: 'button', className: 'dsh-dcg__btn', disabled: busy !== undefined, onClick: clearLog },
+                  busy === 'clear' ? copy.working : copy.clearLog),
               ),
-              h('p', { className: 'dsh-dcg__hint', style: { margin: '8px 0' } }, copy.logHint),
-              recent.length === 0
+              shownDecisions.length === 0
+                ? h('p', { className: 'dsh-dcg__hint' }, copy.noSelection)
+                : recent.length === 0
                 ? h('p', { className: 'dsh-dcg__hint' }, copy.empty)
                 : h(
                     'div',
@@ -710,7 +838,11 @@ window.__ModuleLoader__.load({
                         'div',
                         { key: `${record.ts ?? index}-${index}`, className: 'dsh-dcg__log' },
                         h('span', { className: 'dsh-dcg__mono' }, clockOf(record.ts)),
-                        h('span', { className: pillClass(record.decision) }, record.decision ?? '?'),
+                        h(
+                          'span',
+                          { className: pillClass(record.decision), title: record.decision ?? undefined },
+                          pillText(record),
+                        ),
                         h(
                           'span',
                           { className: 'dsh-dcg__cmd', title: record.command ?? record.tool ?? '' },
@@ -722,6 +854,28 @@ window.__ModuleLoader__.load({
                       ),
                     ),
                   ),
+              h(
+                'div',
+                { className: 'dsh-dcg__row', style: { borderBottom: 'none', paddingTop: 12 } },
+                h('span', { className: 'dsh-dcg__key' }, copy.showLimit),
+                h(
+                  'div',
+                  { className: 'dsh-dcg__seg', role: 'group', 'aria-label': copy.showLimit },
+                  ...[20, 50, 100].map((value) =>
+                    h(
+                      'button',
+                      {
+                        key: value,
+                        type: 'button',
+                        'aria-pressed': shownLimit === value,
+                        disabled: busy !== undefined,
+                        onClick: () => saveAudit({ limit: value }),
+                      },
+                      String(value),
+                    ),
+                  ),
+                ),
+              ),
             )
           : null,
       )
