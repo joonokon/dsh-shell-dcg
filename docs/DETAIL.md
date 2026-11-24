@@ -157,6 +157,16 @@ plugin_manager { action: "remove_bundle", target: "dsh-shell-dcg" }
 
 `%DSH_HOME%\dsh-shell-dcg\` 可保留（策略与审计记录）或删除。
 
+## 持续集成与发布
+
+| 环节 | 做什么 |
+|---|---|
+| `npm test` | 四个测试文件各起一个进程：`entry`（`index.js`、`client.js` 真的能被加载并注册）、`gate`、`http`、`smoke`。一个文件失败不再遮蔽其余文件的结论。 |
+| `npm run check:pack` | 把 `npm pack` 的实际清单与磁盘推导出的集合双向比对：`files` 里每个 glob、`main`／`exports`／`icon`／`dsh.bundle.patch` 指到的路径，以及 `lib/`、`locale/`、`docs/` 的全部文件。少一个、多一个都失败；`test/`、`tools/`、`.github/`、`assets/` 若进了 tarball 报 forbidden。 |
+| CI 矩阵 | Windows 是主力：`windows-latest` × Node 20／22／24 三条都挡合并；`ubuntu-latest` × Node 22 只做 canary（`continue-on-error`），红了不拦发布。push 到 `main`、PR、手动触发各跑一次；同一 ref 有新运行即取消旧的。macOS 不跑。 |
+| 真实 `dcg` | PR 与手动触发时，Windows（挡合并）与 Ubuntu（canary）各起一个 job：`tools/ci-install-dcg.mjs` 下载钉住的 0.17.0、校验 SHA-256、把目录写进 `PATH`，然后跑 `npm run test:live`（`arm()`、二进制查找、版本门、doctor、策略生成、审计落盘、判定映射全走真二进制）。与矩阵并行，不占关键路径；不涉及任何 secret，fork 的 PR 也能跑。 |
+| 发布 | 推 `v<版本>` tag 触发 `release.yml`：校验 tag 与 `package.json` 一致 → 跑 `npm test` 与 `check:pack` → `npm publish --provenance`。凭据来自 npm **trusted publishing**（OIDC），仓库里不存 `NPM_TOKEN`；版本号带 `-` 的自动发到 `next`。 |
+
 ## 关于 dcg
 
 **不设 `default_mode` 时按严重度分级。** 规则命中后：`critical` / `high` 拒绝、`medium` 警告后放行、`low` 仅记录。插件只在 `policy.defaultMode` 明确配置时才写这一行。
