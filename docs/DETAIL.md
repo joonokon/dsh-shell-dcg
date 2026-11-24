@@ -8,7 +8,7 @@
 - 调用 `dcg --robot test --stdin --format json --dialect <posix|ps> --config <policy.toml>`，命令经 stdin 传入；
 - 判定为 `allow` 时，用另一种方言再判一次，取更严的结果（`crossCheckDialects`）；
 - 按最终 `decision` 决定放行、转交审批或拒绝；
-- 每次判定写入一行审计记录，含 `matchedBy`（按工具名还是按参数命中）与 `dialect`，复核过的另有 `crossCheck`。
+- 判定达到记录等级时写入一行审计记录（默认警告及以上，`audit.record`），含 `matchedBy`（按工具名还是按参数命中）与 `dialect`，复核过的另有 `crossCheck`。
 
 工具名与实际执行器可能不一致（例如名为 `pwsh` 的工具底层跑 bash），这时按名字选的方言就是错的语法。`eval "$(…)"` 这类构造在 PowerShell 语法下不构成可疑结构，在 POSIX 语法下会命中 `heredoc.posix:eval-dynamic`——只按一次方言判会漏。复核只对 `allow` 生效：拒绝已经拦住了命令，没必要再花一次子进程。
 
@@ -52,6 +52,8 @@
 
 `onAsk` 默认 `ask`。DSH 在 `danger-full-access` 权限档下将审批策略设为 `never`，此时 `ask` 会被自动拒绝，不产生弹窗；需要弹窗时应使用 `read-only` 或 `workspace-write`。
 
+`ask` 这一档只在 `dcg` 真的返回 `ask` 时出现在记录里。默认策略下它不会返回：插件不写 `[policy]` 时，`dcg` 按严重度给出 `allow` / `warn` / `log` / `deny`；要出现 `ask`，需把 `policy.defaultMode` 或某个 `policy.packModes` 显式配成 `ask`。因此默认配置下「需审批」筛选项总是空的，这不是缺陷。
+
 ## 实测行为
 
 `dcg` 0.17.0，插件默认配置（未设置 `policy.defaultMode`，采用 `dcg` 的严重度分级）：
@@ -87,7 +89,8 @@
 - 策略：「判定为危险时」五个选项（`dcg` 默认 / 一律拒绝 / 询问 / 只警告 / 只记录），每项附说明；
 - 方言复核：双重判断（默认，两种语法各判一次）与单次判定（只按工具名的方言判一次），每项附说明；
 - 额外规则包：按分类勾选；
-- 日志：累计条数；展开「最近记录」后为记录开关、保留天数、最多条数、清空日志，以及最近 20 条记录（本地时间、判定着色、命令原文、规则 id）。
+- 日志设置（常驻，不折叠）：记录开关、记录等级（低于该级不写入，附一句说明）、显示的等级（四项排一行）、保留天数与最多条数并排、「保存」。前三项改动即写回配置，保留上限仍需点「保存」。
+- 判定记录：标题带累计条数；展开后上方是等级图例与「清空日志」（同一行、右对齐），中间是按设置切出的记录列表（本地时间、等级着色、命令原文、规则 id），底部是「显示条数」（20 / 50 / 100）。
 
 页面修改通过 DSH 的 config editor 写回 profile 配置，与手写 `cordis.patch.yml` 等价，需重启生效。`policy.packModes`、`policy.observeUntil`、`dryRun`、`maxConcurrent`、`matchUnlistedTools` 未提供界面入口。
 
