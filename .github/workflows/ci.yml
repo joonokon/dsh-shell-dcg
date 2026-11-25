@@ -56,13 +56,13 @@ jobs:
         run: npm test
 
   # The only job that runs a real dcg binary; everything in `test` feeds it fake
-  # verdicts. Windows blocks, Linux is the canary, and the two run beside the
-  # matrix rather than after it, so the wait for a green PR barely moves.
-  # No secrets involved: it downloads a public release, so fork PRs get the same
-  # check as a branch in this repository.
+  # verdicts. It runs on every push to main as well, so the merged state is
+  # validated with the binary too — a merge can differ from the PR it came from,
+  # and a direct push skips the PR entirely. Windows blocks, Linux is the canary,
+  # and both run beside the matrix rather than after it. No secrets involved: it
+  # downloads a public release, so fork PRs get the same check.
   live:
     name: live dcg (${{ matrix.os }})
-    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     continue-on-error: ${{ matrix.os == 'ubuntu-latest' }}

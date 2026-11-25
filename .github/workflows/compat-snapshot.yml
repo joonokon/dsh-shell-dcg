@@ -1,0 +1,154 @@
+name: Compat snapshot
+
+# Records dcg's answers on a platform this machine does not have.
+#
+# One dispatch fills every gap: it lists the project's releases, keeps the stable
+# ones at or above `minVersion`, and drops anything that already has both snapshot
+# families here — so a version released months ago is recorded in the same run as
+# the newest one, without a dispatch per release.
+#
+# It pushes a branch and stops. This repository does not let Actions create pull
+# requests, and a push made with GITHUB_TOKEN does not start workflow runs, so the
+# snapshots are validated inside this run instead of by CI on the branch.
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'snapshot directory to write into'
+        required: false
+        default: linux-x64
+      versions:
+        description: 'optional: space separated versions to record; empty means every missing release'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    name: snapshot dcg (${{ inputs.platform }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Work out which releases are missing
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PLATFORM: ${{ inputs.platform }}
+          VERSIONS: ${{ inputs.versions }}
+        run: |
+          set -euo pipefail
+          todo="$RUNNER_TEMP/todo.txt"
+          if [ -n "${VERSIONS:-}" ]; then
+            : > "$todo"
+            for version in $VERSIONS; do echo "$version" >> "$todo"; done
+          else
+            gh release list \
+              --repo Dicklesworthstone/destructive_command_guard \
+              --limit 200 --json tagName --jq '.[].tagName' \
+              | node tools/compat-plan.mjs --platform "$PLATFORM" > "$todo"
+          fi
+          if [ ! -s "$todo" ]; then
+            echo "::notice::every release at or above minVersion already has a $PLATFORM snapshot"
+            exit 0
+          fi
+          echo 'versions to record:'
+          sed 's/^/  /' "$todo"
+
+      - name: Record the missing versions
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PLATFORM: ${{ inputs.platform }}
+        run: |
+          set -euo pipefail
+          set -E
+          trap 'echo "::error::failed while recording a version: $BASH_COMMAND"' ERR
+          while read -r version; do
+            [ -n "$version" ] || continue
+            echo "::group::dcg $version"
+            dir="$RUNNER_TEMP/dcg-$version"
+            rm -rf "$dir"
+            mkdir -p "$dir"
+            if ! gh release download "v${version}" \
+              --repo Dicklesworthstone/destructive_command_guard \
+              --dir "$dir" --pattern '*linux*' --pattern 'SHA256SUMS*'; then
+              echo "::warning::v${version} matched no linux asset by pattern; downloading every asset instead"
+              gh release download "v${version}" \
+                --repo Dicklesworthstone/destructive_command_guard \
+                --dir "$dir" --clobber
+            fi
+            sums="$(ls "$dir"/SHA256SUMS* 2>/dev/null | head -1 || true)"
+            if [ -n "$sums" ]; then
+              (cd "$dir" && sha256sum -c "$(basename "$sums")" --ignore-missing)
+            else
+              echo "::warning::v${version} published no SHA256SUMS; the digest is only recorded in the snapshot header"
+            fi
+            # One directory per archive, named without the suffix: keeping the
+            # suffix would ask mkdir to create a directory at the archive's own
+            # path. Never `[ -e ] && cmd` as the loop body either — an unmatched
+            # glob then becomes the loop's exit status under `set -e`.
+            for archive in "$dir"/*.tar.xz "$dir"/*.tar.gz; do
+              [ -e "$archive" ] || continue
+              name="$(basename "$archive")"
+              name="${name%.tar.xz}"; name="${name%.tar.gz}"
+              into="$dir/unpacked/$name"
+              mkdir -p "$into"
+              case "$archive" in
+                *.tar.xz) tar -xJf "$archive" -C "$into" ;;
+                *.tar.gz) tar -xzf "$archive" -C "$into" ;;
+              esac
+            done
+            for archive in "$dir"/*.zip; do
+              [ -e "$archive" ] || continue
+              name="$(basename "$archive")"; name="${name%.zip}"
+              mkdir -p "$dir/unpacked/$name"
+              unzip -oq "$archive" -d "$dir/unpacked/$name"
+            done
+            bin="$(find "$dir" -type f -name dcg -path '*x86_64*' | head -1)"
+            [ -n "$bin" ] || bin="$(find "$dir" -type f -name dcg | head -1)"
+            if [ -z "$bin" ]; then
+              echo "::error::v${version} carries no dcg executable"
+              exit 1
+            fi
+            chmod +x "$bin"
+            "$bin" --version
+            for family in plugin all; do
+              node tools/compat.mjs snapshot "$bin" --family "$family" --platform "$PLATFORM"
+            done
+            echo '::endgroup::'
+          done < "$RUNNER_TEMP/todo.txt"
+
+      # A push made with GITHUB_TOKEN does not start workflow runs, so the branch
+      # would show no checks. The same gates run here instead.
+      - name: Validate what was recorded
+        env:
+          PLATFORM: ${{ inputs.platform }}
+        run: |
+          set -euo pipefail
+          node tools/compat.mjs check
+          for family in plugin all; do
+            node tools/compat.mjs coverage --family "$family" --platform "$PLATFORM"
+          done
+
+      - name: Push a branch with the new snapshots
+        env:
+          PLATFORM: ${{ inputs.platform }}
+        run: |
+          set -euo pipefail
+          branch="compat/snapshots-${PLATFORM}-${{ github.run_number }}"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git checkout -b "$branch"
+          git add "test/compat/dcg/${PLATFORM}"
+          if git diff --cached --quiet; then
+            echo '::notice::nothing new to record'
+            exit 0
+          fi
+          git commit -m "test: 补齐 dcg $(paste -sd' ' "$RUNNER_TEMP/todo.txt") 的 ${PLATFORM} 快照"
+          git push -u origin "$branch"
+          echo "::notice title=branch pushed::${{ github.repository }}/compare/main...${branch}?expand=1"

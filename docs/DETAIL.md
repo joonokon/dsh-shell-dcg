@@ -165,7 +165,7 @@ plugin_manager { action: "remove_bundle", target: "dsh-shell-dcg" }
 | `npm run check:pack` | 把 `npm pack` 的实际清单与磁盘推导出的集合双向比对：`files` 里每个 glob、`main`／`exports`／`icon`／`dsh.bundle.patch` 指到的路径，以及 `lib/`、`locale/`、`docs/` 的全部文件。少一个、多一个都失败；`test/`、`tools/`、`.github/`、`assets/` 若进了 tarball 报 forbidden。 |
 | CI 矩阵 | Windows 是主力：`windows-latest` × Node 20／22／24 三条都挡合并；`ubuntu-latest` × Node 22 只做 canary（`continue-on-error`），红了不拦发布。push 到 `main`、PR、手动触发各跑一次；同一 ref 有新运行即取消旧的。macOS 不跑。 |
 | 真实 `dcg` | PR 与手动触发时，Windows（挡合并）与 Ubuntu（canary）各起一个 job：`tools/ci-install-dcg.mjs` 下载钉住的 0.17.0、校验 SHA-256、把目录写进 `PATH`，然后跑 `npm run test:live`（`arm()`、二进制查找、版本门、doctor、策略生成、审计落盘、判定映射全走真二进制）。与矩阵并行，不占关键路径；不涉及任何 secret，fork 的 PR 也能跑。 |
-| dcg 兼容快照 | `test/compat/` 存每个 `dcg` 版本的判定快照（264 条命令 × 两个配置族：`plugin` 是默认安装实际生效的配置，`all` 是全部规则包启用）。CI 只做离线校验：快照头部与语料/包目录一致、同族相邻版本逐条相等（`minVersion` 之上的断裂直接失败）、每个规则包至少被 2 条命中。新增 `dcg` 版本时用 `node tools/compat.mjs snapshot <bin>` 生成一份提交即可，断裂点由此显形。 |
+| dcg 兼容快照 | `test/compat/` 存每个 `dcg` 版本的判定快照（331 条命令 × 两个配置族：`plugin` 是默认安装实际生效的配置，`all` 是全部规则包启用）。CI 只做离线校验：快照头部与语料/包目录一致、同族相邻版本逐条相等（`minVersion` 之上的断裂直接失败）、每个规则包至少被 3 条命中。新增版本时跑 `node tools/compat.mjs snapshot <bin> --family plugin` 与 `--family all` 各一次并提交；没有 Ubuntu 机器时用 **Compat snapshot** 工作流：它按 `minVersion` 及以上、仓库里还没有快照的版本一次补齐，推一个分支（仓库未允许 Actions 建 PR，PR 需自己开），校验在同一个 run 内完成。 |
 | 发布 | 推 `v<版本>` tag 触发 `release.yml`：校验 tag 与 `package.json` 一致 → 跑 `npm test` 与 `check:pack` → `npm publish --provenance`。凭据来自 npm **trusted publishing**（OIDC），仓库里不存 `NPM_TOKEN`；版本号带 `-` 的自动发到 `next`。 |
 
 ## 关于 dcg
