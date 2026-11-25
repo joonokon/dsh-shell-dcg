@@ -38,7 +38,7 @@
 
 | 键 | 默认 | 说明 |
 |---|---|---|
-| `policy.packs` | `[]` | 额外启用的规则包，写入 `[packs] enabled`。该设置为增量，`core.*` 始终生效 |
+| `policy.packs` | `["database", "package_managers"]` | 额外启用的规则包，写入 `[packs] enabled`。该设置为增量，`core.*` 始终生效。默认值就是 README 判定表里那两行的依据（`psql … DROP TABLE`、`npm publish`）；容器、云、K8s 等其余包默认关闭 |
 | `policy.packModes` | `{}` | 单个规则包降级，例如 `{ "core.git": "warn" }` |
 | `policy.observeUntil` | `""` | 写入 `policy.observe_until`，`dcg` 内建的灰度到期日 |
 | `audit.enabled` | `true` | 是否写入判定记录 |

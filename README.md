@@ -30,6 +30,8 @@
 
 规则来自 `dcg`，插件未硬编码任何命令，完整列表见 [docs/DETAIL.md](docs/DETAIL.md)。
 
+默认只启用判定表里用到的那几组：`dcg` 自带的核心包，加上 `database` 与 `package_managers`。容器、云、Kubernetes、密钥管理等其余规则包默认关闭。需要时在 **设置 → Shell 守卫** 的规则包里开启，或写进 `policy.packs`。
+
 不涉及的部分：文件路径边界（DSH 沙箱）、读取凭据后的出网行为、远端主机上实际执行的内容。`dcg` 采用 deny-list，可降低风险，不构成完整防护。
 
 ## 安装
