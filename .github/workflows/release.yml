@@ -23,7 +23,7 @@ jobs:
     environment:
       name: npm
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
@@ -31,7 +31,7 @@ jobs:
       # No NPM_TOKEN, no registry-url: npm asks this workflow's OIDC identity for
       # the credential, and the package's trusted-publisher setting on npmjs.com
       # decides whether that identity may publish.
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
 

@@ -294,7 +294,7 @@ function commandSnapshot(bin, family, explicitPlatform) {
   console.log(`${version} on ${platform} [${family}]: ${Object.keys(results).length} answers → ${path.relative(root, target)}`)
 }
 
-function commandCoverage(file, family) {
+function commandCoverage(file, family, platform = PRIMARY_PLATFORM) {
   const packs = readJson(packsFile).packs
   const { corpus } = cases()
   const plan = readJson(planFile)
@@ -303,14 +303,14 @@ function commandCoverage(file, family) {
   // Newest snapshot of this family whose corpus still matches: a snapshot taken
   // before the last corpus edit says nothing about the cases added since, so
   // coverage refuses to grade stale evidence.
-  const candidates = snapshotsFor(PRIMARY_PLATFORM)
+  const candidates = snapshotsFor(platform)
     .filter((entry) => entry.family === family)
     .map((entry) => ({ ...entry, body: readJson(entry.file) }))
     .filter((entry) => entry.body.corpus === corpusHashes().corpus)
   const target = file ?? candidates.at(-1)?.file
   if (target === undefined || !fs.existsSync(target)) {
     console.error(
-      `no ${family} snapshot on ${PRIMARY_PLATFORM} matches the current corpus; run: node tools/compat.mjs snapshot <bin> --family ${family}`,
+      `no ${family} snapshot on ${platform} matches the current corpus; run: node tools/compat.mjs snapshot <bin> --family ${family} --platform ${platform}`,
     )
     process.exit(1)
   }
@@ -554,7 +554,7 @@ switch (command) {
     commandSnapshot(positional[0], family, option('platform'))
     break
   case 'coverage':
-    commandCoverage(positional[0], family)
+    commandCoverage(positional[0], family, option('platform', PRIMARY_PLATFORM))
     break
   case 'diff':
     if (positional[0] === undefined || positional[1] === undefined) throw new Error('usage: node tools/compat.mjs diff <a.json> <b.json>')
