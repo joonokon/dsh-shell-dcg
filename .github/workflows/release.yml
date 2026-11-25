@@ -50,6 +50,9 @@ jobs:
       - name: Every runtime file is shipped, and nothing else
         run: npm run check:pack
 
+      - name: dcg compatibility chain is unbroken
+        run: node tools/compat.mjs check
+
       - name: Publish to npm with provenance
         run: |
           # A prerelease version never lands on `latest`: v0.2.0-next.1 goes to

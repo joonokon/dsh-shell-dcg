@@ -107,3 +107,13 @@ jobs:
 
       - name: Every runtime file is shipped, and nothing else
         run: npm run check:pack
+
+      # Offline: snapshots are committed JSON, so these need no dcg binary.
+      - name: dcg compatibility chain is unbroken
+        run: node tools/compat.mjs check
+
+      - name: Every rule pack is exercised by the corpus
+        run: node tools/compat.mjs coverage --family all
+
+      - name: The default install answers what the docs promise
+        run: node tools/compat.mjs coverage --family plugin
