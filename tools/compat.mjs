@@ -300,9 +300,18 @@ function commandCoverage(file, family) {
   const plan = readJson(planFile)
   const limits = plan.limits ?? {}
 
-  const target = file ?? snapshotsFor(PRIMARY_PLATFORM).filter((entry) => entry.family === family).at(-1)?.file
+  // Newest snapshot of this family whose corpus still matches: a snapshot taken
+  // before the last corpus edit says nothing about the cases added since, so
+  // coverage refuses to grade stale evidence.
+  const candidates = snapshotsFor(PRIMARY_PLATFORM)
+    .filter((entry) => entry.family === family)
+    .map((entry) => ({ ...entry, body: readJson(entry.file) }))
+    .filter((entry) => entry.body.corpus === corpusHashes().corpus)
+  const target = file ?? candidates.at(-1)?.file
   if (target === undefined || !fs.existsSync(target)) {
-    console.error(`no ${family} snapshot on ${PRIMARY_PLATFORM}; run: node tools/compat.mjs snapshot <bin> --family ${family}`)
+    console.error(
+      `no ${family} snapshot on ${PRIMARY_PLATFORM} matches the current corpus; run: node tools/compat.mjs snapshot <bin> --family ${family}`,
+    )
     process.exit(1)
   }
   const snapshot = readJson(target)

@@ -1,6 +1,6 @@
 {
   "limits": {
-    "enabledHits": 2
+    "enabledHits": 3
   },
   "extraPacks": [
     "heredoc.powershell"
