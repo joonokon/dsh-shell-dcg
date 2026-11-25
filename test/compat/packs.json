@@ -1,0 +1,726 @@
+{
+  "dcg": "0.17.0",
+  "packs": [
+    {
+      "category": "apigateway",
+      "destructivePatterns": 14,
+      "id": "apigateway.apigee",
+      "name": "Google Apigee",
+      "safePatterns": 24
+    },
+    {
+      "category": "apigateway",
+      "destructivePatterns": 18,
+      "id": "apigateway.aws",
+      "name": "AWS API Gateway",
+      "safePatterns": 27
+    },
+    {
+      "category": "apigateway",
+      "destructivePatterns": 11,
+      "id": "apigateway.kong",
+      "name": "Kong API Gateway",
+      "safePatterns": 14
+    },
+    {
+      "category": "backup",
+      "destructivePatterns": 5,
+      "id": "backup.borg",
+      "name": "BorgBackup",
+      "safePatterns": 7
+    },
+    {
+      "category": "backup",
+      "destructivePatterns": 7,
+      "id": "backup.rclone",
+      "name": "Rclone",
+      "safePatterns": 8
+    },
+    {
+      "category": "backup",
+      "destructivePatterns": 5,
+      "id": "backup.restic",
+      "name": "Restic",
+      "safePatterns": 8
+    },
+    {
+      "category": "backup",
+      "destructivePatterns": 6,
+      "id": "backup.velero",
+      "name": "Velero",
+      "safePatterns": 7
+    },
+    {
+      "category": "careful_company_running_windows",
+      "destructivePatterns": 11,
+      "id": "careful_company_running_windows.chat",
+      "name": "Careful Company: Chat & Webhook Egress",
+      "safePatterns": 2
+    },
+    {
+      "category": "careful_company_running_windows",
+      "destructivePatterns": 9,
+      "id": "careful_company_running_windows.email",
+      "name": "Careful Company: Outbound Email",
+      "safePatterns": 2
+    },
+    {
+      "category": "careful_company_running_windows",
+      "destructivePatterns": 15,
+      "id": "careful_company_running_windows.guardrails",
+      "name": "Careful Company: Guardrail Tampering",
+      "safePatterns": 4
+    },
+    {
+      "category": "careful_company_running_windows",
+      "destructivePatterns": 21,
+      "id": "careful_company_running_windows.transfer",
+      "name": "Careful Company: File-Transfer Egress",
+      "safePatterns": 6
+    },
+    {
+      "category": "careful_company_running_windows",
+      "destructivePatterns": 15,
+      "id": "careful_company_running_windows.tunnel",
+      "name": "Careful Company: Tunnels & Raw Channels",
+      "safePatterns": 4
+    },
+    {
+      "category": "careful_company_running_windows",
+      "destructivePatterns": 18,
+      "id": "careful_company_running_windows.upload",
+      "name": "Careful Company: HTTP Upload Egress",
+      "safePatterns": 3
+    },
+    {
+      "category": "cdn",
+      "destructivePatterns": 9,
+      "id": "cdn.cloudflare_workers",
+      "name": "Cloudflare Workers",
+      "safePatterns": 12
+    },
+    {
+      "category": "cdn",
+      "destructivePatterns": 7,
+      "id": "cdn.cloudfront",
+      "name": "AWS CloudFront",
+      "safePatterns": 12
+    },
+    {
+      "category": "cdn",
+      "destructivePatterns": 11,
+      "id": "cdn.fastly",
+      "name": "Fastly CDN",
+      "safePatterns": 14
+    },
+    {
+      "category": "cicd",
+      "destructivePatterns": 6,
+      "id": "cicd.circleci",
+      "name": "CircleCI",
+      "safePatterns": 10
+    },
+    {
+      "category": "cicd",
+      "destructivePatterns": 6,
+      "id": "cicd.github_actions",
+      "name": "GitHub Actions",
+      "safePatterns": 7
+    },
+    {
+      "category": "cicd",
+      "destructivePatterns": 4,
+      "id": "cicd.gitlab_ci",
+      "name": "GitLab CI",
+      "safePatterns": 7
+    },
+    {
+      "category": "cicd",
+      "destructivePatterns": 6,
+      "id": "cicd.jenkins",
+      "name": "Jenkins",
+      "safePatterns": 9
+    },
+    {
+      "category": "cloud",
+      "destructivePatterns": 41,
+      "id": "cloud.aws",
+      "name": "AWS CLI",
+      "safePatterns": 11
+    },
+    {
+      "category": "cloud",
+      "destructivePatterns": 29,
+      "id": "cloud.azure",
+      "name": "Azure CLI",
+      "safePatterns": 6
+    },
+    {
+      "category": "cloud",
+      "destructivePatterns": 23,
+      "id": "cloud.gcp",
+      "name": "Google Cloud SDK",
+      "safePatterns": 7
+    },
+    {
+      "category": "containers",
+      "destructivePatterns": 4,
+      "id": "containers.compose",
+      "name": "Docker Compose",
+      "safePatterns": 7
+    },
+    {
+      "category": "containers",
+      "destructivePatterns": 9,
+      "id": "containers.docker",
+      "name": "Docker",
+      "safePatterns": 10
+    },
+    {
+      "category": "containers",
+      "destructivePatterns": 9,
+      "id": "containers.podman",
+      "name": "Podman",
+      "safePatterns": 8
+    },
+    {
+      "category": "core",
+      "destructivePatterns": 39,
+      "id": "core.filesystem",
+      "name": "Core Filesystem",
+      "safePatterns": 39
+    },
+    {
+      "category": "core",
+      "destructivePatterns": 28,
+      "id": "core.git",
+      "name": "Core Git",
+      "safePatterns": 7
+    },
+    {
+      "category": "database",
+      "destructivePatterns": 32,
+      "id": "database.bigquery",
+      "name": "BigQuery",
+      "safePatterns": 0
+    },
+    {
+      "category": "database",
+      "destructivePatterns": 19,
+      "id": "database.databricks",
+      "name": "Databricks CLI",
+      "safePatterns": 0
+    },
+    {
+      "category": "database",
+      "destructivePatterns": 7,
+      "id": "database.mongodb",
+      "name": "MongoDB",
+      "safePatterns": 5
+    },
+    {
+      "category": "database",
+      "destructivePatterns": 13,
+      "id": "database.mysql",
+      "name": "MySQL/MariaDB",
+      "safePatterns": 5
+    },
+    {
+      "category": "database",
+      "destructivePatterns": 10,
+      "id": "database.postgresql",
+      "name": "PostgreSQL",
+      "safePatterns": 2
+    },
+    {
+      "category": "database",
+      "destructivePatterns": 14,
+      "id": "database.redis",
+      "name": "Redis",
+      "safePatterns": 6
+    },
+    {
+      "category": "database",
+      "destructivePatterns": 51,
+      "id": "database.snowflake",
+      "name": "Snowflake CLI",
+      "safePatterns": 0
+    },
+    {
+      "category": "database",
+      "destructivePatterns": 7,
+      "id": "database.sqlite",
+      "name": "SQLite",
+      "safePatterns": 4
+    },
+    {
+      "category": "database",
+      "destructivePatterns": 18,
+      "id": "database.supabase",
+      "name": "Supabase",
+      "safePatterns": 35
+    },
+    {
+      "category": "dns",
+      "destructivePatterns": 4,
+      "id": "dns.cloudflare",
+      "name": "Cloudflare DNS",
+      "safePatterns": 3
+    },
+    {
+      "category": "dns",
+      "destructivePatterns": 4,
+      "id": "dns.generic",
+      "name": "Generic DNS Tools",
+      "safePatterns": 3
+    },
+    {
+      "category": "dns",
+      "destructivePatterns": 6,
+      "id": "dns.route53",
+      "name": "AWS Route53",
+      "safePatterns": 4
+    },
+    {
+      "category": "email",
+      "destructivePatterns": 8,
+      "id": "email.mailgun",
+      "name": "Mailgun",
+      "safePatterns": 0
+    },
+    {
+      "category": "email",
+      "destructivePatterns": 7,
+      "id": "email.postmark",
+      "name": "Postmark",
+      "safePatterns": 0
+    },
+    {
+      "category": "email",
+      "destructivePatterns": 8,
+      "id": "email.sendgrid",
+      "name": "SendGrid",
+      "safePatterns": 0
+    },
+    {
+      "category": "email",
+      "destructivePatterns": 10,
+      "id": "email.ses",
+      "name": "AWS SES",
+      "safePatterns": 25
+    },
+    {
+      "category": "featureflags",
+      "destructivePatterns": 8,
+      "id": "featureflags.flipt",
+      "name": "Flipt",
+      "safePatterns": 18
+    },
+    {
+      "category": "featureflags",
+      "destructivePatterns": 11,
+      "id": "featureflags.launchdarkly",
+      "name": "LaunchDarkly",
+      "safePatterns": 18
+    },
+    {
+      "category": "featureflags",
+      "destructivePatterns": 10,
+      "id": "featureflags.split",
+      "name": "Split.io",
+      "safePatterns": 17
+    },
+    {
+      "category": "featureflags",
+      "destructivePatterns": 9,
+      "id": "featureflags.unleash",
+      "name": "Unleash",
+      "safePatterns": 16
+    },
+    {
+      "category": "infrastructure",
+      "destructivePatterns": 4,
+      "id": "infrastructure.ansible",
+      "name": "Ansible",
+      "safePatterns": 7
+    },
+    {
+      "category": "infrastructure",
+      "destructivePatterns": 11,
+      "id": "infrastructure.atmos",
+      "name": "Atmos",
+      "safePatterns": 6
+    },
+    {
+      "category": "infrastructure",
+      "destructivePatterns": 6,
+      "id": "infrastructure.pulumi",
+      "name": "Pulumi",
+      "safePatterns": 9
+    },
+    {
+      "category": "infrastructure",
+      "destructivePatterns": 8,
+      "id": "infrastructure.terraform",
+      "name": "Terraform",
+      "safePatterns": 11
+    },
+    {
+      "category": "kubernetes",
+      "destructivePatterns": 4,
+      "id": "kubernetes.helm",
+      "name": "Helm",
+      "safePatterns": 12
+    },
+    {
+      "category": "kubernetes",
+      "destructivePatterns": 19,
+      "id": "kubernetes.kubectl",
+      "name": "kubectl",
+      "safePatterns": 9
+    },
+    {
+      "category": "kubernetes",
+      "destructivePatterns": 3,
+      "id": "kubernetes.kustomize",
+      "name": "Kustomize",
+      "safePatterns": 1
+    },
+    {
+      "category": "loadbalancer",
+      "destructivePatterns": 7,
+      "id": "loadbalancer.elb",
+      "name": "AWS ELB",
+      "safePatterns": 4
+    },
+    {
+      "category": "loadbalancer",
+      "destructivePatterns": 9,
+      "id": "loadbalancer.haproxy",
+      "name": "HAProxy",
+      "safePatterns": 5
+    },
+    {
+      "category": "loadbalancer",
+      "destructivePatterns": 5,
+      "id": "loadbalancer.nginx",
+      "name": "nginx",
+      "safePatterns": 7
+    },
+    {
+      "category": "loadbalancer",
+      "destructivePatterns": 9,
+      "id": "loadbalancer.traefik",
+      "name": "Traefik",
+      "safePatterns": 6
+    },
+    {
+      "category": "messaging",
+      "destructivePatterns": 7,
+      "id": "messaging.kafka",
+      "name": "Apache Kafka",
+      "safePatterns": 9
+    },
+    {
+      "category": "messaging",
+      "destructivePatterns": 6,
+      "id": "messaging.nats",
+      "name": "NATS",
+      "safePatterns": 10
+    },
+    {
+      "category": "messaging",
+      "destructivePatterns": 9,
+      "id": "messaging.rabbitmq",
+      "name": "RabbitMQ",
+      "safePatterns": 6
+    },
+    {
+      "category": "messaging",
+      "destructivePatterns": 8,
+      "id": "messaging.sqs_sns",
+      "name": "AWS SQS/SNS",
+      "safePatterns": 6
+    },
+    {
+      "category": "monitoring",
+      "destructivePatterns": 4,
+      "id": "monitoring.datadog",
+      "name": "Datadog",
+      "safePatterns": 3
+    },
+    {
+      "category": "monitoring",
+      "destructivePatterns": 6,
+      "id": "monitoring.newrelic",
+      "name": "New Relic",
+      "safePatterns": 4
+    },
+    {
+      "category": "monitoring",
+      "destructivePatterns": 7,
+      "id": "monitoring.pagerduty",
+      "name": "PagerDuty",
+      "safePatterns": 4
+    },
+    {
+      "category": "monitoring",
+      "destructivePatterns": 7,
+      "id": "monitoring.prometheus",
+      "name": "Prometheus/Grafana",
+      "safePatterns": 4
+    },
+    {
+      "category": "monitoring",
+      "destructivePatterns": 4,
+      "id": "monitoring.splunk",
+      "name": "Splunk",
+      "safePatterns": 3
+    },
+    {
+      "category": "package_managers",
+      "destructivePatterns": 20,
+      "id": "package_managers",
+      "name": "Package Managers",
+      "safePatterns": 18
+    },
+    {
+      "category": "payment",
+      "destructivePatterns": 6,
+      "id": "payment.braintree",
+      "name": "Braintree",
+      "safePatterns": 3
+    },
+    {
+      "category": "payment",
+      "destructivePatterns": 7,
+      "id": "payment.square",
+      "name": "Square",
+      "safePatterns": 3
+    },
+    {
+      "category": "payment",
+      "destructivePatterns": 7,
+      "id": "payment.stripe",
+      "name": "Stripe",
+      "safePatterns": 6
+    },
+    {
+      "category": "platform",
+      "destructivePatterns": 23,
+      "id": "platform.azure_devops",
+      "name": "Azure DevOps CLI",
+      "safePatterns": 2
+    },
+    {
+      "category": "platform",
+      "destructivePatterns": 20,
+      "id": "platform.github",
+      "name": "GitHub Platform",
+      "safePatterns": 13
+    },
+    {
+      "category": "platform",
+      "destructivePatterns": 11,
+      "id": "platform.gitlab",
+      "name": "GitLab Platform",
+      "safePatterns": 11
+    },
+    {
+      "category": "platform",
+      "destructivePatterns": 10,
+      "id": "platform.kamal",
+      "name": "Kamal",
+      "safePatterns": 20
+    },
+    {
+      "category": "platform",
+      "destructivePatterns": 12,
+      "id": "platform.modal",
+      "name": "Modal Platform",
+      "safePatterns": 14
+    },
+    {
+      "category": "platform",
+      "destructivePatterns": 23,
+      "id": "platform.railway",
+      "name": "Railway Platform",
+      "safePatterns": 10
+    },
+    {
+      "category": "remote",
+      "destructivePatterns": 2,
+      "id": "remote.rsync",
+      "name": "rsync",
+      "safePatterns": 3
+    },
+    {
+      "category": "remote",
+      "destructivePatterns": 10,
+      "id": "remote.scp",
+      "name": "scp",
+      "safePatterns": 5
+    },
+    {
+      "category": "remote",
+      "destructivePatterns": 6,
+      "id": "remote.ssh",
+      "name": "ssh",
+      "safePatterns": 9
+    },
+    {
+      "category": "search",
+      "destructivePatterns": 7,
+      "id": "search.algolia",
+      "name": "Algolia",
+      "safePatterns": 4
+    },
+    {
+      "category": "search",
+      "destructivePatterns": 10,
+      "id": "search.elasticsearch",
+      "name": "Elasticsearch",
+      "safePatterns": 6
+    },
+    {
+      "category": "search",
+      "destructivePatterns": 10,
+      "id": "search.meilisearch",
+      "name": "Meilisearch",
+      "safePatterns": 8
+    },
+    {
+      "category": "search",
+      "destructivePatterns": 12,
+      "id": "search.opensearch",
+      "name": "OpenSearch",
+      "safePatterns": 8
+    },
+    {
+      "category": "secret_disclosure",
+      "destructivePatterns": 11,
+      "id": "secret_disclosure",
+      "name": "Secret Value Disclosure",
+      "safePatterns": 2
+    },
+    {
+      "category": "secrets",
+      "destructivePatterns": 7,
+      "id": "secrets.aws_secrets",
+      "name": "AWS Secrets Manager",
+      "safePatterns": 9
+    },
+    {
+      "category": "secrets",
+      "destructivePatterns": 4,
+      "id": "secrets.doppler",
+      "name": "Doppler CLI",
+      "safePatterns": 8
+    },
+    {
+      "category": "secrets",
+      "destructivePatterns": 4,
+      "id": "secrets.infisical",
+      "name": "Infisical CLI",
+      "safePatterns": 0
+    },
+    {
+      "category": "secrets",
+      "destructivePatterns": 6,
+      "id": "secrets.onepassword",
+      "name": "1Password CLI",
+      "safePatterns": 10
+    },
+    {
+      "category": "secrets",
+      "destructivePatterns": 9,
+      "id": "secrets.vault",
+      "name": "HashiCorp Vault",
+      "safePatterns": 11
+    },
+    {
+      "category": "storage",
+      "destructivePatterns": 6,
+      "id": "storage.azure_blob",
+      "name": "Azure Blob Storage",
+      "safePatterns": 19
+    },
+    {
+      "category": "storage",
+      "destructivePatterns": 6,
+      "id": "storage.gcs",
+      "name": "Google Cloud Storage",
+      "safePatterns": 15
+    },
+    {
+      "category": "storage",
+      "destructivePatterns": 6,
+      "id": "storage.minio",
+      "name": "MinIO",
+      "safePatterns": 14
+    },
+    {
+      "category": "storage",
+      "destructivePatterns": 6,
+      "id": "storage.s3",
+      "name": "AWS S3",
+      "safePatterns": 10
+    },
+    {
+      "category": "strict_git",
+      "destructivePatterns": 19,
+      "id": "strict_git",
+      "name": "Strict Git",
+      "safePatterns": 0
+    },
+    {
+      "category": "system",
+      "destructivePatterns": 59,
+      "id": "system.disk",
+      "name": "Disk Operations",
+      "safePatterns": 19
+    },
+    {
+      "category": "system",
+      "destructivePatterns": 11,
+      "id": "system.permissions",
+      "name": "Permissions",
+      "safePatterns": 4
+    },
+    {
+      "category": "system",
+      "destructivePatterns": 11,
+      "id": "system.services",
+      "name": "Services",
+      "safePatterns": 7
+    },
+    {
+      "category": "windows",
+      "destructivePatterns": 11,
+      "id": "windows.filesystem",
+      "name": "Windows Filesystem",
+      "safePatterns": 2
+    },
+    {
+      "category": "windows",
+      "destructivePatterns": 6,
+      "id": "windows.misc",
+      "name": "Windows Misc (registry/accounts/wsl)",
+      "safePatterns": 4
+    },
+    {
+      "category": "windows",
+      "destructivePatterns": 9,
+      "id": "windows.powershell",
+      "name": "Windows PowerShell Cmdlets",
+      "safePatterns": 1
+    },
+    {
+      "category": "windows",
+      "destructivePatterns": 14,
+      "id": "windows.system",
+      "name": "Windows Disk & System",
+      "safePatterns": 3
+    }
+  ]
+}

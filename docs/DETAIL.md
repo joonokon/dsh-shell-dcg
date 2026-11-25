@@ -165,13 +165,16 @@ plugin_manager { action: "remove_bundle", target: "dsh-shell-dcg" }
 | `npm run check:pack` | 把 `npm pack` 的实际清单与磁盘推导出的集合双向比对：`files` 里每个 glob、`main`／`exports`／`icon`／`dsh.bundle.patch` 指到的路径，以及 `lib/`、`locale/`、`docs/` 的全部文件。少一个、多一个都失败；`test/`、`tools/`、`.github/`、`assets/` 若进了 tarball 报 forbidden。 |
 | CI 矩阵 | Windows 是主力：`windows-latest` × Node 20／22／24 三条都挡合并；`ubuntu-latest` × Node 22 只做 canary（`continue-on-error`），红了不拦发布。push 到 `main`、PR、手动触发各跑一次；同一 ref 有新运行即取消旧的。macOS 不跑。 |
 | 真实 `dcg` | PR 与手动触发时，Windows（挡合并）与 Ubuntu（canary）各起一个 job：`tools/ci-install-dcg.mjs` 下载钉住的 0.17.0、校验 SHA-256、把目录写进 `PATH`，然后跑 `npm run test:live`（`arm()`、二进制查找、版本门、doctor、策略生成、审计落盘、判定映射全走真二进制）。与矩阵并行，不占关键路径；不涉及任何 secret，fork 的 PR 也能跑。 |
+| dcg 兼容快照 | `test/compat/` 存每个 `dcg` 版本的判定快照（264 条命令 × 两个配置族：`plugin` 是默认安装实际生效的配置，`all` 是全部规则包启用）。CI 只做离线校验：快照头部与语料/包目录一致、同族相邻版本逐条相等（`minVersion` 之上的断裂直接失败）、每个规则包至少被 2 条命中。新增 `dcg` 版本时用 `node tools/compat.mjs snapshot <bin>` 生成一份提交即可，断裂点由此显形。 |
 | 发布 | 推 `v<版本>` tag 触发 `release.yml`：校验 tag 与 `package.json` 一致 → 跑 `npm test` 与 `check:pack` → `npm publish --provenance`。凭据来自 npm **trusted publishing**（OIDC），仓库里不存 `NPM_TOKEN`；版本号带 `-` 的自动发到 `next`。 |
 
 ## 关于 dcg
 
 **不设 `default_mode` 时按严重度分级。** 规则命中后：`critical` / `high` 拒绝、`medium` 警告后放行、`low` 仅记录。插件只在 `policy.defaultMode` 明确配置时才写这一行。
 
-**包是增量的。** `[packs] enabled` 只追加，`core.*` 始终生效；`dcg` 另有 `[packs] disabled` 用于关闭非 core 包，本插件未暴露该开关。
+**包是增量的。** `[packs] enabled` 只追加，`core.*` 始终生效；`dcg` 另有 `[packs] disabled` 用于关闭非 core 包，本插件未暴露该开关。默认写入的是 `database` 与 `package_managers`——`dcg` 自身默认只启用核心包，若不追加这两组，README 判定表里的 `psql … DROP TABLE` 与 `npm publish` 在全新安装上会放行。
+
+**兼容性由快照证明。** `test/compat/` 记录 0.16.0、0.17.0、0.17.1 三个版本对同一批命令的判定，逐条相等；任何一个新版本与前一版出现差异，CI 就会要求抬 `minVersion` 或显式改语料。
 
 **安装只接受钉住的版本。** 版本与各平台 SHA-256 写在 `lib/install.js`（当前 0.17.0），摘要不匹配即丢弃；升级需更新该表并重新发版。
 

@@ -1,0 +1,6045 @@
+{
+  "binary": {
+    "bytes": 28362240,
+    "name": "dcg160.exe",
+    "sha256": "26a53ac1cf768d69af6b34e69e5a5027e96bb6c25466dfad27411cb80f35c9c2"
+  },
+  "config": "test/compat/all-packs.toml",
+  "corpus": "4f0c94a1163e1d568194de006bdb959f3f29452fd5f4aedddc08593a797bdc18",
+  "dcg": "0.16.0",
+  "family": "all",
+  "packs": "b3273e675bb1b0392c3caf1c130b84dcf4cec438d55015c73acf88f3a70cd6b5",
+  "platform": "win32-x64",
+  "results": {
+    "algolia-indices-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        22
+      ],
+      "mode": "deny",
+      "pack_id": "search.algolia",
+      "pattern_name": "algolia-indices-delete",
+      "rule_id": "search.algolia:algolia-indices-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "algolia-indices-delete-legacy|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        22
+      ],
+      "mode": "deny",
+      "pack_id": "search.algolia",
+      "pattern_name": "algolia-indices-delete",
+      "rule_id": "search.algolia:algolia-indices-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "algolia-indices-delete-products|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        22
+      ],
+      "mode": "deny",
+      "pack_id": "search.algolia",
+      "pattern_name": "algolia-indices-delete",
+      "rule_id": "search.algolia:algolia-indices-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "ansible-playbook-extra-vars|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        33
+      ],
+      "mode": "deny",
+      "pack_id": "infrastructure.ansible",
+      "pattern_name": "shell-rm-rf",
+      "rule_id": "infrastructure.ansible:shell-rm-rf",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "ansible-shell-rm-srv|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        31
+      ],
+      "mode": "deny",
+      "pack_id": "infrastructure.ansible",
+      "pattern_name": "shell-rm-rf",
+      "rule_id": "infrastructure.ansible:shell-rm-rf",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "ansible-shell-rm-www|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        31
+      ],
+      "mode": "deny",
+      "pack_id": "infrastructure.ansible",
+      "pattern_name": "shell-rm-rf",
+      "rule_id": "infrastructure.ansible:shell-rm-rf",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "apigee-delete-api|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        21
+      ],
+      "mode": "deny",
+      "pack_id": "apigateway.apigee",
+      "pattern_name": "apigeecli-apis-delete",
+      "rule_id": "apigateway.apigee:apigeecli-apis-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "apigee-delete-app|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        21
+      ],
+      "mode": "deny",
+      "pack_id": "apigateway.apigee",
+      "pattern_name": "apigeecli-apps-delete",
+      "rule_id": "apigateway.apigee:apigeecli-apps-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "apigee-delete-product|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        25
+      ],
+      "mode": "deny",
+      "pack_id": "apigateway.apigee",
+      "pattern_name": "apigeecli-products-delete",
+      "rule_id": "apigateway.apigee:apigeecli-products-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "apigw-delete-deployment|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        0,
+        32
+      ],
+      "mode": "warn",
+      "pack_id": "apigateway.aws",
+      "pattern_name": "apigateway-delete-deployment",
+      "rule_id": "apigateway.aws:apigateway-delete-deployment",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "apigw-delete-rest|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        30
+      ],
+      "mode": "deny",
+      "pack_id": "apigateway.aws",
+      "pattern_name": "apigateway-delete-rest-api",
+      "rule_id": "apigateway.aws:apigateway-delete-rest-api",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "apigw-delete-v2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        27
+      ],
+      "mode": "deny",
+      "pack_id": "apigateway.aws",
+      "pattern_name": "apigatewayv2-delete-api",
+      "rule_id": "apigateway.aws:apigatewayv2-delete-api",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "atmos-destroy-rds|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "deny",
+      "pack_id": "infrastructure.atmos",
+      "pattern_name": "atmos-destroy",
+      "rule_id": "infrastructure.atmos:atmos-destroy",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "atmos-terraform-apply-destroy|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        6,
+        42
+      ],
+      "mode": "deny",
+      "pack_id": "infrastructure.terraform",
+      "pattern_name": "destroy",
+      "rule_id": "infrastructure.terraform:destroy",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "atmos-terraform-destroy-app|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "deny",
+      "pack_id": "infrastructure.atmos",
+      "pattern_name": "atmos-destroy",
+      "rule_id": "infrastructure.atmos:atmos-destroy",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "atmos-terraform-destroy-vpc|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "deny",
+      "pack_id": "infrastructure.atmos",
+      "pattern_name": "atmos-destroy",
+      "rule_id": "infrastructure.atmos:atmos-destroy",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "aws-ec2-terminate|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        27
+      ],
+      "mode": "deny",
+      "pack_id": "cloud.aws",
+      "pattern_name": "ec2-terminate",
+      "rule_id": "cloud.aws:ec2-terminate",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "aws-iam-delete-user|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        15
+      ],
+      "mode": "deny",
+      "pack_id": "cloud.aws",
+      "pattern_name": "iam-delete",
+      "rule_id": "cloud.aws:iam-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "aws-rds-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        15
+      ],
+      "mode": "deny",
+      "pack_id": "cloud.aws",
+      "pattern_name": "rds-delete",
+      "rule_id": "cloud.aws:rds-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "aws-ssm-delete-parameters-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        25
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.aws_secrets",
+      "pattern_name": "aws-ssm-delete-parameters",
+      "rule_id": "secrets.aws_secrets:aws-ssm-delete-parameters",
+      "severity": "high",
+      "source": "pack"
+    },
+    "aws-ssm-delete-parameters|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        25
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.aws_secrets",
+      "pattern_name": "aws-ssm-delete-parameters",
+      "rule_id": "secrets.aws_secrets:aws-ssm-delete-parameters",
+      "severity": "high",
+      "source": "pack"
+    },
+    "aws-ssm-delete-parameter|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        24
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.aws_secrets",
+      "pattern_name": "aws-ssm-delete-parameter",
+      "rule_id": "secrets.aws_secrets:aws-ssm-delete-parameter",
+      "severity": "high",
+      "source": "pack"
+    },
+    "az-container-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        27
+      ],
+      "mode": "deny",
+      "pack_id": "storage.azure_blob",
+      "pattern_name": "az-storage-container-delete",
+      "rule_id": "storage.azure_blob:az-storage-container-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "az-group-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        15
+      ],
+      "mode": "deny",
+      "pack_id": "cloud.azure",
+      "pattern_name": "group-delete",
+      "rule_id": "cloud.azure:group-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "az-vm-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        12
+      ],
+      "mode": "deny",
+      "pack_id": "cloud.azure",
+      "pattern_name": "vm-delete",
+      "rule_id": "cloud.azure:vm-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "azdo-pipeline-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        19
+      ],
+      "mode": "deny",
+      "pack_id": "platform.azure_devops",
+      "pattern_name": "pipelines-delete",
+      "rule_id": "platform.azure_devops:pipelines-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "azdo-project-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        24
+      ],
+      "mode": "deny",
+      "pack_id": "platform.azure_devops",
+      "pattern_name": "devops-project-delete",
+      "rule_id": "platform.azure_devops:devops-project-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "azdo-repo-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        15
+      ],
+      "mode": "deny",
+      "pack_id": "platform.azure_devops",
+      "pattern_name": "repos-delete",
+      "rule_id": "platform.azure_devops:repos-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "blob-delete-batch|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        28
+      ],
+      "mode": "deny",
+      "pack_id": "storage.azure_blob",
+      "pattern_name": "az-storage-blob-delete-batch",
+      "rule_id": "storage.azure_blob:az-storage-blob-delete-batch",
+      "severity": "high",
+      "source": "pack"
+    },
+    "blob-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        22
+      ],
+      "mode": "deny",
+      "pack_id": "cloud.azure",
+      "pattern_name": "blob-delete",
+      "rule_id": "cloud.azure:blob-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "borg-compact|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        0,
+        12
+      ],
+      "mode": "warn",
+      "pack_id": "backup.borg",
+      "pattern_name": "borg-compact",
+      "rule_id": "backup.borg:borg-compact",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "borg-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        11
+      ],
+      "mode": "deny",
+      "pack_id": "backup.borg",
+      "pattern_name": "borg-delete",
+      "rule_id": "backup.borg:borg-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "borg-prune|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        10
+      ],
+      "mode": "deny",
+      "pack_id": "backup.borg",
+      "pattern_name": "borg-prune",
+      "rule_id": "backup.borg:borg-prune",
+      "severity": "high",
+      "source": "pack"
+    },
+    "bq-rm-recursive-archive|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "database.bigquery",
+      "pattern_name": "bq-rm-recursive",
+      "rule_id": "database.bigquery:bq-rm-recursive",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "bq-rm-recursive-staging|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "database.bigquery",
+      "pattern_name": "bq-rm-recursive",
+      "rule_id": "database.bigquery:bq-rm-recursive",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "bq-rm-recursive|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "database.bigquery",
+      "pattern_name": "bq-rm-recursive",
+      "rule_id": "database.bigquery:bq-rm-recursive",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "braintree-customer-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        81
+      ],
+      "mode": "deny",
+      "pack_id": "payment.braintree",
+      "pattern_name": "braintree-api-delete",
+      "rule_id": "payment.braintree:braintree-api-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "braintree-subscription-cancel|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        85
+      ],
+      "mode": "deny",
+      "pack_id": "payment.braintree",
+      "pattern_name": "braintree-api-delete",
+      "rule_id": "payment.braintree:braintree-api-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "braintree-subscription-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        85
+      ],
+      "mode": "deny",
+      "pack_id": "payment.braintree",
+      "pattern_name": "braintree-api-delete",
+      "rule_id": "payment.braintree:braintree-api-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cargo-yank|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        10
+      ],
+      "mode": "deny",
+      "pack_id": "package_managers",
+      "pattern_name": "cargo-yank",
+      "rule_id": "package_managers:cargo-yank",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cc-chat-slack-webhook-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        13,
+        37
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.chat",
+      "pattern_name": "slack-incoming-webhook",
+      "rule_id": "careful_company_running_windows.chat:slack-incoming-webhook",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cc-chat-slack-webhook-ps|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        23,
+        47
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.chat",
+      "pattern_name": "slack-incoming-webhook",
+      "rule_id": "careful_company_running_windows.chat:slack-incoming-webhook",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cc-chat-slack-webhook|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        71,
+        95
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.chat",
+      "pattern_name": "slack-incoming-webhook",
+      "rule_id": "careful_company_running_windows.chat:slack-incoming-webhook",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cc-email-send-mailmessage-attach|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        16
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.email",
+      "pattern_name": "send-mailmessage",
+      "rule_id": "careful_company_running_windows.email:send-mailmessage",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cc-email-send-mailmessage-port|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        16
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.email",
+      "pattern_name": "send-mailmessage",
+      "rule_id": "careful_company_running_windows.email:send-mailmessage",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cc-email-send-mailmessage|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        16
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.email",
+      "pattern_name": "send-mailmessage",
+      "rule_id": "careful_company_running_windows.email:send-mailmessage",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cc-guard-disable-behavior|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        49
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.guardrails",
+      "pattern_name": "disable-antivirus",
+      "rule_id": "careful_company_running_windows.guardrails:disable-antivirus",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "cc-guard-disable-ioav|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        45
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.guardrails",
+      "pattern_name": "disable-antivirus",
+      "rule_id": "careful_company_running_windows.guardrails:disable-antivirus",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "cc-guard-disable-realtime|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        49
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.guardrails",
+      "pattern_name": "disable-antivirus",
+      "rule_id": "careful_company_running_windows.guardrails:disable-antivirus",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "cc-transfer-scp-remote|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "allow",
+      "exitCode": 0
+    },
+    "cc-transfer-scp-unverified|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "allow",
+      "exitCode": 0
+    },
+    "cc-tunnel-ngrok-3000|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        10
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.tunnel",
+      "pattern_name": "ngrok-tunnel",
+      "rule_id": "careful_company_running_windows.tunnel:ngrok-tunnel",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cc-tunnel-ngrok-http|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        10
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.tunnel",
+      "pattern_name": "ngrok-tunnel",
+      "rule_id": "careful_company_running_windows.tunnel:ngrok-tunnel",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cc-tunnel-ngrok-tcp|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        9
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.tunnel",
+      "pattern_name": "ngrok-tunnel",
+      "rule_id": "careful_company_running_windows.tunnel:ngrok-tunnel",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cc-upload-curl-form|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        14
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.upload",
+      "pattern_name": "curl-form-file-attach",
+      "rule_id": "careful_company_running_windows.upload:curl-form-file-attach",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cc-upload-invoke-restmethod|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        69
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.upload",
+      "pattern_name": "ps-http-upload-file",
+      "rule_id": "careful_company_running_windows.upload:ps-http-upload-file",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cc-upload-put-file|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        64
+      ],
+      "mode": "deny",
+      "pack_id": "careful_company_running_windows.upload",
+      "pattern_name": "ps-http-upload-file",
+      "rule_id": "careful_company_running_windows.upload:ps-http-upload-file",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cf-record-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        114
+      ],
+      "mode": "deny",
+      "pack_id": "dns.cloudflare",
+      "pattern_name": "cloudflare-api-delete-dns-record",
+      "rule_id": "dns.cloudflare:cloudflare-api-delete-dns-record",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cf-record-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        114
+      ],
+      "mode": "deny",
+      "pack_id": "dns.cloudflare",
+      "pattern_name": "cloudflare-api-delete-dns-record",
+      "rule_id": "dns.cloudflare:cloudflare-api-delete-dns-record",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cf-zone-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        98
+      ],
+      "mode": "deny",
+      "pack_id": "dns.cloudflare",
+      "pattern_name": "cloudflare-api-delete-zone",
+      "rule_id": "dns.cloudflare:cloudflare-api-delete-zone",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "circleci-pipeline-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        0,
+        24
+      ],
+      "mode": "warn",
+      "pack_id": "cicd.circleci",
+      "pattern_name": "circleci-pipeline-delete",
+      "rule_id": "cicd.circleci:circleci-pipeline-delete",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "circleci-pipeline-delete-777|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        0,
+        24
+      ],
+      "mode": "warn",
+      "pack_id": "cicd.circleci",
+      "pattern_name": "circleci-pipeline-delete",
+      "rule_id": "cicd.circleci:circleci-pipeline-delete",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "circleci-pipeline-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        0,
+        24
+      ],
+      "mode": "warn",
+      "pack_id": "cicd.circleci",
+      "pattern_name": "circleci-pipeline-delete",
+      "rule_id": "cicd.circleci:circleci-pipeline-delete",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "cloudfront-delete-distribution|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        34
+      ],
+      "mode": "deny",
+      "pack_id": "cdn.cloudfront",
+      "pattern_name": "cloudfront-delete-distribution",
+      "rule_id": "cdn.cloudfront:cloudfront-delete-distribution",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "cloudfront-delete-function|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        30
+      ],
+      "mode": "deny",
+      "pack_id": "cdn.cloudfront",
+      "pattern_name": "cloudfront-delete-function",
+      "rule_id": "cdn.cloudfront:cloudfront-delete-function",
+      "severity": "high",
+      "source": "pack"
+    },
+    "cloudfront-delete-oac|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        34
+      ],
+      "mode": "deny",
+      "pack_id": "cdn.cloudfront",
+      "pattern_name": "cloudfront-delete-cache-policy",
+      "rule_id": "cdn.cloudfront:cloudfront-delete-cache-policy",
+      "severity": "high",
+      "source": "pack"
+    },
+    "compose-down-remove-orphans|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        29
+      ],
+      "mode": "deny",
+      "pack_id": "containers.compose",
+      "pattern_name": "down-volumes",
+      "rule_id": "containers.compose:down-volumes",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "compose-down-rmi|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        29
+      ],
+      "mode": "deny",
+      "pack_id": "containers.compose",
+      "pattern_name": "down-rmi-all",
+      "rule_id": "containers.compose:down-rmi-all",
+      "severity": "high",
+      "source": "pack"
+    },
+    "compose-down-v|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        22
+      ],
+      "mode": "deny",
+      "pack_id": "containers.compose",
+      "pattern_name": "down-volumes",
+      "rule_id": "containers.compose:down-volumes",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "container-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        27
+      ],
+      "mode": "deny",
+      "pack_id": "storage.azure_blob",
+      "pattern_name": "az-storage-container-delete",
+      "rule_id": "storage.azure_blob:az-storage-container-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "dbx-fs-rm|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        19
+      ],
+      "mode": "deny",
+      "pack_id": "database.databricks",
+      "pattern_name": "databricks-fs-rm-recursive",
+      "rule_id": "database.databricks:databricks-fs-rm-recursive",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "dbx-job-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        22
+      ],
+      "mode": "deny",
+      "pack_id": "database.databricks",
+      "pattern_name": "databricks-resource-delete",
+      "rule_id": "database.databricks:databricks-resource-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "dbx-workspace-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        55
+      ],
+      "mode": "deny",
+      "pack_id": "database.databricks",
+      "pattern_name": "databricks-workspace-delete-recursive",
+      "rule_id": "database.databricks:databricks-workspace-delete-recursive",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "dd-monitors-delete-123|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        26
+      ],
+      "mode": "deny",
+      "pack_id": "monitoring.datadog",
+      "pattern_name": "datadog-ci-monitors-delete",
+      "rule_id": "monitoring.datadog:datadog-ci-monitors-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "dd-monitors-delete-456|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        26
+      ],
+      "mode": "deny",
+      "pack_id": "monitoring.datadog",
+      "pattern_name": "datadog-ci-monitors-delete",
+      "rule_id": "monitoring.datadog:datadog-ci-monitors-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "dd-monitors-delete-789|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        26
+      ],
+      "mode": "deny",
+      "pack_id": "monitoring.datadog",
+      "pattern_name": "datadog-ci-monitors-delete",
+      "rule_id": "monitoring.datadog:datadog-ci-monitors-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "disclosure-infisical-pipe|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        16
+      ],
+      "mode": "deny",
+      "pack_id": "secret_disclosure",
+      "pattern_name": "infisical-export-output",
+      "rule_id": "secret_disclosure:infisical-export-output",
+      "severity": "high",
+      "source": "pack"
+    },
+    "disclosure-op-pipe|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        11
+      ],
+      "mode": "deny",
+      "pack_id": "secret_disclosure",
+      "pattern_name": "onepassword-item-get-output",
+      "rule_id": "secret_disclosure:onepassword-item-get-output",
+      "severity": "high",
+      "source": "pack"
+    },
+    "disclosure-vault-pipe|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        10
+      ],
+      "mode": "deny",
+      "pack_id": "secret_disclosure",
+      "pattern_name": "vault-read-output",
+      "rule_id": "secret_disclosure:vault-read-output",
+      "severity": "high",
+      "source": "pack"
+    },
+    "disk-dd|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        24
+      ],
+      "mode": "deny",
+      "pack_id": "system.disk",
+      "pattern_name": "dd-device",
+      "rule_id": "system.disk:dd-device",
+      "severity": "high",
+      "source": "pack"
+    },
+    "disk-fdisk|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        11
+      ],
+      "mode": "deny",
+      "pack_id": "system.disk",
+      "pattern_name": "fdisk-edit",
+      "rule_id": "system.disk:fdisk-edit",
+      "severity": "high",
+      "source": "pack"
+    },
+    "disk-mkfs|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        10
+      ],
+      "mode": "deny",
+      "pack_id": "system.disk",
+      "pattern_name": "mkfs",
+      "rule_id": "system.disk:mkfs",
+      "severity": "high",
+      "source": "pack"
+    },
+    "disk-wipefs|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        7
+      ],
+      "mode": "deny",
+      "pack_id": "system.disk",
+      "pattern_name": "wipefs",
+      "rule_id": "system.disk:wipefs",
+      "severity": "high",
+      "source": "pack"
+    },
+    "dns-nsupdate-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "dns.generic",
+      "pattern_name": "stdin-unverified",
+      "rule_id": "dns.generic:stdin-unverified",
+      "severity": "high",
+      "source": "pack"
+    },
+    "dns-nsupdate-soa|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "dns.generic",
+      "pattern_name": "stdin-unverified",
+      "rule_id": "dns.generic:stdin-unverified",
+      "severity": "high",
+      "source": "pack"
+    },
+    "dns-nsupdate-zone-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "dns.generic",
+      "pattern_name": "stdin-unverified",
+      "rule_id": "dns.generic:stdin-unverified",
+      "severity": "high",
+      "source": "pack"
+    },
+    "docker-rm-f|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        12
+      ],
+      "mode": "deny",
+      "pack_id": "containers.docker",
+      "pattern_name": "rm-force",
+      "rule_id": "containers.docker:rm-force",
+      "severity": "high",
+      "source": "pack"
+    },
+    "docker-rmi|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        13
+      ],
+      "mode": "deny",
+      "pack_id": "containers.docker",
+      "pattern_name": "rmi-force",
+      "rule_id": "containers.docker:rmi-force",
+      "severity": "high",
+      "source": "pack"
+    },
+    "docker-system-prune|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        19
+      ],
+      "mode": "deny",
+      "pack_id": "containers.docker",
+      "pattern_name": "system-prune",
+      "rule_id": "containers.docker:system-prune",
+      "severity": "high",
+      "source": "pack"
+    },
+    "docker-volume-rm|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        16
+      ],
+      "mode": "deny",
+      "pack_id": "containers.docker",
+      "pattern_name": "volume-rm",
+      "rule_id": "containers.docker:volume-rm",
+      "severity": "high",
+      "source": "pack"
+    },
+    "doppler-configs-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        22
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.doppler",
+      "pattern_name": "doppler-configs-delete",
+      "rule_id": "secrets.doppler:doppler-configs-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "doppler-secrets-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        22
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.doppler",
+      "pattern_name": "doppler-secrets-delete",
+      "rule_id": "secrets.doppler:doppler-secrets-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "doppler-secrets-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        22
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.doppler",
+      "pattern_name": "doppler-secrets-delete",
+      "rule_id": "secrets.doppler:doppler-secrets-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "doppler-secrets-get-plain|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        19
+      ],
+      "mode": "deny",
+      "pack_id": "secret_disclosure",
+      "pattern_name": "doppler-secrets-output",
+      "rule_id": "secret_disclosure:doppler-secrets-output",
+      "severity": "high",
+      "source": "pack"
+    },
+    "elb-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        28
+      ],
+      "mode": "deny",
+      "pack_id": "loadbalancer.elb",
+      "pattern_name": "elb-delete-load-balancer",
+      "rule_id": "loadbalancer.elb:elb-delete-load-balancer",
+      "severity": "high",
+      "source": "pack"
+    },
+    "elbv2-delete-listener|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        25
+      ],
+      "mode": "deny",
+      "pack_id": "loadbalancer.elb",
+      "pattern_name": "elbv2-delete-listener",
+      "rule_id": "loadbalancer.elb:elbv2-delete-listener",
+      "severity": "high",
+      "source": "pack"
+    },
+    "elbv2-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        30
+      ],
+      "mode": "deny",
+      "pack_id": "loadbalancer.elb",
+      "pattern_name": "elbv2-delete-load-balancer",
+      "rule_id": "loadbalancer.elb:elbv2-delete-load-balancer",
+      "severity": "high",
+      "source": "pack"
+    },
+    "es-doc-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        52
+      ],
+      "mode": "deny",
+      "pack_id": "search.elasticsearch",
+      "pattern_name": "es-curl-delete-index",
+      "rule_id": "search.elasticsearch:es-curl-delete-index",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "es-index-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        43
+      ],
+      "mode": "deny",
+      "pack_id": "search.elasticsearch",
+      "pattern_name": "es-curl-delete-index",
+      "rule_id": "search.elasticsearch:es-curl-delete-index",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "es-index-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        45
+      ],
+      "mode": "deny",
+      "pack_id": "search.elasticsearch",
+      "pattern_name": "es-curl-delete-index",
+      "rule_id": "search.elasticsearch:es-curl-delete-index",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "fastly-backend-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        21
+      ],
+      "mode": "deny",
+      "pack_id": "cdn.fastly",
+      "pattern_name": "fastly-backend-delete",
+      "rule_id": "cdn.fastly:fastly-backend-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "fastly-service-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        21
+      ],
+      "mode": "deny",
+      "pack_id": "cdn.fastly",
+      "pattern_name": "fastly-service-delete",
+      "rule_id": "cdn.fastly:fastly-service-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "fastly-version-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        20
+      ],
+      "mode": "deny",
+      "pack_id": "cdn.fastly",
+      "pattern_name": "fastly-domain-delete",
+      "rule_id": "cdn.fastly:fastly-domain-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "flipt-flag-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        48
+      ],
+      "mode": "deny",
+      "pack_id": "featureflags.flipt",
+      "pattern_name": "flipt-api-delete",
+      "rule_id": "featureflags.flipt:flipt-api-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "flipt-flag-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        48
+      ],
+      "mode": "deny",
+      "pack_id": "featureflags.flipt",
+      "pattern_name": "flipt-api-delete",
+      "rule_id": "featureflags.flipt:flipt-api-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "flipt-segment-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        48
+      ],
+      "mode": "deny",
+      "pack_id": "featureflags.flipt",
+      "pattern_name": "flipt-api-delete",
+      "rule_id": "featureflags.flipt:flipt-api-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "fs-find-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        28
+      ],
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "find-delete-general",
+      "rule_id": "core.filesystem:find-delete-general",
+      "severity": "high",
+      "source": "pack"
+    },
+    "fs-remove-item-recursive|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "powershell-remove-item-recursive",
+      "rule_id": "core.filesystem:powershell-remove-item-recursive",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "fs-rm-fr-cache|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        3,
+        6
+      ],
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "rm-rf-general",
+      "rule_id": "core.filesystem:rm-rf-general",
+      "severity": "high",
+      "source": "pack"
+    },
+    "fs-rm-rf-build|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        3,
+        6
+      ],
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "rm-rf-general",
+      "rule_id": "core.filesystem:rm-rf-general",
+      "severity": "high",
+      "source": "pack"
+    },
+    "fs-shred|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        10
+      ],
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "shred-general",
+      "rule_id": "core.filesystem:shred-general",
+      "severity": "high",
+      "source": "pack"
+    },
+    "fs-truncate|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        13
+      ],
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "truncate-zero-general",
+      "rule_id": "core.filesystem:truncate-zero-general",
+      "severity": "high",
+      "source": "pack"
+    },
+    "gcp-disk-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        27
+      ],
+      "mode": "deny",
+      "pack_id": "cloud.gcp",
+      "pattern_name": "disk-delete",
+      "rule_id": "cloud.gcp:disk-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "gcp-instance-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        31
+      ],
+      "mode": "deny",
+      "pack_id": "cloud.gcp",
+      "pattern_name": "compute-delete",
+      "rule_id": "cloud.gcp:compute-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "gcp-project-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        22
+      ],
+      "mode": "deny",
+      "pack_id": "cloud.gcp",
+      "pattern_name": "project-delete",
+      "rule_id": "cloud.gcp:project-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "gcp-storage-rm|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "storage.gcs",
+      "pattern_name": "gcloud-storage-rm",
+      "rule_id": "storage.gcs:gcloud-storage-rm",
+      "severity": "high",
+      "source": "pack"
+    },
+    "gcs-rb|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        9
+      ],
+      "mode": "deny",
+      "pack_id": "storage.gcs",
+      "pattern_name": "gsutil-rb",
+      "rule_id": "storage.gcs:gsutil-rb",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "gcs-rm|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        12
+      ],
+      "mode": "deny",
+      "pack_id": "storage.gcs",
+      "pattern_name": "gsutil-rm",
+      "rule_id": "storage.gcs:gsutil-rm",
+      "severity": "high",
+      "source": "pack"
+    },
+    "gh-api-delete-repo|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        31
+      ],
+      "mode": "deny",
+      "pack_id": "platform.github",
+      "pattern_name": "gh-api-delete-repo",
+      "rule_id": "platform.github:gh-api-delete-repo",
+      "severity": "high",
+      "source": "pack"
+    },
+    "gh-release-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "platform.github",
+      "pattern_name": "gh-release-delete",
+      "rule_id": "platform.github:gh-release-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "gh-repo-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        14
+      ],
+      "mode": "deny",
+      "pack_id": "platform.github",
+      "pattern_name": "gh-repo-delete",
+      "rule_id": "platform.github:gh-repo-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "gha-api-delete-secret|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        48
+      ],
+      "mode": "deny",
+      "pack_id": "platform.github",
+      "pattern_name": "gh-api-delete-actions-secret",
+      "rule_id": "platform.github:gh-api-delete-actions-secret",
+      "severity": "high",
+      "source": "pack"
+    },
+    "gha-secret-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        16
+      ],
+      "mode": "deny",
+      "pack_id": "platform.github",
+      "pattern_name": "gh-secret-delete",
+      "rule_id": "platform.github:gh-secret-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "gha-variable-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        18
+      ],
+      "mode": "deny",
+      "pack_id": "platform.github",
+      "pattern_name": "gh-variable-delete",
+      "rule_id": "platform.github:gh-variable-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "git-branch-D|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "core.git",
+      "pattern_name": "branch-force-delete",
+      "rule_id": "core.git:branch-force-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "git-checkout-path|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        21
+      ],
+      "mode": "deny",
+      "pack_id": "core.git",
+      "pattern_name": "checkout-ref-discard",
+      "rule_id": "core.git:checkout-ref-discard",
+      "severity": "high",
+      "source": "pack"
+    },
+    "git-clean-fdx|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        12
+      ],
+      "mode": "deny",
+      "pack_id": "core.git",
+      "pattern_name": "clean-force",
+      "rule_id": "core.git:clean-force",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "git-push-force|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        16
+      ],
+      "mode": "deny",
+      "pack_id": "core.git",
+      "pattern_name": "push-force-long",
+      "rule_id": "core.git:push-force-long",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "git-reset-hard|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        16
+      ],
+      "mode": "deny",
+      "pack_id": "core.git",
+      "pattern_name": "reset-hard",
+      "rule_id": "core.git:reset-hard",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "git-update-ref-d|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        18
+      ],
+      "mode": "deny",
+      "pack_id": "core.git",
+      "pattern_name": "update-ref-delete",
+      "rule_id": "core.git:update-ref-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "gitlab-ci-delete-1|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        0,
+        14
+      ],
+      "mode": "warn",
+      "pack_id": "cicd.gitlab_ci",
+      "pattern_name": "glab-ci-delete",
+      "rule_id": "cicd.gitlab_ci:glab-ci-delete",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "gitlab-ci-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        0,
+        14
+      ],
+      "mode": "warn",
+      "pack_id": "cicd.gitlab_ci",
+      "pattern_name": "glab-ci-delete",
+      "rule_id": "cicd.gitlab_ci:glab-ci-delete",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "gitlab-ci-delete-777|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        0,
+        14
+      ],
+      "mode": "warn",
+      "pack_id": "cicd.gitlab_ci",
+      "pattern_name": "glab-ci-delete",
+      "rule_id": "cicd.gitlab_ci:glab-ci-delete",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "glab-project-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "allow",
+      "exitCode": 0
+    },
+    "glab-release-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        19
+      ],
+      "mode": "deny",
+      "pack_id": "platform.gitlab",
+      "pattern_name": "glab-release-delete",
+      "rule_id": "platform.gitlab:glab-release-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "glab-release-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        19
+      ],
+      "mode": "deny",
+      "pack_id": "platform.gitlab",
+      "pattern_name": "glab-release-delete",
+      "rule_id": "platform.gitlab:glab-release-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "glab-repo-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        16
+      ],
+      "mode": "deny",
+      "pack_id": "platform.gitlab",
+      "pattern_name": "glab-repo-delete",
+      "rule_id": "platform.gitlab:glab-repo-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "haproxy-config-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        19
+      ],
+      "mode": "deny",
+      "pack_id": "loadbalancer.haproxy",
+      "pattern_name": "haproxy-config-delete",
+      "rule_id": "loadbalancer.haproxy:haproxy-config-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "haproxy-socat-shutdown-sessions|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "allow",
+      "exitCode": 0
+    },
+    "haproxy-systemctl-stop|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        14
+      ],
+      "mode": "deny",
+      "pack_id": "system.services",
+      "pattern_name": "systemctl-stop",
+      "rule_id": "system.services:systemctl-stop",
+      "severity": "high",
+      "source": "pack"
+    },
+    "helm-rollback|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        13
+      ],
+      "mode": "deny",
+      "pack_id": "kubernetes.helm",
+      "pattern_name": "rollback",
+      "rule_id": "kubernetes.helm:rollback",
+      "severity": "high",
+      "source": "pack"
+    },
+    "helm-uninstall-wait|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        14
+      ],
+      "mode": "deny",
+      "pack_id": "kubernetes.helm",
+      "pattern_name": "uninstall",
+      "rule_id": "kubernetes.helm:uninstall",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "helm-uninstall|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        14
+      ],
+      "mode": "deny",
+      "pack_id": "kubernetes.helm",
+      "pattern_name": "uninstall",
+      "rule_id": "kubernetes.helm:uninstall",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "infisical-project-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        32
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.infisical",
+      "pattern_name": "infisical-folders-delete",
+      "rule_id": "secrets.infisical:infisical-folders-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "infisical-secrets-delete-api|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        24
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.infisical",
+      "pattern_name": "infisical-secrets-delete",
+      "rule_id": "secrets.infisical:infisical-secrets-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "infisical-secrets-delete-db|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        24
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.infisical",
+      "pattern_name": "infisical-secrets-delete",
+      "rule_id": "secrets.infisical:infisical-secrets-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "jenkins-curl-delete-job|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        44
+      ],
+      "mode": "deny",
+      "pack_id": "cicd.jenkins",
+      "pattern_name": "jenkins-curl-do-delete",
+      "rule_id": "cicd.jenkins:jenkins-curl-do-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "jenkins-delete-job|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        54
+      ],
+      "mode": "deny",
+      "pack_id": "cicd.jenkins",
+      "pattern_name": "jenkins-cli-delete-job",
+      "rule_id": "cicd.jenkins:jenkins-cli-delete-job",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "jenkins-delete-node|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        55
+      ],
+      "mode": "deny",
+      "pack_id": "cicd.jenkins",
+      "pattern_name": "jenkins-cli-delete-node",
+      "rule_id": "cicd.jenkins:jenkins-cli-delete-node",
+      "severity": "high",
+      "source": "pack"
+    },
+    "kafka-consumer-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        67
+      ],
+      "mode": "deny",
+      "pack_id": "messaging.kafka",
+      "pattern_name": "kafka-consumer-groups-delete",
+      "rule_id": "messaging.kafka:kafka-consumer-groups-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "kafka-topic-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        58
+      ],
+      "mode": "deny",
+      "pack_id": "messaging.kafka",
+      "pattern_name": "kafka-topics-delete",
+      "rule_id": "messaging.kafka:kafka-topics-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "kafka-topic-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        58
+      ],
+      "mode": "deny",
+      "pack_id": "messaging.kafka",
+      "pattern_name": "kafka-topics-delete",
+      "rule_id": "messaging.kafka:kafka-topics-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "kamal-remove-preview|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        13
+      ],
+      "mode": "deny",
+      "pack_id": "platform.kamal",
+      "pattern_name": "kamal-remove",
+      "rule_id": "platform.kamal:kamal-remove",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "kamal-remove-prod|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        13
+      ],
+      "mode": "deny",
+      "pack_id": "platform.kamal",
+      "pattern_name": "kamal-remove",
+      "rule_id": "platform.kamal:kamal-remove",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "kamal-remove-staging|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        13
+      ],
+      "mode": "deny",
+      "pack_id": "platform.kamal",
+      "pattern_name": "kamal-remove",
+      "rule_id": "platform.kamal:kamal-remove",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "kong-deck-reset-addr|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        18
+      ],
+      "mode": "deny",
+      "pack_id": "apigateway.kong",
+      "pattern_name": "deck-reset",
+      "rule_id": "apigateway.kong:deck-reset",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "kong-deck-reset|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        18
+      ],
+      "mode": "deny",
+      "pack_id": "apigateway.kong",
+      "pattern_name": "deck-reset",
+      "rule_id": "apigateway.kong:deck-reset",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "kong-delete-plugin|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        18
+      ],
+      "mode": "deny",
+      "pack_id": "apigateway.kong",
+      "pattern_name": "deck-reset",
+      "rule_id": "apigateway.kong:deck-reset",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "kubectl-delete-deploy|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        26
+      ],
+      "mode": "deny",
+      "pack_id": "kubernetes.kubectl",
+      "pattern_name": "delete-workload",
+      "rule_id": "kubernetes.kubectl:delete-workload",
+      "severity": "high",
+      "source": "pack"
+    },
+    "kubectl-delete-ns|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        25
+      ],
+      "mode": "deny",
+      "pack_id": "kubernetes.kubectl",
+      "pattern_name": "delete-namespace",
+      "rule_id": "kubernetes.kubectl:delete-namespace",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "kubectl-delete-pvc|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        19
+      ],
+      "mode": "deny",
+      "pack_id": "kubernetes.kubectl",
+      "pattern_name": "delete-pvc",
+      "rule_id": "kubernetes.kubectl:delete-pvc",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "kustomize-delete-k-dev|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "kubernetes.kustomize",
+      "pattern_name": "kubectl-delete-k",
+      "rule_id": "kubernetes.kustomize:kubectl-delete-k",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "kustomize-delete-k-prod|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "kubernetes.kustomize",
+      "pattern_name": "kubectl-delete-k",
+      "rule_id": "kubernetes.kustomize:kubectl-delete-k",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "kustomize-delete-k-staging|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "kubernetes.kustomize",
+      "pattern_name": "kubectl-delete-k",
+      "rule_id": "kubernetes.kustomize:kubectl-delete-k",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "ld-environment-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        104
+      ],
+      "mode": "deny",
+      "pack_id": "featureflags.launchdarkly",
+      "pattern_name": "launchdarkly-api-delete-environments",
+      "rule_id": "featureflags.launchdarkly:launchdarkly-api-delete-environments",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "ld-flag-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        96
+      ],
+      "mode": "deny",
+      "pack_id": "featureflags.launchdarkly",
+      "pattern_name": "launchdarkly-api-delete-flags",
+      "rule_id": "featureflags.launchdarkly:launchdarkly-api-delete-flags",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "ld-flag-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        94
+      ],
+      "mode": "deny",
+      "pack_id": "featureflags.launchdarkly",
+      "pattern_name": "launchdarkly-api-delete-flags",
+      "rule_id": "featureflags.launchdarkly:launchdarkly-api-delete-flags",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "mailgun-delete-domain-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        26,
+        80
+      ],
+      "mode": "deny",
+      "pack_id": "email.mailgun",
+      "pattern_name": "mailgun-delete-domain",
+      "rule_id": "email.mailgun:mailgun-delete-domain",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "mailgun-delete-domain|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        26,
+        82
+      ],
+      "mode": "deny",
+      "pack_id": "email.mailgun",
+      "pattern_name": "mailgun-delete-domain",
+      "rule_id": "email.mailgun:mailgun-delete-domain",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "mailgun-delete-list|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        26,
+        69
+      ],
+      "mode": "deny",
+      "pack_id": "email.mailgun",
+      "pattern_name": "mailgun-delete-list",
+      "rule_id": "email.mailgun:mailgun-delete-list",
+      "severity": "high",
+      "source": "pack"
+    },
+    "mc-rb-3|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        5
+      ],
+      "mode": "deny",
+      "pack_id": "storage.minio",
+      "pattern_name": "mc-rb",
+      "rule_id": "storage.minio:mc-rb",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "mc-rb-backup|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        5
+      ],
+      "mode": "deny",
+      "pack_id": "storage.minio",
+      "pattern_name": "mc-rb",
+      "rule_id": "storage.minio:mc-rb",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "mc-rb-prod|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        5
+      ],
+      "mode": "deny",
+      "pack_id": "storage.minio",
+      "pattern_name": "mc-rb",
+      "rule_id": "storage.minio:mc-rb",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "meili-doc-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        0,
+        95
+      ],
+      "mode": "warn",
+      "pack_id": "search.meilisearch",
+      "pattern_name": "meili-curl-delete-document",
+      "rule_id": "search.meilisearch:meili-curl-delete-document",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "meili-index-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        81
+      ],
+      "mode": "deny",
+      "pack_id": "search.meilisearch",
+      "pattern_name": "meili-curl-delete-index",
+      "rule_id": "search.meilisearch:meili-curl-delete-index",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "meili-index-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        83
+      ],
+      "mode": "deny",
+      "pack_id": "search.meilisearch",
+      "pattern_name": "meili-curl-delete-index",
+      "rule_id": "search.meilisearch:meili-curl-delete-index",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "modal-app-stop|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        14
+      ],
+      "mode": "deny",
+      "pack_id": "platform.modal",
+      "pattern_name": "modal-app-stop",
+      "rule_id": "platform.modal:modal-app-stop",
+      "severity": "high",
+      "source": "pack"
+    },
+    "modal-secret-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        19
+      ],
+      "mode": "deny",
+      "pack_id": "platform.modal",
+      "pattern_name": "modal-secret-delete",
+      "rule_id": "platform.modal:modal-secret-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "modal-volume-rm|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        0,
+        15
+      ],
+      "mode": "warn",
+      "pack_id": "platform.modal",
+      "pattern_name": "modal-volume-rm",
+      "rule_id": "platform.modal:modal-volume-rm",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "mongo-drop-collection|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.mongodb",
+      "pattern_name": "drop-collection",
+      "rule_id": "database.mongodb:drop-collection",
+      "severity": "high",
+      "source": "pack"
+    },
+    "mongo-drop-db|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.mongodb",
+      "pattern_name": "drop-database",
+      "rule_id": "database.mongodb:drop-database",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "mongo-restore-drop|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        19
+      ],
+      "mode": "deny",
+      "pack_id": "database.mongodb",
+      "pattern_name": "mongorestore-drop",
+      "rule_id": "database.mongodb:mongorestore-drop",
+      "severity": "high",
+      "source": "pack"
+    },
+    "mysql-drop-db|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.mysql",
+      "pattern_name": "drop-database",
+      "rule_id": "database.mysql:drop-database",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "mysql-drop-table|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.mysql",
+      "pattern_name": "drop-table",
+      "rule_id": "database.mysql:drop-table",
+      "severity": "high",
+      "source": "pack"
+    },
+    "mysqladmin-drop|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        15
+      ],
+      "mode": "deny",
+      "pack_id": "database.mysql",
+      "pattern_name": "mysqladmin-drop",
+      "rule_id": "database.mysql:mysqladmin-drop",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "nats-account-rm|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "allow",
+      "exitCode": 0
+    },
+    "nats-consumer-rm|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        16
+      ],
+      "mode": "deny",
+      "pack_id": "messaging.nats",
+      "pattern_name": "nats-consumer-delete",
+      "rule_id": "messaging.nats:nats-consumer-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "nats-stream-rm-events|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        14
+      ],
+      "mode": "deny",
+      "pack_id": "messaging.nats",
+      "pattern_name": "nats-stream-delete",
+      "rule_id": "messaging.nats:nats-stream-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "nats-stream-rm|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        14
+      ],
+      "mode": "deny",
+      "pack_id": "messaging.nats",
+      "pattern_name": "nats-stream-delete",
+      "rule_id": "messaging.nats:nats-stream-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "nginx-remove-conf-d|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "loadbalancer.nginx",
+      "pattern_name": "nginx-config-delete",
+      "rule_id": "loadbalancer.nginx:nginx-config-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "nginx-remove-site|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "loadbalancer.nginx",
+      "pattern_name": "nginx-config-delete",
+      "rule_id": "loadbalancer.nginx:nginx-config-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "nginx-stop-signal|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        13
+      ],
+      "mode": "deny",
+      "pack_id": "loadbalancer.nginx",
+      "pattern_name": "nginx-stop",
+      "rule_id": "loadbalancer.nginx:nginx-stop",
+      "severity": "high",
+      "source": "pack"
+    },
+    "npm-publish|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        11
+      ],
+      "mode": "deny",
+      "pack_id": "package_managers",
+      "pattern_name": "npm-publish",
+      "rule_id": "package_managers:npm-publish",
+      "severity": "high",
+      "source": "pack"
+    },
+    "npm-unpublish|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        13
+      ],
+      "mode": "deny",
+      "pack_id": "package_managers",
+      "pattern_name": "npm-unpublish",
+      "rule_id": "package_managers:npm-unpublish",
+      "severity": "high",
+      "source": "pack"
+    },
+    "nr-alert-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        86
+      ],
+      "mode": "deny",
+      "pack_id": "monitoring.newrelic",
+      "pattern_name": "newrelic-api-delete",
+      "rule_id": "monitoring.newrelic:newrelic-api-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "nr-condition-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        86
+      ],
+      "mode": "deny",
+      "pack_id": "monitoring.newrelic",
+      "pattern_name": "newrelic-api-delete",
+      "rule_id": "monitoring.newrelic:newrelic-api-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "nr-dash-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        81
+      ],
+      "mode": "deny",
+      "pack_id": "monitoring.newrelic",
+      "pattern_name": "newrelic-api-delete",
+      "rule_id": "monitoring.newrelic:newrelic-api-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "op-item-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        14
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.onepassword",
+      "pattern_name": "op-item-delete",
+      "rule_id": "secrets.onepassword:op-item-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "op-item-get-password|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        11
+      ],
+      "mode": "deny",
+      "pack_id": "secret_disclosure",
+      "pattern_name": "onepassword-item-get-output",
+      "rule_id": "secret_disclosure:onepassword-item-get-output",
+      "severity": "high",
+      "source": "pack"
+    },
+    "op-vault-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        15
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.onepassword",
+      "pattern_name": "op-vault-delete",
+      "rule_id": "secrets.onepassword:op-vault-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "op-vault-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        15
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.onepassword",
+      "pattern_name": "op-vault-delete",
+      "rule_id": "secrets.onepassword:op-vault-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "os-delete-doc|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        60
+      ],
+      "mode": "deny",
+      "pack_id": "search.opensearch",
+      "pattern_name": "os-curl-delete-index",
+      "rule_id": "search.opensearch:os-curl-delete-index",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "os-delete-domain-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        28
+      ],
+      "mode": "deny",
+      "pack_id": "search.opensearch",
+      "pattern_name": "aws-opensearch-delete-domain",
+      "rule_id": "search.opensearch:aws-opensearch-delete-domain",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "os-delete-domain|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        28
+      ],
+      "mode": "deny",
+      "pack_id": "search.opensearch",
+      "pattern_name": "aws-opensearch-delete-domain",
+      "rule_id": "search.opensearch:aws-opensearch-delete-domain",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "pd-service-delete-p1|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        87
+      ],
+      "mode": "deny",
+      "pack_id": "monitoring.pagerduty",
+      "pattern_name": "pagerduty-api-delete-service",
+      "rule_id": "monitoring.pagerduty:pagerduty-api-delete-service",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "pd-service-delete-p2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        87
+      ],
+      "mode": "deny",
+      "pack_id": "monitoring.pagerduty",
+      "pattern_name": "pagerduty-api-delete-service",
+      "rule_id": "monitoring.pagerduty:pagerduty-api-delete-service",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "pd-service-delete-p3|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        87
+      ],
+      "mode": "deny",
+      "pack_id": "monitoring.pagerduty",
+      "pattern_name": "pagerduty-api-delete-service",
+      "rule_id": "monitoring.pagerduty:pagerduty-api-delete-service",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "perm-chmod-000-srv|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "system.permissions",
+      "pattern_name": "chmod-recursive-root",
+      "rule_id": "system.permissions:chmod-recursive-root",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "perm-chmod-777|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "system.permissions",
+      "pattern_name": "chmod-777",
+      "rule_id": "system.permissions:chmod-777",
+      "severity": "high",
+      "source": "pack"
+    },
+    "perm-chmod-zero|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "allow",
+      "exitCode": 0
+    },
+    "perm-chown-root|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "system.permissions",
+      "pattern_name": "chown-recursive-root",
+      "rule_id": "system.permissions:chown-recursive-root",
+      "severity": "high",
+      "source": "pack"
+    },
+    "pg-drop-db|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.postgresql",
+      "pattern_name": "drop-database",
+      "rule_id": "database.postgresql:drop-database",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "pg-drop-table|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.postgresql",
+      "pattern_name": "drop-table",
+      "rule_id": "database.postgresql:drop-table",
+      "severity": "high",
+      "source": "pack"
+    },
+    "pg-dropdb|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        7
+      ],
+      "mode": "deny",
+      "pack_id": "database.postgresql",
+      "pattern_name": "dropdb-cli",
+      "rule_id": "database.postgresql:dropdb-cli",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "pg-truncate|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.postgresql",
+      "pattern_name": "truncate-table",
+      "rule_id": "database.postgresql:truncate-table",
+      "severity": "high",
+      "source": "pack"
+    },
+    "podman-rmi|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        13
+      ],
+      "mode": "deny",
+      "pack_id": "containers.podman",
+      "pattern_name": "rmi-force",
+      "rule_id": "containers.podman:rmi-force",
+      "severity": "high",
+      "source": "pack"
+    },
+    "podman-system-prune|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        19
+      ],
+      "mode": "deny",
+      "pack_id": "containers.podman",
+      "pattern_name": "system-prune",
+      "rule_id": "containers.podman:system-prune",
+      "severity": "high",
+      "source": "pack"
+    },
+    "podman-volume-rm|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        16
+      ],
+      "mode": "deny",
+      "pack_id": "containers.podman",
+      "pattern_name": "volume-rm",
+      "rule_id": "containers.podman:volume-rm",
+      "severity": "high",
+      "source": "pack"
+    },
+    "postmark-delete-server|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        5,
+        51
+      ],
+      "mode": "deny",
+      "pack_id": "email.postmark",
+      "pattern_name": "postmark-delete-server",
+      "rule_id": "email.postmark:postmark-delete-server",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "postmark-delete-stream|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        5,
+        64
+      ],
+      "mode": "deny",
+      "pack_id": "email.postmark",
+      "pattern_name": "postmark-delete-message-stream",
+      "rule_id": "email.postmark:postmark-delete-message-stream",
+      "severity": "high",
+      "source": "pack"
+    },
+    "postmark-delete-template|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        5,
+        53
+      ],
+      "mode": "warn",
+      "pack_id": "email.postmark",
+      "pattern_name": "postmark-delete-template",
+      "rule_id": "email.postmark:postmark-delete-template",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "prometheus-rules-file-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        37
+      ],
+      "mode": "deny",
+      "pack_id": "monitoring.prometheus",
+      "pattern_name": "prometheus-rules-file-delete",
+      "rule_id": "monitoring.prometheus:prometheus-rules-file-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "prometheus-rules-file-delete-3|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        37
+      ],
+      "mode": "deny",
+      "pack_id": "monitoring.prometheus",
+      "pattern_name": "prometheus-rules-file-delete",
+      "rule_id": "monitoring.prometheus:prometheus-rules-file-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "prometheus-rules-file-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        35
+      ],
+      "mode": "deny",
+      "pack_id": "monitoring.prometheus",
+      "pattern_name": "prometheus-rules-file-delete",
+      "rule_id": "monitoring.prometheus:prometheus-rules-file-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "pulumi-destroy|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        14
+      ],
+      "mode": "deny",
+      "pack_id": "infrastructure.pulumi",
+      "pattern_name": "destroy",
+      "rule_id": "infrastructure.pulumi:destroy",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "pulumi-stack-rm-dev|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        15
+      ],
+      "mode": "deny",
+      "pack_id": "infrastructure.pulumi",
+      "pattern_name": "stack-rm",
+      "rule_id": "infrastructure.pulumi:stack-rm",
+      "severity": "high",
+      "source": "pack"
+    },
+    "pulumi-stack-rm-prod|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        15
+      ],
+      "mode": "deny",
+      "pack_id": "infrastructure.pulumi",
+      "pattern_name": "stack-rm",
+      "rule_id": "infrastructure.pulumi:stack-rm",
+      "severity": "high",
+      "source": "pack"
+    },
+    "r53-change-record|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "allow",
+      "exitCode": 0
+    },
+    "r53-zone-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        30
+      ],
+      "mode": "deny",
+      "pack_id": "cloud.aws",
+      "pattern_name": "route53-delete-hosted-zone",
+      "rule_id": "cloud.aws:route53-delete-hosted-zone",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "rabbitmq-delete-policy|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        24
+      ],
+      "mode": "deny",
+      "pack_id": "messaging.rabbitmq",
+      "pattern_name": "rabbitmqctl-delete-queue",
+      "rule_id": "messaging.rabbitmq:rabbitmqctl-delete-queue",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "rabbitmq-delete-queue|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        24
+      ],
+      "mode": "deny",
+      "pack_id": "messaging.rabbitmq",
+      "pattern_name": "rabbitmqctl-delete-queue",
+      "rule_id": "messaging.rabbitmq:rabbitmqctl-delete-queue",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "rabbitmq-delete-user|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "allow",
+      "exitCode": 0
+    },
+    "rabbitmq-delete-vhost|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        24
+      ],
+      "mode": "deny",
+      "pack_id": "messaging.rabbitmq",
+      "pattern_name": "rabbitmqctl-delete-vhost",
+      "rule_id": "messaging.rabbitmq:rabbitmqctl-delete-vhost",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "railway-down-yes|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        13
+      ],
+      "mode": "deny",
+      "pack_id": "platform.railway",
+      "pattern_name": "railway-deployment-remove",
+      "rule_id": "platform.railway:railway-deployment-remove",
+      "severity": "high",
+      "source": "pack"
+    },
+    "railway-down|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        13
+      ],
+      "mode": "deny",
+      "pack_id": "platform.railway",
+      "pattern_name": "railway-deployment-remove",
+      "rule_id": "platform.railway:railway-deployment-remove",
+      "severity": "high",
+      "source": "pack"
+    },
+    "railway-service-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "deny",
+      "pack_id": "platform.railway",
+      "pattern_name": "railway-service-delete",
+      "rule_id": "platform.railway:railway-service-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "rclone-deletefile|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "backup.rclone",
+      "pattern_name": "rclone-deletefile",
+      "rule_id": "backup.rclone:rclone-deletefile",
+      "severity": "high",
+      "source": "pack"
+    },
+    "rclone-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        13
+      ],
+      "mode": "deny",
+      "pack_id": "backup.rclone",
+      "pattern_name": "rclone-delete",
+      "rule_id": "backup.rclone:rclone-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "rclone-purge|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        12
+      ],
+      "mode": "deny",
+      "pack_id": "backup.rclone",
+      "pattern_name": "rclone-purge",
+      "rule_id": "backup.rclone:rclone-purge",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "redis-flushall|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.redis",
+      "pattern_name": "flushall",
+      "rule_id": "database.redis:flushall",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "redis-flushdb|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.redis",
+      "pattern_name": "flushdb",
+      "rule_id": "database.redis:flushdb",
+      "severity": "high",
+      "source": "pack"
+    },
+    "redis-shutdown|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.redis",
+      "pattern_name": "shutdown",
+      "rule_id": "database.redis:shutdown",
+      "severity": "high",
+      "source": "pack"
+    },
+    "restic-forget|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        13
+      ],
+      "mode": "deny",
+      "pack_id": "backup.restic",
+      "pattern_name": "restic-forget",
+      "rule_id": "backup.restic:restic-forget",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "restic-key-remove|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "backup.restic",
+      "pattern_name": "restic-key-remove",
+      "rule_id": "backup.restic:restic-key-remove",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "restic-prune|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        12
+      ],
+      "mode": "deny",
+      "pack_id": "backup.restic",
+      "pattern_name": "restic-prune",
+      "rule_id": "backup.restic:restic-prune",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "rsync-delete-before|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        21
+      ],
+      "mode": "deny",
+      "pack_id": "remote.rsync",
+      "pattern_name": "rsync-delete",
+      "rule_id": "remote.rsync:rsync-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "rsync-delete-excluded|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        26
+      ],
+      "mode": "deny",
+      "pack_id": "remote.rsync",
+      "pattern_name": "rsync-delete",
+      "rule_id": "remote.rsync:rsync-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "rsync-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "remote.rsync",
+      "pattern_name": "rsync-delete",
+      "rule_id": "remote.rsync:rsync-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "s3-rb-force|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        9
+      ],
+      "mode": "deny",
+      "pack_id": "storage.s3",
+      "pattern_name": "s3-rb",
+      "rule_id": "storage.s3:s3-rb",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "s3-rm-recursive|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        9
+      ],
+      "mode": "deny",
+      "pack_id": "storage.s3",
+      "pattern_name": "s3-rm",
+      "rule_id": "storage.s3:s3-rm",
+      "severity": "high",
+      "source": "pack"
+    },
+    "s3api-delete-bucket|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "deny",
+      "pack_id": "storage.s3",
+      "pattern_name": "s3api-delete-bucket",
+      "rule_id": "storage.s3:s3api-delete-bucket",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "scp-recursive-root|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "remote.scp",
+      "pattern_name": "scp-recursive-root",
+      "rule_id": "remote.scp:scp-recursive-root",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "scp-to-nginx-conf|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "remote.scp",
+      "pattern_name": "scp-to-etc",
+      "rule_id": "remote.scp:scp-to-etc",
+      "severity": "high",
+      "source": "pack"
+    },
+    "scp-to-windows-system|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "remote.scp",
+      "pattern_name": "scp-destination-unverified",
+      "rule_id": "remote.scp:scp-destination-unverified",
+      "severity": "high",
+      "source": "pack"
+    },
+    "scp-unverified-destination|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "allow",
+      "exitCode": 0
+    },
+    "sendgrid-delete-key|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        5,
+        52
+      ],
+      "mode": "deny",
+      "pack_id": "email.sendgrid",
+      "pattern_name": "sendgrid-delete-api-key",
+      "rule_id": "email.sendgrid:sendgrid-delete-api-key",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "sendgrid-delete-teammate|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        5,
+        53
+      ],
+      "mode": "warn",
+      "pack_id": "email.sendgrid",
+      "pattern_name": "sendgrid-delete-teammate",
+      "rule_id": "email.sendgrid:sendgrid-delete-teammate",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "sendgrid-delete-template|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        5,
+        53
+      ],
+      "mode": "deny",
+      "pack_id": "email.sendgrid",
+      "pattern_name": "sendgrid-delete-template",
+      "rule_id": "email.sendgrid:sendgrid-delete-template",
+      "severity": "high",
+      "source": "pack"
+    },
+    "ses-delete-identity|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "deny",
+      "pack_id": "email.ses",
+      "pattern_name": "ses-delete-identity",
+      "rule_id": "email.ses:ses-delete-identity",
+      "severity": "high",
+      "source": "pack"
+    },
+    "ses-delete-rule-set|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        31
+      ],
+      "mode": "deny",
+      "pack_id": "email.ses",
+      "pattern_name": "ses-delete-receipt-rule-set",
+      "rule_id": "email.ses:ses-delete-receipt-rule-set",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "ses-delete-template|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "warn",
+      "pack_id": "email.ses",
+      "pattern_name": "ses-delete-template",
+      "rule_id": "email.ses:ses-delete-template",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "snow-drop-db|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.snowflake",
+      "pattern_name": "drop-database",
+      "rule_id": "database.snowflake:drop-database",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "snow-drop-schema|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.snowflake",
+      "pattern_name": "drop-schema",
+      "rule_id": "database.snowflake:drop-schema",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "snow-truncate|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.snowflake",
+      "pattern_name": "truncate-table",
+      "rule_id": "database.snowflake:truncate-table",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "sns-delete-topic-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        20
+      ],
+      "mode": "deny",
+      "pack_id": "messaging.sqs_sns",
+      "pattern_name": "aws-sns-delete-topic",
+      "rule_id": "messaging.sqs_sns:aws-sns-delete-topic",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "sns-delete-topic|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        20
+      ],
+      "mode": "deny",
+      "pack_id": "messaging.sqs_sns",
+      "pattern_name": "aws-sns-delete-topic",
+      "rule_id": "messaging.sqs_sns:aws-sns-delete-topic",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "split-flag-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        99
+      ],
+      "mode": "deny",
+      "pack_id": "featureflags.split",
+      "pattern_name": "split-api-delete-splits",
+      "rule_id": "featureflags.split:split-api-delete-splits",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "split-flag-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        99
+      ],
+      "mode": "deny",
+      "pack_id": "featureflags.split",
+      "pattern_name": "split-api-delete-splits",
+      "rule_id": "featureflags.split:split-api-delete-splits",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "split-segment-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        101
+      ],
+      "mode": "deny",
+      "pack_id": "featureflags.split",
+      "pattern_name": "split-api-delete-segments",
+      "rule_id": "featureflags.split:split-api-delete-segments",
+      "severity": "high",
+      "source": "pack"
+    },
+    "splunk-delete-index|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        47
+      ],
+      "mode": "deny",
+      "pack_id": "monitoring.splunk",
+      "pattern_name": "splunk-api-delete",
+      "rule_id": "monitoring.splunk:splunk-api-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "splunk-delete-savedsearch|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "allow",
+      "exitCode": 0
+    },
+    "sqlite-delete-all|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.sqlite",
+      "pattern_name": "delete-without-where",
+      "rule_id": "database.sqlite:delete-without-where",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "sqlite-drop-index|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "allow",
+      "exitCode": 0
+    },
+    "sqlite-drop-table|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.sqlite",
+      "pattern_name": "drop-table",
+      "rule_id": "database.sqlite:drop-table",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "sqlite-drop-view|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "database.sqlite",
+      "pattern_name": "drop-column",
+      "rule_id": "database.sqlite:drop-column",
+      "severity": "high",
+      "source": "pack"
+    },
+    "sqs-delete-queue|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        20
+      ],
+      "mode": "deny",
+      "pack_id": "messaging.sqs_sns",
+      "pattern_name": "aws-sqs-delete-queue",
+      "rule_id": "messaging.sqs_sns:aws-sqs-delete-queue",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "square-catalog-delete-def|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        65
+      ],
+      "mode": "deny",
+      "pack_id": "payment.square",
+      "pattern_name": "square-api-delete-catalog-object",
+      "rule_id": "payment.square:square-api-delete-catalog-object",
+      "severity": "high",
+      "source": "pack"
+    },
+    "square-catalog-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        65
+      ],
+      "mode": "deny",
+      "pack_id": "payment.square",
+      "pattern_name": "square-api-delete-catalog-object",
+      "rule_id": "payment.square:square-api-delete-catalog-object",
+      "severity": "high",
+      "source": "pack"
+    },
+    "square-customer-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        60
+      ],
+      "mode": "deny",
+      "pack_id": "payment.square",
+      "pattern_name": "square-api-delete-customer",
+      "rule_id": "payment.square:square-api-delete-customer",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "ssh-remote-rm-var|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        16,
+        19
+      ],
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "rm-rf-root-home",
+      "rule_id": "core.filesystem:rm-rf-root-home",
+      "severity": "critical",
+      "source": "heredoc_ast"
+    },
+    "ssh-remote-rm|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        13,
+        16
+      ],
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "rm-rf-root-home",
+      "rule_id": "core.filesystem:rm-rf-root-home",
+      "severity": "critical",
+      "source": "heredoc_ast"
+    },
+    "ssh-remote-truncate|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        10,
+        29
+      ],
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "truncate-zero-root-home",
+      "rule_id": "core.filesystem:truncate-zero-root-home",
+      "severity": "critical",
+      "source": "heredoc_ast"
+    },
+    "strict-git-add-all|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        10
+      ],
+      "mode": "deny",
+      "pack_id": "strict_git",
+      "pattern_name": "add-all-flag",
+      "rule_id": "strict_git:add-all-flag",
+      "severity": "high",
+      "source": "pack"
+    },
+    "strict-git-amend|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        18
+      ],
+      "mode": "deny",
+      "pack_id": "strict_git",
+      "pattern_name": "commit-amend",
+      "rule_id": "strict_git:commit-amend",
+      "severity": "high",
+      "source": "pack"
+    },
+    "strict-git-rebase-i|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        10
+      ],
+      "mode": "deny",
+      "pack_id": "strict_git",
+      "pattern_name": "rebase",
+      "rule_id": "strict_git:rebase",
+      "severity": "high",
+      "source": "pack"
+    },
+    "stripe-customer-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "deny",
+      "pack_id": "payment.stripe",
+      "pattern_name": "stripe-customers-delete",
+      "rule_id": "payment.stripe:stripe-customers-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "stripe-price-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        20
+      ],
+      "mode": "deny",
+      "pack_id": "payment.stripe",
+      "pattern_name": "stripe-prices-delete",
+      "rule_id": "payment.stripe:stripe-prices-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "stripe-product-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        22
+      ],
+      "mode": "deny",
+      "pack_id": "payment.stripe",
+      "pattern_name": "stripe-products-delete",
+      "rule_id": "payment.stripe:stripe-products-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "supabase-db-reset|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "database.supabase",
+      "pattern_name": "supabase-db-reset",
+      "rule_id": "database.supabase:supabase-db-reset",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "supabase-migration-repair|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        25
+      ],
+      "mode": "deny",
+      "pack_id": "database.supabase",
+      "pattern_name": "supabase-migration-repair",
+      "rule_id": "database.supabase:supabase-migration-repair",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "supabase-project-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        24
+      ],
+      "mode": "deny",
+      "pack_id": "database.supabase",
+      "pattern_name": "supabase-projects-delete",
+      "rule_id": "database.supabase:supabase-projects-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "svc-disable-sshd|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        22
+      ],
+      "mode": "deny",
+      "pack_id": "system.services",
+      "pattern_name": "systemctl-stop-critical",
+      "rule_id": "system.services:systemctl-stop-critical",
+      "severity": "high",
+      "source": "pack"
+    },
+    "svc-service-stop|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "allow",
+      "exitCode": 0
+    },
+    "svc-stop-nginx|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        14
+      ],
+      "mode": "deny",
+      "pack_id": "system.services",
+      "pattern_name": "systemctl-stop",
+      "rule_id": "system.services:systemctl-stop",
+      "severity": "high",
+      "source": "pack"
+    },
+    "tf-apply-destroy|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        24
+      ],
+      "mode": "deny",
+      "pack_id": "infrastructure.terraform",
+      "pattern_name": "destroy",
+      "rule_id": "infrastructure.terraform:destroy",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "tf-destroy|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        17
+      ],
+      "mode": "deny",
+      "pack_id": "infrastructure.terraform",
+      "pattern_name": "destroy",
+      "rule_id": "infrastructure.terraform:destroy",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "tf-state-rm|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        18
+      ],
+      "mode": "deny",
+      "pack_id": "infrastructure.terraform",
+      "pattern_name": "state-rm",
+      "rule_id": "infrastructure.terraform:state-rm",
+      "severity": "high",
+      "source": "pack"
+    },
+    "traefik-delete-middleware|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        62
+      ],
+      "mode": "deny",
+      "pack_id": "loadbalancer.traefik",
+      "pattern_name": "traefik-api-delete",
+      "rule_id": "loadbalancer.traefik:traefik-api-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "traefik-delete-router|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        60
+      ],
+      "mode": "deny",
+      "pack_id": "loadbalancer.traefik",
+      "pattern_name": "traefik-api-delete",
+      "rule_id": "loadbalancer.traefik:traefik-api-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "traefik-delete-service|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        61
+      ],
+      "mode": "deny",
+      "pack_id": "loadbalancer.traefik",
+      "pattern_name": "traefik-api-delete",
+      "rule_id": "loadbalancer.traefik:traefik-api-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "unleash-flag-delete-2|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        110
+      ],
+      "mode": "deny",
+      "pack_id": "featureflags.unleash",
+      "pattern_name": "unleash-api-delete-features",
+      "rule_id": "featureflags.unleash:unleash-api-delete-features",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "unleash-flag-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        108
+      ],
+      "mode": "deny",
+      "pack_id": "featureflags.unleash",
+      "pattern_name": "unleash-api-delete-features",
+      "rule_id": "featureflags.unleash:unleash-api-delete-features",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "unleash-project-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        91
+      ],
+      "mode": "deny",
+      "pack_id": "featureflags.unleash",
+      "pattern_name": "unleash-api-delete-projects",
+      "rule_id": "featureflags.unleash:unleash-api-delete-projects",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "vault-kv-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        15
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.vault",
+      "pattern_name": "vault-kv-delete",
+      "rule_id": "secrets.vault:vault-kv-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "vault-policy-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        19
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.vault",
+      "pattern_name": "vault-policy-delete",
+      "rule_id": "secrets.vault:vault-policy-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "vault-secrets-disable|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        21
+      ],
+      "mode": "deny",
+      "pack_id": "secrets.vault",
+      "pattern_name": "vault-secrets-disable",
+      "rule_id": "secrets.vault:vault-secrets-disable",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "velero-backup-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        20
+      ],
+      "mode": "deny",
+      "pack_id": "backup.velero",
+      "pattern_name": "velero-backup-delete",
+      "rule_id": "backup.velero:velero-backup-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "velero-restore-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "log",
+      "exitCode": 0,
+      "matched_span": [
+        0,
+        21
+      ],
+      "mode": "log",
+      "pack_id": "backup.velero",
+      "pattern_name": "velero-restore-delete",
+      "rule_id": "backup.velero:velero-restore-delete",
+      "severity": "low",
+      "source": "pack"
+    },
+    "velero-schedule-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        0,
+        22
+      ],
+      "mode": "warn",
+      "pack_id": "backup.velero",
+      "pattern_name": "velero-schedule-delete",
+      "rule_id": "backup.velero:velero-schedule-delete",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "win-fs-del|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "windows.filesystem",
+      "pattern_name": "del-recursive",
+      "rule_id": "windows.filesystem:del-recursive",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "win-fs-rd|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "windows.filesystem",
+      "pattern_name": "rd-recursive",
+      "rule_id": "windows.filesystem:rd-recursive",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "win-fs-remove-d|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "windows.filesystem",
+      "pattern_name": "rd-recursive",
+      "rule_id": "windows.filesystem:rd-recursive",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "win-fs-remove-item|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "powershell-remove-item-recursive",
+      "rule_id": "core.filesystem:powershell-remove-item-recursive",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "win-fs-remove-path|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "powershell-remove-item-recursive",
+      "rule_id": "core.filesystem:powershell-remove-item-recursive",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "win-misc-bcdedit|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        15
+      ],
+      "mode": "deny",
+      "pack_id": "windows.system",
+      "pattern_name": "bcdedit-delete",
+      "rule_id": "windows.system:bcdedit-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "win-misc-reg-hkcu|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        10
+      ],
+      "mode": "deny",
+      "pack_id": "windows.misc",
+      "pattern_name": "reg-delete",
+      "rule_id": "windows.misc:reg-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "win-misc-reg|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        10
+      ],
+      "mode": "deny",
+      "pack_id": "windows.misc",
+      "pattern_name": "reg-delete",
+      "rule_id": "windows.misc:reg-delete",
+      "severity": "high",
+      "source": "pack"
+    },
+    "win-misc-schtasks|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "matched_span": [
+        0,
+        16
+      ],
+      "mode": "warn",
+      "pack_id": "windows.misc",
+      "pattern_name": "schtasks-delete",
+      "rule_id": "windows.misc:schtasks-delete",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "win-ps-remove-cert-currentuser|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "deny",
+      "pack_id": "windows.powershell",
+      "pattern_name": "remove-item-provider",
+      "rule_id": "windows.powershell:remove-item-provider",
+      "severity": "high",
+      "source": "pack"
+    },
+    "win-ps-remove-cert-local|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "deny",
+      "pack_id": "windows.powershell",
+      "pattern_name": "remove-item-provider",
+      "rule_id": "windows.powershell:remove-item-provider",
+      "severity": "high",
+      "source": "pack"
+    },
+    "win-ps-remove-cert-root|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "deny",
+      "pack_id": "windows.powershell",
+      "pattern_name": "remove-item-provider",
+      "rule_id": "windows.powershell:remove-item-provider",
+      "severity": "high",
+      "source": "pack"
+    },
+    "win-sys-diskpart|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        8
+      ],
+      "mode": "deny",
+      "pack_id": "windows.system",
+      "pattern_name": "diskpart",
+      "rule_id": "windows.system:diskpart",
+      "severity": "high",
+      "source": "pack"
+    },
+    "win-sys-shadowcopy-wmi|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        14,
+        49
+      ],
+      "mode": "deny",
+      "pack_id": "windows.system",
+      "pattern_name": "wmi-shadowcopy-delete",
+      "rule_id": "windows.system:wmi-shadowcopy-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "win-sys-vssadmin-all|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "vssadmin-delete-shadows",
+      "rule_id": "core.filesystem:vssadmin-delete-shadows",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "win-sys-vssadmin-for-c|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "vssadmin-delete-shadows",
+      "rule_id": "core.filesystem:vssadmin-delete-shadows",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "win-sys-vssadmin-for-d|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "vssadmin-delete-shadows",
+      "rule_id": "core.filesystem:vssadmin-delete-shadows",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "win-sys-vssadmin-oldest|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        23
+      ],
+      "mode": "deny",
+      "pack_id": "core.filesystem",
+      "pattern_name": "vssadmin-delete-shadows",
+      "rule_id": "core.filesystem:vssadmin-delete-shadows",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "win-sys-wbadmin-catalog|ps": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "matched_span": [
+        0,
+        22
+      ],
+      "mode": "deny",
+      "pack_id": "windows.system",
+      "pattern_name": "wbadmin-delete",
+      "rule_id": "windows.system:wbadmin-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "wrangler-delete-worker|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "deny",
+      "exitCode": 1,
+      "mode": "deny",
+      "pack_id": "cdn.cloudflare_workers",
+      "pattern_name": "wrangler-delete",
+      "rule_id": "cdn.cloudflare_workers:wrangler-delete",
+      "severity": "critical",
+      "source": "pack"
+    },
+    "wrangler-kv-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "mode": "warn",
+      "pack_id": "cdn.cloudflare_workers",
+      "pattern_name": "wrangler-kv-key-delete",
+      "rule_id": "cdn.cloudflare_workers:wrangler-kv-key-delete",
+      "severity": "medium",
+      "source": "pack"
+    },
+    "wrangler-r2-delete|posix": {
+      "agent": {
+        "detected": "unknown",
+        "detection_method": "none",
+        "trust_level": "medium"
+      },
+      "decision": "warn",
+      "exitCode": 0,
+      "mode": "warn",
+      "pack_id": "cdn.cloudflare_workers",
+      "pattern_name": "wrangler-r2-object-delete",
+      "rule_id": "cdn.cloudflare_workers:wrangler-r2-object-delete",
+      "severity": "medium",
+      "source": "pack"
+    }
+  },
+  "schema": 1
+}
