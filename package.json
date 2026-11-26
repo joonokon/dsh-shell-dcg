@@ -1,6 +1,6 @@
 {
   "name": "dsh-shell-dcg",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Runs Destructive Command Guard (dcg) on every shell command a DeepSeek Harness tool is about to run.",
   "license": "MIT",
