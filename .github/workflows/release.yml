@@ -1,8 +1,11 @@
 name: Release
 
-# Publishing is what a tag means here: the tag carries the version, so a tag is
-# only allowed to ship when it agrees with package.json and the same suite CI
-# runs comes back green.
+# A tag is a staging request here, not a publish. The tag carries the version and
+# is only accepted when it agrees with package.json and the same suite CI runs
+# comes back green; the job then parks the tarball as a staged release. A
+# maintainer approves that stage, and only then does the version become
+# installable. Two consequences worth keeping: a tag alone cannot ship a release,
+# and nothing in this repository holds a credential that could publish directly.
 on:
   push:
     tags: ['v*']
@@ -15,11 +18,11 @@ permissions:
 
 jobs:
   publish:
-    name: publish ${{ github.ref_name }}
+    name: stage ${{ github.ref_name }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # Reference point for protection rules: add required reviewers here and a
-    # tag alone can no longer publish.
+    # Required reviewers here gate the run that stages a release; the release
+    # itself is approved afterwards, from the staged list.
     environment:
       name: npm
     steps:
@@ -27,13 +30,24 @@ jobs:
         with:
           persist-credentials: false
 
-      # Node 24 bundles npm 11, the first line that speaks trusted publishing.
       # No NPM_TOKEN, no registry-url: npm asks this workflow's OIDC identity for
       # the credential, and the package's trusted-publisher setting on npmjs.com
-      # decides whether that identity may publish.
+      # decides what that identity may do — this one may stage, nothing more.
       - uses: actions/setup-node@v7
         with:
           node-version: 24
+
+      # `npm stage` arrived in npm 11.15. A newer runner image may already ship a
+      # client that has it, so ask first and only install one when the answer is
+      # no: upgrading Node or npm later then needs no change here.
+      - name: Make sure the client can stage
+        run: |
+          if npm stage --help >/dev/null 2>&1; then
+            echo "bundled npm $(npm --version) already speaks npm stage"
+          else
+            npm install --global npm@12
+            npm stage --help >/dev/null
+          fi
 
       - name: Tag matches package.json
         run: |
@@ -53,12 +67,20 @@ jobs:
       - name: dcg compatibility chain is unbroken
         run: node tools/compat.mjs check
 
-      - name: Publish to npm with provenance
+      # Staging, not publishing: this job cannot put a version on the registry.
+      # `npm stage publish` parks the tarball as a pending stage, so the registry
+      # stays unchanged until a maintainer approves it — `npm stage
+      # approve <id>`, or the Staged section on the package page. The trusted
+      # publisher therefore grants `--allow-stage-publish` only: an OIDC token can
+      # stage but cannot approve, and a tag on its own ships nothing.
+      - name: Stage the release for human approval
         run: |
           # A prerelease version never lands on `latest`: v0.2.0-next.1 goes to
-          # the `next` dist-tag, the same place `npm publish --tag next` would.
+          # the `next` dist-tag, the same place `npm stage publish --tag next`
+          # puts it at approval time. The tag is fixed once staged.
           case "${GITHUB_REF_NAME}" in
             *-*) dist_tag="--tag next" ;;
             *) dist_tag="" ;;
           esac
-          npm publish --access public --provenance $dist_tag
+          npm stage publish --access public --provenance $dist_tag
+          echo "::notice title=staged ${GITHUB_REF_NAME}::approve the staged release — npm stage list dsh-shell-dcg, then npm stage approve <stage-id>; or use the Staged section of the package page"
