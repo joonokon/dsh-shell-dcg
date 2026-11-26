@@ -45,7 +45,7 @@
    dcg --version     # 需要 >= 0.16.0
    ```
 
-2. **安装插件**：在侧栏 **插件** 页点 **添加插件**，填入 Git 地址 `https://github.com/joonokon/dsh-shell-dcg`，也可选择本地目录。
+2. **安装插件**：在侧栏 **插件** 页点 **添加插件**，填入包名 `dsh-shell-dcg`（[npm](https://www.npmjs.com/package/dsh-shell-dcg)；预发布版在 `next` 通道），或 Git 地址 `https://github.com/joonokon/dsh-shell-dcg`，也可选择本地目录。npm 上的版本不带 `test/`、`tools/`，也没有任何运行时依赖；由 CI 发布的那几个版本带 provenance 声明。
 
 3. **打开开关**：在 **设置 → Shell 守卫** 打开总开关，插件重启后执行四项就绪检查。
 若该 profile 不支持通过设置页保存，在 `cordis.patch.yml` 中写入：

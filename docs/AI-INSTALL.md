@@ -71,7 +71,7 @@ node tools/install-dcg.mjs
 
 由人操作：在 DSH 侧栏 **插件** 页点 **添加插件**，填入以下任一：
 
-- 包名 `dsh-shell-dcg`（已发布到 npm 时）
+- 包名 `dsh-shell-dcg`（[npm](https://www.npmjs.com/package/dsh-shell-dcg)；预发布版在 `next` 通道）
 - Git 地址 `https://github.com/joonokon/dsh-shell-dcg`
 - 本地目录的绝对路径（克隆仓库后）
 
