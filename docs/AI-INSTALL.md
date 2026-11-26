@@ -152,7 +152,8 @@ ls "$DSH_HOME/dsh-shell-dcg/audit/"
 |---|---|---|
 | 拒绝理由含 `SHELL_DCG_NOT_READY` | 就绪检查未通过 | 理由中已指出未通过项，按项修复 |
 | 已设 `enabled: true` 但无记录 | 插件未加载或未重启 | 检查 Plugins 列表状态并重启 DSH |
-| 状态接口返回 403 | 请求非本机来源 | 使用 `127.0.0.1`，不要使用局域网地址 |
+| 状态接口返回 403 | 请求非本机来源，或 `Host` 不指向本机 | 使用 `127.0.0.1`，不要使用局域网地址或自定义域名 |
+| 状态接口返回 415 | 写操作没带 JSON 类型 | 请求头加 `Content-Type: application/json`；用设置页时不会出现 |
 | 「安装 dcg」报证书错误 | 企业网络 TLS 拦截 | 手动安装（2c），或使用 `--use-system-ca` |
 | 下载超时 | 网络或代理 | 手动安装（2c） |
 | 误拦比例偏高 | 规则过严 | 先 `policy.defaultMode: warn` 观察，再按包降级 `policy.packModes` |

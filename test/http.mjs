@@ -48,7 +48,7 @@ function mount({ editor } = {}) {
 }
 
 /** One request/response pair against a mounted route. */
-async function call(routes, pathName, { ip = '127.0.0.1', body } = {}) {
+async function call(routes, pathName, { ip = '127.0.0.1', body, headers = {} } = {}) {
   const [routePath, query] = pathName.split('?')
   const route = routes.get(`${ROUTE_PREFIX}${routePath}`)
   if (route === undefined) throw new Error(`no route ${routePath}`)
@@ -56,6 +56,8 @@ async function call(routes, pathName, { ip = '127.0.0.1', body } = {}) {
   const req = new EventEmitter()
   req.url = query === undefined ? routePath : `${routePath}?${query}`
   req.socket = { remoteAddress: ip }
+  // What the settings page actually sends: same-origin JSON from 127.0.0.1.
+  req.headers = { host: '127.0.0.1:64503', 'content-type': 'application/json', ...headers }
   setImmediate(() => {
     if (body !== undefined) req.emit('data', typeof body === 'string' ? body : JSON.stringify(body))
     req.emit('end')
@@ -198,6 +200,59 @@ await check('a non-loopback caller is refused on every route', async () => {
     assert.equal(status, 403, pathName)
     assert.match(json.error, /loopback-only/)
   }
+})
+
+await check('a foreign Host is refused: a rebinding page cannot read the audit', async () => {
+  const { routes } = mount()
+  const { status, json } = await call(routes, '/status', { headers: { host: 'attacker.example:64503' } })
+  assert.equal(status, 403)
+  assert.match(json.error, /unexpected host/)
+
+  // The port is the page's own here too; only the name gives the caller away.
+  const named = await call(routes, '/packs', { headers: { host: 'dsh-shell-dcg.example' } })
+  assert.equal(named.status, 403)
+})
+
+await check('a cross-site Origin is refused even on a read', async () => {
+  const { routes } = mount()
+  const { status, json } = await call(routes, '/status', { headers: { origin: 'https://attacker.example' } })
+  assert.equal(status, 403)
+  assert.match(json.error, /unexpected origin/)
+})
+
+await check('a mutation refuses the body a cross-site page could send', async () => {
+  const editor = { async edit() { throw new Error('the editor must not be reached') } }
+  const { routes } = mount({ editor })
+  // `text/plain` is CORS-safelisted, so it would arrive without a preflight;
+  // an absent type is nobody's settings page either.
+  for (const contentType of ['text/plain', 'text/plain;charset=UTF-8', 'application/x-www-form-urlencoded', '', undefined]) {
+    const headers = { 'content-type': contentType }
+    // Turning the guard off and wiping the audit are the two a page would try.
+    const config = await call(routes, '/config', { body: { enabled: false }, headers })
+    assert.equal(config.status, 415, String(contentType))
+    assert.match(config.json.error, /application\/json/)
+    const action = await call(routes, '/action', { body: { action: 'clear-audit' }, headers })
+    assert.equal(action.status, 415, String(contentType))
+  }
+})
+
+await check('a same-origin JSON mutation still goes through', async () => {
+  const seen = []
+  const editor = { async edit(entry, change) { seen.push(change({ enabled: true })) } }
+  const { routes } = mount({ editor })
+  const { status, json } = await call(routes, '/config', {
+    body: { enabled: false },
+    // localhost, a charset parameter and the page's own origin all have to pass.
+    headers: {
+      host: 'localhost:64503',
+      origin: 'http://localhost:64503',
+      'content-type': 'application/json; charset=utf-8',
+    },
+  })
+  assert.equal(status, 200)
+  assert.equal(json.ok, true)
+  assert.equal(seen.length, 1)
+  assert.equal(seen[0].enabled, false)
 })
 
 await check('config refuses a body with nothing it can apply', async () => {

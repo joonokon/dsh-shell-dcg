@@ -94,7 +94,7 @@
 
 页面修改通过 DSH 的 config editor 写回 profile 配置，与手写 `cordis.patch.yml` 等价，需重启生效。`policy.packModes`、`policy.observeUntil`、`dryRun`、`maxConcurrent`、`matchUnlistedTools` 未提供界面入口。
 
-页面数据来自插件挂载的四条 loopback 路由（`/api/dsh-shell-dcg/status|packs|action|config`），非本机请求返回 403。使用自有路由而非 Remote 命名空间，原因是 bundle 无法在运行期新增 Remote 命名空间。
+页面数据来自插件挂载的四条 loopback 路由（`/api/dsh-shell-dcg/status|packs|action|config`），非本机请求返回 403。两条写入路由（`action`、`config`）另要求 `Content-Type: application/json`、`Host` 指向本机、`Origin`（若带上）也必须是本机页面——否则用户在浏览器里打开的任意站点都能用 `text/plain` 的简单请求关掉守卫或清空审计；不满足分别返回 415 或 403。使用自有路由而非 Remote 命名空间，原因是 bundle 无法在运行期新增 Remote 命名空间。
 
 ## 性能
 
